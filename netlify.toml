@@ -1,0 +1,18 @@
+# Netlify settings for the Agrela / PheNode marketing site.
+# Deep links (/phenode, /design-your-system, …) are handled by public/_redirects,
+# which Vite copies into dist/.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 needs Node ^20.19 or >=22.12.
+  NODE_VERSION = "22"
+
+# Work-in-progress preview: keep it out of search engines until launch.
+# Delete this block when the site goes live on the real domain.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

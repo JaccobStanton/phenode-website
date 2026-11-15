@@ -1,0 +1,432 @@
+@import "tailwindcss";
+
+/* Inter, the PheNode app's typeface. Until it loads, text paints in Arial
+   scaled to Inter's metrics so the swap barely moves the layout — the same
+   fallback the app uses (phenode_frontend src/assets/style.css). */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Helvetica');
+  size-adjust: 107.13%;
+  ascent-override: 90.43%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+}
+
+/* ------------------------------------------------------------------
+   Agrela / PheNode design tokens — "Field Instrument"
+   Physical world = paper + signal amber. Digital world = ink + data cyan.
+------------------------------------------------------------------- */
+@theme {
+  --color-ink: #0E1012;
+  --color-ink-2: #161A1D;
+  --color-ink-3: #1F2428;
+  --color-ink-4: #2A3036;
+
+  --color-paper: #F4F2EC;
+  --color-paper-2: #ECE9E1;
+  --color-paper-3: #E2DED4;
+
+  --color-stone: #A7A299;
+  --color-stone-2: #6E6A63;
+  --color-stone-3: #3E3B36;
+
+  --color-alloy: #C8CCD0;
+  --color-alloy-2: #8F969C;
+  --color-alloy-3: #5B6268;
+
+  --color-signal: #E08A2E;
+  --color-signal-2: #F2B468;
+  --color-data: #5FB7C9;
+  --color-data-2: #9FDCE8;
+  --color-data-3: #2B6F7E;
+
+  --color-moss: #4C6B4A;
+  --color-sage: #8A9A78;
+  --color-loam: #7A5C3C;
+  --color-clay: #B08968;
+
+  --color-phenode-blue: #1A75E0;
+  --color-phenode-blue-deep: #1764C4; /* button hover fill: brand blue, deep enough for white text (5.7:1) */
+  --color-midnight: #0A1A3D; /* night navy (home 04): deeper and less saturated than the app's #001244, which sat as a
+                                 hard blue block between the black sections and turned the blue drawings into blue-on-blue */
+  --color-phenode-green: #48F7F5; /* the PheNode app's --green (phenode_frontend/src/assets/style.css): readings in its map cards */
+  --color-phenode-blue-light: #3C8AE5; /* brand blue lifted 15 % toward white: text and icons on dark (5.3:1 on ink) */
+  --color-phenode-cyan: #48F7F5;
+  --color-phenode-white: #FFFFFF; /* the PheNode app's white (phenode_frontend palette.js): light-section backgrounds */
+  --color-phenode-white-2: #F5F5F5; /* the app's next grey: selected and hovered rows on white */
+
+  --font-sans: "Inter Variable", "Inter", "Inter Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quad: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --breakpoint-3xl: 1680px;
+}
+
+/* Viewports tall enough to pin a scroll-driven stage (home 04): laptops from ~640px tall, tablets from ~736px. */
+@custom-variant pin {
+  @media (min-width: 64rem) and (min-height: 40rem) { @slot; }
+  @media (min-width: 48rem) and (min-height: 46rem) { @slot; }
+}
+
+/* Base ----------------------------------------------------------------- */
+html {
+  /* clip (not hidden): stops stray decorative glows / hidden hover labels from causing sideways scroll, without breaking position: sticky */
+  overflow-x: clip;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  @apply bg-ink text-paper font-sans antialiased;
+  font-feature-settings: "ss01", "cv05";
+  /* no overflow here: overflow on body makes it a scroll container and breaks position: sticky */
+}
+/* Headings never end on a lone word: Inter sets wider than the old face, so some headings gained a line.
+   In a base layer so a heading's own text-wrap utility still wins. Browsers without it wrap as before. */
+@layer base { h1, h2, h3 { text-wrap: pretty; } }
+/* Tailwind v4 gives buttons the plain arrow cursor; every enabled button gets the hand, like links (Jake). */
+@layer base { button:not(:disabled), [role="button"]:not([aria-disabled="true"]) { cursor: pointer; } }
+/* Clip stray decorative glows sideways at the app root — `clip` (unlike `hidden`) doesn't create a scroll container, so sticky still works. */
+#root { overflow-x: clip; }
+
+::selection { background: color-mix(in oklab, var(--color-data) 55%, transparent); color: white; }
+
+/* Section themes ------------------------------------------------------- */
+.theme-ink { @apply bg-ink text-paper; --fg: var(--color-paper); --fg-muted: var(--color-stone); --rule: rgba(244,242,236,0.12); --surface: var(--color-ink-2); }
+.theme-paper { @apply bg-phenode-white text-ink; --fg: var(--color-ink); --fg-muted: var(--color-stone-2); --rule: rgba(14,16,18,0.12); --surface: #ffffff; --data-fg: var(--color-data-3); --signal-fg: #9A5612; }
+.theme-ink { --data-fg: var(--color-data); --signal-fg: var(--color-signal); }
+/* Dark blue, used with theme-ink (home 04, Jake's PM, Nov 15): the journey drawings need a dark page, and blue sets the
+   section apart from the black ones either side. It fades in from black and back out over its first and last 260 px,
+   so the edges read as the light changing rather than a block of colour. Surfaces, rules and muted text cool to match. */
+.theme-midnight {
+  background-color: var(--color-midnight);
+  background-image: linear-gradient(180deg, var(--color-ink) 0, var(--color-midnight) 260px, var(--color-midnight) calc(100% - 260px), var(--color-ink) 100%);
+  --surface: #0E2350; --rule: rgba(160, 196, 255, 0.14); --fg-muted: #A3B1CC;
+}
+/* Accent text on paper surfaces uses the darker ramp so small mono labels stay legible (WCAG AA). */
+.theme-paper .text-data, .theme-paper .text-data-2 { color: var(--color-data-3); }
+.theme-paper .text-signal, .theme-paper .text-signal-2 { color: #9A5612; }
+.theme-paper .border-data { border-color: var(--color-data-3); }
+.theme-paper .border-signal { border-color: #9A5612; }
+
+/* Typography utilities ------------------------------------------------- */
+@utility eyebrow {
+  @apply font-mono text-[11px] tracking-[0.18em] uppercase;
+  color: var(--fg-muted, var(--color-stone));
+}
+@utility display-xl { @apply font-sans font-semibold tracking-[-0.035em] leading-[0.98]; font-size: clamp(2.75rem, 7vw, 6.5rem); }
+/* Hero headline: sized so "Understand your" always fits on one line in the hero column. */
+@utility hero-title { @apply font-sans font-semibold tracking-[-0.035em] leading-[1.0]; font-size: clamp(2.5rem, 4.6vw, 4.75rem); }
+/* 03 headline: like display-lg, but capped on wide screens so "entire landscape." always fits one line in its column */
+@utility hyperlocal-title { @apply font-sans font-semibold tracking-[-0.03em] leading-[1.02]; font-size: clamp(2.25rem, 4.1vw, 3.75rem); max-width: 15ch; } /* capped lower since the title got longer (Nov 13), so it stays at four lines on wide screens */
+@utility display-lg { @apply font-sans font-semibold tracking-[-0.03em] leading-[1.02]; font-size: clamp(2.25rem, 5vw, 4.5rem); }
+@utility display-md { @apply font-sans font-semibold tracking-[-0.025em] leading-[1.06]; font-size: clamp(1.75rem, 3.4vw, 3rem); }
+@utility display-sm { @apply font-sans font-semibold tracking-[-0.02em] leading-[1.12]; font-size: clamp(1.375rem, 2.2vw, 1.9rem); }
+@utility lede { @apply font-sans leading-[1.5]; font-size: clamp(1.125rem, 1.5vw, 1.375rem); color: var(--fg-muted, var(--color-stone)); }
+@utility body-md { @apply font-sans text-[17px] leading-[1.6]; }
+@utility stat-xl { @apply font-sans font-normal tracking-[-0.04em] leading-none; font-size: clamp(3.5rem, 9vw, 8.5rem); }
+@utility hairline { border-color: var(--rule, rgba(244,242,236,0.12)); }
+
+/* Layout --------------------------------------------------------------- */
+@utility container-x { @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10; }
+@utility section-y { @apply py-24 md:py-36 lg:py-44; }
+
+/* Focus ---------------------------------------------------------------- */
+:focus-visible { outline: 2px solid var(--color-data); outline-offset: 3px; border-radius: 4px; }
+/* Programmatic focus targets (a heading or panel focus is moved to for screen readers) don't draw the ring. */
+[data-focus-target]:focus-visible { outline: none; }
+
+/* Buttons -------------------------------------------------------------- */
+@utility btn { @apply inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-[15px] font-medium transition-[background-color,color,border-color,box-shadow,transform] duration-300; transition-timing-function: var(--ease-out-quint); }
+/* Filled buttons carry a transparent 1px border so they're exactly the size of the outlined ones beside them. */
+@utility btn-primary { @apply btn border border-transparent bg-paper text-ink; }
+@utility btn-primary-ink { @apply btn border border-transparent bg-ink text-paper; }
+@utility btn-ghost { @apply btn border text-current hover:bg-white/10; border-color: var(--rule, rgba(244,242,236,0.2)); }
+@utility btn-ghost-ink { @apply btn border border-ink/20 text-ink hover:bg-ink/5; }
+@utility btn-signal { @apply btn border border-transparent bg-signal text-ink hover:bg-signal-2; }
+
+/* Button hovers: filled buttons turn Agrela blue with a soft glow and nudge their arrow; outlined ones pick up a blue edge.
+   Hover only where a real pointer exists (no sticky hover after a tap); keyboard focus gets the same look. */
+/* --btn-glow: the hover halo. White buttons sit on dark sections and keep a fuller glow; black buttons sit on light
+   sections, where the same halo reads much stronger, so theirs is a faint lift. */
+.btn-primary { --btn-glow: 0 10px 26px -10px rgba(26, 117, 224, 0.85), 0 0 22px -6px rgba(26, 117, 224, 0.55); }
+.btn-primary-ink { --btn-glow: 0 4px 10px -6px rgba(26, 117, 224, 0.4); }
+.btn-primary svg, .btn-primary-ink svg { transition: transform 0.3s var(--ease-out-quint); }
+@media (hover: hover) {
+  .btn-primary:hover:not(:disabled), .btn-primary-ink:hover:not(:disabled) {
+    background-color: var(--color-phenode-blue-deep); border-color: rgba(122, 176, 240, 0.55); color: #fff;
+    box-shadow: var(--btn-glow);
+  }
+  .btn-primary:hover:not(:disabled) svg, .btn-primary-ink:hover:not(:disabled) svg { transform: translateX(3px); }
+  .btn-ghost:hover:not(:disabled), .btn-ghost-ink:hover:not(:disabled) { border-color: rgba(26, 117, 224, 0.6); }
+}
+.btn-primary:focus-visible, .btn-primary-ink:focus-visible {
+  background-color: var(--color-phenode-blue-deep); border-color: rgba(122, 176, 240, 0.55); color: #fff;
+  box-shadow: var(--btn-glow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary svg, .btn-primary-ink svg { transition: none; transform: none !important; }
+}
+
+/* Home 04: the data journey's stage panel ------------------------------ */
+/* The illustration box gives way first on short screens, so the pinned stage always fits the viewport. */
+.journey-stage { height: clamp(150px, calc(100vh - 470px), 300px); isolation: isolate; }
+/* a soft blue backlight behind the drawing, so its dark navy parts read against the dark blue page */
+.journey-stage::before {
+  content: ''; position: absolute; inset: -18% -12%; z-index: -1; pointer-events: none; filter: blur(6px);
+  background: radial-gradient(50% 50% at 50% 54%, rgba(13, 86, 255, 0.3), rgba(13, 86, 255, 0.1) 55%, transparent 75%);
+}
+/* the outgoing picture clears quickly, the incoming one follows a beat later, so two drawings never overlap for long */
+.journey-art { opacity: 0; transition: opacity 0.22s ease-out, transform 0.5s var(--ease-out-quint); }
+.journey-art[data-on] { opacity: 1; transition: opacity 0.5s var(--ease-out-quint) 0.14s, transform 0.9s var(--ease-out-quint) 0.1s; }
+.journey-caption-wrap { margin-top: clamp(0.75rem, 2vh, 1.25rem); padding-top: clamp(0.75rem, 1.8vh, 1rem); }
+.journey-caption { animation: journey-caption-in 0.5s var(--ease-out-quint) both; }
+/* reserve the longest note's lines so the panel never changes height between stops */
+.journey-note { min-height: 4.875em; }
+@media (min-width: 75rem) { .journey-note { min-height: 3.25em; } }
+@keyframes journey-caption-in { from { opacity: 0; transform: translateY(6px); } }
+.journey-thumb { opacity: 0.35; filter: grayscale(1); transition: opacity 0.4s, filter 0.4s; }
+.journey-thumb[data-on] { opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) {
+  .journey-art, .journey-art[data-on] { transition: none; }
+  .journey-caption { animation: none; }
+}
+
+/* Home 05: "I'm a … and I need to understand …" --------------------------- */
+/* The sentence is the section's headline; the words that can change are brand blue, underlined, with a chevron. */
+@utility sentence-xl { @apply font-sans font-semibold tracking-[-0.03em]; line-height: 1.16; font-size: clamp(1.875rem, 1rem + 3.4vw, 3.75rem); }
+.sentence-slot {
+  color: var(--color-phenode-blue-light);
+  text-decoration-line: underline;
+  text-decoration-thickness: max(2px, 0.055em);
+  text-underline-offset: 0.16em;
+  text-decoration-color: rgb(60 138 229 / 0.5);
+  text-decoration-skip-ink: none;
+  border-radius: 0.12em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.3s var(--ease-out-quint), text-decoration-color 0.3s var(--ease-out-quint);
+}
+.sentence-slot[aria-expanded="true"] { color: #7DB3F0; text-decoration-color: currentColor; }
+@media (hover: hover) { .sentence-slot:hover { color: #7DB3F0; text-decoration-color: currentColor; } }
+.sentence-slot:focus-visible { outline-offset: 0.1em; }
+.sentence-chevron { display: inline-block; width: 0.46em; height: 0.46em; margin-left: 0.12em; margin-right: -0.08em; vertical-align: 0.08em; stroke-width: 2.6; transition: transform 0.3s var(--ease-out-quint); }
+.sentence-slot[aria-expanded="true"] .sentence-chevron { transform: rotate(180deg); }
+/* a changed word, and the deployment and starting point under it, fade in */
+.sentence-word, .persp-fade { animation: persp-fade-in 0.5s var(--ease-out-quint) both; }
+@keyframes persp-fade-in { from { opacity: 0; } }
+.sentence-list:not([hidden]) { animation: sentence-list-in 0.2s var(--ease-out-quint) both; }
+@keyframes sentence-list-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) {
+  .sentence-word, .persp-fade, .sentence-list:not([hidden]) { animation: none; }
+  .sentence-chevron { transition: none; }
+}
+
+/* Chips / toggles ------------------------------------------------------ */
+@utility chip { @apply inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors duration-300; border-color: var(--rule); }
+
+/* Reveal (used by useReveal) ------------------------------------------ */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.9s var(--ease-out-quint), transform 0.9s var(--ease-out-quint); will-change: opacity, transform; }
+.reveal.is-visible { opacity: 1; transform: none; will-change: auto; } /* drop the compositing layer once shown, so text inside doesn't shimmer on hover */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Device frames -------------------------------------------------------- */
+.device-screen { background: #061127; }
+
+/* Grain overlay for atmospheric sections ------------------------------- */
+.grain::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.9'/></svg>");
+}
+
+/* Thin scrollbars inside panels */
+.scroll-thin { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent; }
+
+/* Hide number input spinners */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* Keyframes ------------------------------------------------------------ */
+@keyframes pulse-ring { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes drift { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(0,-14px,0); } }
+@keyframes dash { to { stroke-dashoffset: 0; } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+/* System chain: one packet travels the spine and stops at Decisions; Decisions pulses as each one lands.
+   Both loops share --chain-period, and the ring is delayed by one period so it fires on arrival.
+   Transform + opacity only (compositor-driven), so the loop never forces layout or repaint on the page. */
+:root { --chain-period: 3.2s; }
+.chain-packet {
+  position: absolute; left: 0; top: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 9999px;
+  will-change: transform, opacity;
+  animation: chain-packet var(--chain-period) cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.chain-packet > span { position: absolute; inset: 0; border-radius: inherit; }
+.chain-packet > .amber { background: var(--color-signal); box-shadow: 0 0 10px var(--color-signal); animation: chain-amber var(--chain-period) linear infinite; }
+.chain-packet > .cyan { background: var(--color-data); box-shadow: 0 0 10px var(--color-data); animation: chain-cyan var(--chain-period) linear infinite; }
+@keyframes chain-packet {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  6% { opacity: 1; }
+  94% { opacity: 1; }
+  100% { transform: translate3d(0, var(--chain-len, 0px), 0); opacity: 0; }
+}
+@keyframes chain-amber { 0%, 45% { opacity: 1; } 60%, 100% { opacity: 0; } }
+@keyframes chain-cyan { 0%, 45% { opacity: 0; } 60%, 100% { opacity: 1; } }
+.chain-arrive {
+  position: absolute; inset: -1px; border-radius: 9999px; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--color-data) 32%, transparent), transparent);
+  border: 2px solid color-mix(in oklab, var(--color-data) 45%, transparent);
+  opacity: 0; will-change: transform, opacity;
+  animation: chain-arrive var(--chain-period) ease-out var(--chain-period) infinite;
+}
+@keyframes chain-arrive {
+  0% { transform: scale(1); opacity: 0.95; }
+  45%, 100% { transform: scale(1.55); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* 03 fleet map overlay — transform/opacity only, so it runs on the compositor. */
+.hl-ring, .hl-packet { position: absolute; border-radius: 9999px; pointer-events: none; will-change: transform, opacity; }
+.hl-ring { width: 12px; height: 12px; margin: -6px 0 0 -6px; border: 1.5px solid; opacity: 0; animation: hl-ring 2.6s ease-out infinite; }
+.hl-ring--signal { border-color: var(--color-signal); }
+.hl-ring--data { width: 22px; height: 22px; margin: -11px 0 0 -11px; border-color: var(--color-data); animation-duration: 2.8s; }
+.hl-ring.hl-static { animation: none; opacity: 0.6; }
+@keyframes hl-ring { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(3); opacity: 0; } }
+.hl-packet {
+  width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: var(--color-signal);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-signal) 22%, transparent), 0 0 12px var(--color-signal);
+  opacity: 0; animation: hl-packet 2.6s linear infinite;
+}
+@keyframes hl-packet {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate3d(var(--dx), var(--dy), 0); opacity: 0; }
+}
+/* The same reading, drawn inside an SVG (home 03 map): --dx/--dy are viewBox units, so it scales with the map and can
+   pass under the info card. */
+.hl-spacket { opacity: 0; animation: hl-spacket 2.6s linear infinite; will-change: transform, opacity; }
+@keyframes hl-spacket {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* Slow breathing glow (opacity only). Holds steady for reduced-motion users via the global rule above. */
+.glow-pulse { animation: glow-pulse 3.6s ease-in-out infinite; will-change: opacity; }
+@keyframes glow-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+/* PheNode overview hero: a pinned, scroll-driven product reveal -------- */
+/* The stage is sticky inside a tall track. OverviewHero.jsx writes the phase values (--t1 … --t4, 0 → 1, eased) and the
+   measured layout (--dy, --sf, --head, --foot, --l2h) onto .seq-stage as the track scrolls:
+   "One system." alone, centered → "Many environments." joins it → the headline lifts to the top and shrinks →
+   the base station rises into the light, the node a beat later (--t3b) → the buttons arrive. Only transform and opacity
+   change per frame.
+   It plays once: when it's finished the script sets [data-done] on the track, which shortens it to the stage's own height
+   (adjusting the scroll so nothing moves), and from then on the hero scrolls like a normal section. */
+.seq-track { height: 280svh; }
+.seq-track[data-done] { height: auto; }
+.seq-stage { --t1: 0; --t2: 0; --t3: 0; --t3b: 0; --t4: 0; --dy: -30svh; --sf: 0.5; --head: 30svh; --foot: 120px; --l2h: 0px; }
+.seq-title {
+  transform: translate3d(0, calc(-50% + (1 - var(--t1)) * var(--l2h) / 2 + var(--t2) * var(--dy)), 0) scale(calc(1 - var(--t2) * (1 - var(--sf))));
+  transform-origin: 50% 50%;
+}
+.seq-line2 { display: block; opacity: var(--t1); transform: translate3d(0, calc((1 - var(--t1)) * 0.3em), 0); }
+.seq-product { opacity: var(--t3); transform: translate3d(0, calc((1 - var(--t3)) * 26svh), 0) scale(calc(0.9 + var(--t3) * 0.1)); }
+.seq-node { opacity: var(--t3b); transform: translate3d(calc((1 - var(--t3b)) * -16%), calc((1 - var(--t3b)) * 8%), 0); }
+.seq-cta { opacity: var(--t4); transform: translate3d(0, calc((1 - var(--t4)) * 18px), 0); }
+.seq-stage[data-cta="off"] .seq-cta { visibility: hidden; }
+.seq-glow { opacity: calc(0.35 + var(--t3) * 0.65); }
+/* Entrance on load: the light comes up and "One system." fades in. */
+@keyframes stage-fade-up { from { opacity: 0; transform: translate3d(0, 28px, 0); } }
+@keyframes stage-light { from { opacity: 0; } }
+.stage-fade { animation: stage-fade-up 1.2s var(--ease-out-quint) both; animation-delay: var(--d, 0s); }
+.stage-light { animation: stage-light 2.4s ease-out both; animation-delay: var(--d, 0s); }
+/* Statement: words brighten in reading order as it scrolls through (--w 0 → 1, word index --i of --n) and stay lit when
+   scrolling back up. Unread words sit at 0.4 so they still clear 3:1 (large-text AA) against the stage. */
+.stage-word { opacity: clamp(0.4, calc(var(--w, 1) * (var(--n) + 3) - var(--i)), 1); transition: opacity 0.12s linear; }
+/* The key phrases ("one platform", "you need to answer") turn Agrela blue as each word lights (--lit), then bloom into
+   a soft blue glow over the next few words of scroll (--g). The glow is kept light (halved on Jake's request, Nov 13). */
+.stage-glow {
+  --lit: clamp(0, calc(var(--w, 1) * (var(--n) + 3) - var(--i)), 1);
+  --g: clamp(0, calc((var(--w, 1) * (var(--n) + 3) - var(--i) - 0.5) / 2.5), 1);
+  --glow-text: color-mix(in srgb, var(--color-phenode-blue) 85%, white);
+  color: color-mix(in srgb, var(--glow-text) calc(var(--lit) * 100%), var(--color-paper));
+  text-shadow:
+    0 0 0.24em color-mix(in srgb, var(--color-phenode-blue) calc(var(--g) * 38%), transparent),
+    0 0 0.7em color-mix(in srgb, var(--color-phenode-blue) calc(var(--g) * 22%), transparent);
+  transition: color 0.12s linear, text-shadow 0.12s linear;
+}
+/* Reduced motion: no pinning — the stage shows its finished composition. */
+@media (prefers-reduced-motion: reduce) {
+  .seq-track { height: auto; }
+  .seq-stage { position: relative; --t1: 1; --t2: 1; --t3: 1; --t3b: 1; --t4: 1; }
+  .seq-stage[data-cta] .seq-cta { visibility: visible; }
+  .stage-fade, .stage-light { animation: none; }
+  .stage-word { opacity: 1; transition: none; }
+  .stage-glow { transition: none; }
+}
+
+/* Home intro: "Welcome to Hyperlocal Environmental Intelligence" over the living sensor field --------------- */
+/* IntroHero.jsx sets --x (0 → 1) as the intro scrolls away: the copy recedes while the field fades and dives.
+   --horizon matches HORIZON / HORIZON_PHONE in components/viz/sensorField.js. */
+.intro { --x: 0; --horizon: 60%; background-color: #05070A; }
+@media (max-width: 719px) { .intro { --horizon: 62%; } }
+.intro-sky {
+  background:
+    radial-gradient(64% 30% at 50% var(--horizon), rgba(26, 117, 224, 0.42), rgba(26, 117, 224, 0.12) 46%, transparent 72%),
+    radial-gradient(34% 9% at 50% var(--horizon), rgba(116, 244, 238, 0.18), transparent 70%),
+    radial-gradient(95% 60% at 50% var(--horizon), rgba(18, 58, 138, 0.3), transparent 70%),
+    radial-gradient(55% 45% at 50% 0%, rgba(255, 255, 255, 0.05), transparent 70%);
+  animation: intro-in 2.4s ease-out backwards;
+}
+.intro-field { opacity: calc(1 - var(--x) * 0.9); animation: intro-in 1.6s ease-out backwards; }
+.intro-fade { background: linear-gradient(to bottom, transparent 80%, var(--color-ink) 100%); }
+.intro-stage { padding-bottom: 18svh; }
+.intro-copy { transform: translate3d(0, calc(var(--x) * 24svh), 0) scale(calc(1 - var(--x) * 0.06)); opacity: calc(1 - var(--x) * 1.7); }
+.intro-welcome { font-size: clamp(1.125rem, 1.8vw, 1.625rem); font-weight: 500; letter-spacing: -0.01em; color: rgba(244, 242, 236, 0.72); margin-bottom: 0.55em; }
+.intro-title { font-size: clamp(2.6rem, 5.6vw, 6.25rem); font-weight: 600; line-height: 1.06; letter-spacing: -0.045em; color: var(--color-paper); text-wrap: balance; }
+/* "Hyperlocal": a slow shimmer through Agrela blue and PheNode cyan. The gradient sits on an inner span so the
+   word's blur-in (on the outer span) never touches the text clip (WebKit can drop background-clip: text on a layer). */
+.intro-grad {
+  background: linear-gradient(100deg, #9CCBFF 0%, #4FB6F6 38%, #74F4EE 70%, #9CCBFF 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: intro-shimmer 9s ease-in-out infinite alternate;
+}
+/* Words arrive one after another, coming into focus as they rise (Apple's reveal). */
+.intro-word { display: inline-block; animation: intro-word 1.3s var(--ease-out-quint) backwards; animation-delay: var(--d, 0s); }
+@keyframes intro-word { from { opacity: 0; filter: blur(14px); transform: translate3d(0, 0.35em, 0); } }
+@keyframes intro-in { from { opacity: 0; } }
+@keyframes intro-shimmer { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+@media (prefers-reduced-motion: reduce) {
+  .intro-word, .intro-sky, .intro-field, .intro-grad { animation: none; }
+  .intro-copy { transform: none; opacity: 1; }
+}
+
+/* Header with the home intro (lib/intro.js sets data-intro on <html>) -------------------------------------------- */
+/* While the intro is on screen: logo, Sign in, Request a demo and the menu button only (the menu shows on desktop too).
+   On the hero the page tabs fade back in, one after another. */
+.nav-links { transition: visibility 0s; }
+.nav-links > * { transition: opacity 0.5s var(--ease-out-quint), transform 0.5s var(--ease-out-quint); transition-delay: calc(var(--k, 0) * 55ms); }
+html[data-intro="top"] .nav-links { visibility: hidden; transition: visibility 0s linear 0.3s; }
+html[data-intro="top"] .nav-links > * { opacity: 0; transform: translate3d(0, -4px, 0); transition-duration: 0.3s; transition-delay: 0s; }
+html[data-intro="top"] .nav-burger { display: inline-flex; }
+html[data-intro="top"] .nav-sheet { display: block; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-links > * { transition: none; }
+  html[data-intro="top"] .nav-links { transition: none; }
+}

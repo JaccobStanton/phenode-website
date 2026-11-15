@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-preview
+shots
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+_to_delete
+.netlify

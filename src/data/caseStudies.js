@@ -1,0 +1,82 @@
+/**
+ * Case studies. Only publicly reported facts are stated for named partners.
+ * `placeholder: true` marks entries awaiting customer permission — the UI labels them clearly.
+ * Sources: Danforth Plant Science Center press release (2026); The Ray / Georgia DOT announcement.
+ */
+export const CASE_STUDIES = [
+  {
+    slug: 'the-ray-i85',
+    project: 'Roadside vegetation and soil monitoring on an interstate right-of-way',
+    location: 'Interstate 85, West Georgia',
+    partner: 'The Ray · Georgia Department of Transportation',
+    application: 'transportation',
+    status: 'public',
+    year: '2025–',
+    summary: 'An 18-mile pilot along Interstate 85 where PheNode monitors vegetation, soil and air conditions along the highway right-of-way — a first for interstate roadside monitoring.',
+    challenge: 'Roadside restoration and vegetation management decisions are usually made without continuous environmental data from the corridor itself. Conditions along 18 miles of interstate are not uniform.',
+    deployment: 'PheNode base stations with wireless sensor nodes placed along the corridor. Configuration details beyond what has been publicly reported are withheld pending partner approval.',
+    data: ['Soil conditions', 'Air temperature and humidity', 'Rainfall and wind', 'Imaging of roadside vegetation'],
+    result: 'Outcome reporting will be added with partner approval. Public reporting describes the pilot as the first deployment of this kind on an interstate roadside.',
+    timeline: [
+      { year: '2025', label: 'Installation', text: 'Base stations and nodes deployed along the 18-mile pilot section.' },
+      { year: '2026', label: 'Establishment', text: 'Continuous monitoring through the first growing seasons.' },
+      { year: '2027', label: 'Vegetation development', text: 'Multi-season comparison of soil and microclimate conditions.' },
+    ],
+    placeholder: false,
+  },
+  {
+    slug: 'danforth-center-research',
+    project: 'Environmental monitoring for crop and specialty-crop research',
+    location: 'St. Louis, Missouri',
+    partner: 'Donald Danforth Plant Science Center',
+    application: 'agriculture',
+    status: 'public',
+    year: '2016–',
+    summary: 'PheNode was born at the Danforth Center, where researchers needed flexible, field-deployable environmental data. The Center continues to use the platform for agricultural research and specialty crops.',
+    challenge: 'Research programs move between controlled environments and field sites; environmental context for each trial has to be collected the same way everywhere.',
+    deployment: 'Base stations with wireless sensor networks across research fields and controlled environments. Specific trial configurations are withheld pending approval.',
+    data: ['Soil moisture, temperature and EC', 'Air temperature, humidity and pressure', 'Solar radiation and light', 'Rainfall', 'Imaging'],
+    result: 'Results are published by the researchers involved; summaries will be linked here with permission.',
+    screen: { id: 'dual-comparison', caption: 'Danforth Field Research Site in the PheNode software' },
+    timeline: [
+      { year: '2016', label: 'Origins', text: 'PheNode developed by plant scientists at the Danforth Center.' },
+      { year: '2023', label: 'Commercial launch', text: 'The platform becomes available to outside institutions.' },
+      { year: '2026', label: 'Ongoing', text: 'Continued research deployments across fields and controlled environments.' },
+    ],
+    placeholder: false,
+  },
+  {
+    slug: 'wsdot-expansion',
+    project: 'Expanded roadside deployment',
+    location: 'Washington State',
+    partner: 'Washington State Department of Transportation',
+    application: 'transportation',
+    status: 'public',
+    year: '2026–',
+    summary: 'Following the Georgia pilot, PheNode has been deployed with the Washington State Department of Transportation as the platform expands nationally into transportation infrastructure.',
+    challenge: 'Placeholder — awaiting partner-approved project description.',
+    deployment: 'Placeholder — awaiting partner-approved configuration details.',
+    data: ['Placeholder — measurements to be confirmed with partner'],
+    result: 'Placeholder — awaiting partner approval.',
+    timeline: [{ year: '2026', label: 'Deployment', text: 'Expansion announced publicly.' }],
+    placeholder: true,
+  },
+  {
+    slug: 'placeholder-ecology',
+    project: 'Ecosystem and restoration monitoring',
+    location: 'Placeholder',
+    partner: 'Customer name pending permission',
+    application: 'ecology',
+    status: 'placeholder',
+    year: '—',
+    summary: 'Placeholder for an ecological research or restoration deployment. Replace with partner-approved content.',
+    challenge: 'Placeholder.',
+    deployment: 'Placeholder.',
+    data: ['Placeholder'],
+    result: 'Placeholder.',
+    timeline: [],
+    placeholder: true,
+  },
+]
+
+export const CASE_STUDY_BY_SLUG = Object.fromEntries(CASE_STUDIES.map((c) => [c.slug, c]))
