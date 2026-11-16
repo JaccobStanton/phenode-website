@@ -5,6 +5,7 @@ import { Container, Section, Eyebrow, Button } from '../../components/ui/primiti
 import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import { APPLICATIONS } from '../../data/applications.js'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
+import { FEATURES } from '../../data/features.js'
 
 export default function ApplicationsIndex() {
   const { applications, role } = usePersonalization()
@@ -37,7 +38,7 @@ export default function ApplicationsIndex() {
               </li>
             ))}
           </ol>
-          <div className="mt-10"><Button to="/design-your-system" variant="primary">Design your system</Button></div>
+          {FEATURES.designSystem && <div className="mt-10"><Button to="/design-your-system" variant="primary">Design your system</Button></div>}
         </Container>
       </Section>
     </Page>

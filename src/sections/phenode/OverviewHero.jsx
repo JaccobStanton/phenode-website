@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Button, ButtonPair, Img } from '../../components/ui/primitives.jsx'
 import { ScrollTrigger, prefersReducedMotion, seg, easeOut, easeInOut } from '../../lib/motion.js'
+import { FEATURES } from '../../data/features.js'
 
 // Phrases in [brackets] pick up a soft Agrela-blue glow as they light.
 const STATEMENT = 'Hardware, communications, data and software — designed as [one platform], configured around the question [you need to answer].'
@@ -220,7 +221,7 @@ export default function OverviewHero() {
           <div ref={cta} className="seq-cta absolute inset-x-0 bottom-6 px-4 md:bottom-7">
             <ButtonPair className="mx-auto">
               <Button to="/contact?intent=demo" variant="primary">Request a demo</Button>
-              <Button to="/design-your-system" variant="ghost">Design your system</Button>
+              {FEATURES.designSystem && <Button to="/design-your-system" variant="ghost">Design your system</Button>}
             </ButtonPair>
           </div>
         </div>

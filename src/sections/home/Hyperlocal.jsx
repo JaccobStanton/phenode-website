@@ -2,6 +2,7 @@ import { Sprout, Tractor, Route, TreePine, GraduationCap, Building2 } from 'luci
 import { Eyebrow, Section, Container, Button, ButtonPair } from '../../components/ui/primitives.jsx'
 import HyperlocalMap from '../../components/viz/HyperlocalMap.jsx'
 import { useScrollProgress, useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 const FACTORS = ['Soil type', 'Slope', 'Canopy', 'Irrigation', 'Pavement', 'Shade']
 const PLACES = [
@@ -18,7 +19,7 @@ export default function Hyperlocal() {
        <div ref={reveal}>
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-12">
           <div className="lg:col-span-5">
-            <Eyebrow index="03" className="reveal">Hyperlocal environmental intelligence</Eyebrow>
+            <Eyebrow index={homeNo('hyperlocal')} className="reveal">Hyperlocal environmental intelligence</Eyebrow>
             <h2 className="hyperlocal-title reveal mt-5 [text-wrap:balance]">One measurement point can’t describe an entire landscape.</h2>
             {/* The problem, in one line */}
             <p className="lede reveal mt-6">Traditional monitoring often relies on one station to represent a much larger area.</p>

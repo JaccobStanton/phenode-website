@@ -2,6 +2,8 @@ import { Eyebrow, Section, Container, Button, Tag } from '../../components/ui/pr
 import { COMPANY } from '../../data/company.js'
 import { VERIFIED_CLAIMS } from '../../data/specs.js'
 import { useReveal, useCountUp } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
+import { FEATURES } from '../../data/features.js'
 
 function BigNumber({ value, suffix = '', label, note }) {
   const numeric = typeof value === 'number'
@@ -15,7 +17,9 @@ function BigNumber({ value, suffix = '', label, note }) {
   )
 }
 
+/** A customer quote (a labelled placeholder until approved quotes exist). Renders nothing while customer quotes are off. */
 export function TestimonialSlot({ context, className = '' }) {
+  if (!FEATURES.customerQuotes) return null
   return (
     <figure className={`rounded-lg border border-dashed border-white/20 p-5 ${className}`} aria-label={`Testimonial placeholder: ${context}`}>
       <div className="flex items-center gap-2"><Tag>Placeholder</Tag><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-stone">Customer quote · {context}</span></div>
@@ -34,7 +38,7 @@ export default function Proof() {
           <ol className="reveal flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.18em] uppercase text-stone" aria-label="From hardware to customers">
             {['Real hardware', 'Real deployments', 'Real data', 'Real customers'].map((s, i, a) => <li key={s} className="flex items-center gap-4"><span className={i === a.length - 1 ? 'text-paper' : ''}>{s}</span>{i < a.length - 1 && <span aria-hidden="true" className="opacity-40">→</span>}</li>)}
           </ol>
-          <Eyebrow index="12" className="reveal mt-10">Customer proof</Eyebrow>
+          <Eyebrow index={homeNo('proof')} className="reveal mt-10">Customer proof</Eyebrow>
           <div className="mt-5 grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <h2 className="display-lg reveal max-w-[12ch]">Built with the people who use it.</h2>
@@ -66,10 +70,12 @@ export default function Proof() {
               <p className="reveal mt-3 font-mono text-[10.5px] tracking-[0.1em] text-stone">Sources: Danforth Plant Science Center (2026), The Ray. Customer locations are never shown without permission.</p>
             </div>
           </div>
-          <div className="reveal mt-14 grid gap-4 md:grid-cols-2">
-            <TestimonialSlot context="Deployment flexibility" />
-            <TestimonialSlot context="Working with Agrela" />
-          </div>
+          {FEATURES.customerQuotes && (
+            <div className="reveal mt-14 grid gap-4 md:grid-cols-2">
+              <TestimonialSlot context="Deployment flexibility" />
+              <TestimonialSlot context="Working with Agrela" />
+            </div>
+          )}
           <div className="reveal mt-10 flex flex-wrap gap-3">
             <Button to="/case-studies" variant="primary">View case studies</Button>
             <Button to="/company" variant="ghost">About Agrela</Button>

@@ -8,6 +8,7 @@ import MiniChart, { Legend } from '../../components/viz/MiniChart.jsx'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
 import { useScrollProgress, useReveal, seg, easeOut } from '../../lib/motion.js'
 import { diurnalSeries, soilMoistureSeries, nodeLayout } from '../../lib/demoData.js'
+import { homeNo } from '../../data/homeSections.js'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -16,7 +17,7 @@ export default function Applications() {
   return (
     <Section id="applications" theme="ink" padded={false} className="border-t border-white/10">
       <Container className="pt-24 md:pt-36">
-        <Eyebrow index="06">Application experiences</Eyebrow>
+        <Eyebrow index={homeNo('applications')}>Application experiences</Eyebrow>
         <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="display-lg max-w-[16ch]">One platform. Wherever the research goes.</h2>
           <p className="lede max-w-[44ch]">{role?.plural ? `Ordered for ${role.plural}. ` : ''}The same hardware, communications and data system — reconfigured for very different monitoring questions.</p>

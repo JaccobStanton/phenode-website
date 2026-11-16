@@ -4,6 +4,7 @@ import { HOTSPOTS, NODE_MODEL } from '../three/nodeHotspots.js'
 import { Img, Tag } from '../ui/primitives.jsx'
 import { useReducedMotion } from '../../lib/motion.js'
 import { webglOk, modelUrl, ModelBoundary } from '../../lib/webgl.js'
+import { FEATURES } from '../../data/features.js'
 
 const ProductModel3D = lazy(() => import('../three/ProductModel3D.jsx'))
 
@@ -74,7 +75,8 @@ export default function NodeExplorer({ className = '' }) {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-[13px] leading-relaxed text-stone">{current ? 'Specifications from the PheNode Summer 2025 Buyer\'s Guide.' : 'Select a component for a short technical note. Full specifications are on the wireless node page.'}</p>
+        {/* with a component selected, the note credits the Buyer's Guide, which is hidden for now (data/features.js) */}
+        {(!current || FEATURES.buyersGuide) && <p className="mt-4 text-[13px] leading-relaxed text-stone">{current ? 'Specifications from the PheNode Summer 2025 Buyer\'s Guide.' : 'Select a component for a short technical note. Full specifications are on the wireless node page.'}</p>}
       </div>
     </div>
   )

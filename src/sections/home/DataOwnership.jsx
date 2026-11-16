@@ -1,6 +1,7 @@
 import { Eyebrow, Section, Container, Button } from '../../components/ui/primitives.jsx'
 import { SOFTWARE } from '../../data/specs.js'
 import { useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 const LANES = [
   {
@@ -28,7 +29,7 @@ export default function DataOwnership() {
       <Container>
         <div ref={reveal} className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <Eyebrow index="11" className="reveal">Data ownership</Eyebrow>
+            <Eyebrow index={homeNo('data-ownership')} className="reveal">Data ownership</Eyebrow>
             <h2 className="display-lg reveal mt-5 max-w-[12ch]">Your measurements. Your workflow.</h2>
             <p className="lede reveal mt-6 max-w-[44ch]">PheNode supports different levels of interaction with the same data. Start with dashboards and downloads; move to the API and a portable backend when the analysis demands it. Nothing about the data changes along the way.</p>
             <ul className="reveal mt-8 flex flex-col gap-2 border-t hairline pt-6 text-[14.5px] text-ink/80">

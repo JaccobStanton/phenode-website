@@ -7,6 +7,7 @@ import Hyperlocal from '../sections/home/Hyperlocal.jsx'
 import HowItWorks from '../sections/home/HowItWorks.jsx'
 import Perspective from '../sections/home/Perspective.jsx'
 import Applications from '../sections/home/Applications.jsx'
+import { FEATURES } from '../data/features.js'
 
 const Hardware = lazy(() => import('../sections/home/Hardware.jsx'))
 const Scale = lazy(() => import('../sections/home/Scale.jsx'))
@@ -31,7 +32,8 @@ export default function Home() {
       <Perspective />
       <Applications />
       <Suspense fallback={<Fallback theme="paper" />}><Hardware /></Suspense>
-      <Suspense fallback={<Fallback theme="paper" />}><BuildTeaser /></Suspense>
+      {/* "Build your PheNode" only advertises the configurator: hidden while that page is off */}
+      {FEATURES.designSystem && <Suspense fallback={<Fallback theme="paper" />}><BuildTeaser /></Suspense>}
       <Suspense fallback={<Fallback />}><Software /></Suspense>
       <Suspense fallback={<Fallback />}><Scale /></Suspense>
       <Suspense fallback={<Fallback theme="paper" />}><DataOwnership /></Suspense>

@@ -3,6 +3,7 @@ import NodeExplorer from '../../components/hardware/NodeExplorer.jsx'
 import BaseStationExplorer from '../../components/hardware/BaseStationExplorer.jsx'
 import { ADD_ON_SENSORS } from '../../data/specs.js'
 import { useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 export default function Hardware() {
   const reveal = useReveal()
@@ -12,7 +13,7 @@ export default function Hardware() {
       <Section id="hardware" theme="ink" className="border-t border-white/10">
         <Container>
           <div ref={reveal}>
-            <Eyebrow index="07" className="reveal">Hardware</Eyebrow>
+            <Eyebrow index={homeNo('hardware')} className="reveal">Hardware</Eyebrow>
             <div className="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
               <h2 className="display-lg reveal max-w-[16ch] lg:col-span-7">The system adapts to the experiment — not the other way around.</h2>
               <p className="lede reveal max-w-[44ch] lg:col-span-5">Two pieces of hardware, one open sensor interface. Configure what each node carries, where it sits, and how many you need.</p>

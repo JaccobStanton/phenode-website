@@ -4,6 +4,7 @@ import { Container, Section, Eyebrow, Button, Img, Stat, Tag } from '../../compo
 import NodeExplorer from '../../components/hardware/NodeExplorer.jsx'
 import SpecTable from '../../components/ui/SpecTable.jsx'
 import { WIRELESS_NODE, ADD_ON_SENSORS } from '../../data/specs.js'
+import { FEATURES } from '../../data/features.js'
 
 export default function WirelessNodePage() {
   const soil = ADD_ON_SENSORS.find((s) => s.id === 'soil-standard')
@@ -15,7 +16,7 @@ export default function WirelessNodePage() {
             <p className="eyebrow">Wireless sensor node</p>
             <h1 className="display-xl mt-4">Carry the sensors to where conditions vary.</h1>
             <p className="lede mt-6 max-w-[46ch]">{WIRELESS_NODE.tagline} Hourly measurements over LoRaWAN, up to 1 km from the base station.</p>
-            <div className="mt-8 flex flex-wrap gap-3"><Button to="/design-your-system" variant="primary">Add nodes to a system</Button><a href="#specs" className="btn-ghost">Specifications</a></div>
+            <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Add nodes to a system</Button>}<a href="#specs" className={FEATURES.designSystem ? 'btn-ghost' : 'btn-primary'}>Specifications</a></div>
           </div>
           <div className="relative lg:col-span-6">
             <div aria-hidden="true" className="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(closest-side,rgba(244,242,236,0.08),transparent_70%)]" />
@@ -49,7 +50,7 @@ export default function WirelessNodePage() {
             <div id="specs" className="lg:col-span-7">
               <SpecTable title="Wireless sensor specifications" rows={WIRELESS_NODE.sensorSpecs} />
               <SpecTable title="Add-on soil probes" rows={soil.specs} className="mt-10" />
-              <p className="mt-4 font-mono text-[10.5px] tracking-[0.1em] text-stone-2">Source: PheNode Summer 2025 Buyer's Guide.</p>
+              {FEATURES.buyersGuide && <p className="mt-4 font-mono text-[10.5px] tracking-[0.1em] text-stone-2">Source: PheNode Summer 2025 Buyer's Guide.</p>}
             </div>
           </div>
         </Container>

@@ -3,6 +3,7 @@ import Page from '../components/layout/Page.jsx'
 import { Container, Section, Eyebrow } from '../components/ui/primitives.jsx'
 import LeadForm from '../components/configurator/LeadForm.jsx'
 import { COMPANY } from '../data/company.js'
+import { FEATURES } from '../data/features.js'
 
 export default function Contact() {
   const [params] = useSearchParams()
@@ -28,11 +29,13 @@ export default function Contact() {
                 <li><a href={`mailto:${COMPANY.supportEmail}`} className="underline underline-offset-4 hover:text-data">{COMPANY.supportEmail}</a><p className="text-[13px] text-stone">Support, demos, remote installation help</p></li>
                 <li className="pt-2 text-paper/80">St. Louis, Missouri<p className="text-[13px] text-stone">Donald Danforth Plant Science Center community</p></li>
               </ul>
-              <div className="mt-8 border-t border-white/10 pt-6">
-                <Eyebrow>Before you write</Eyebrow>
-                <p className="mt-3 text-[14.5px] leading-relaxed text-paper/75">If you have a sense of scale and sensors already, the configurator captures it in a minute and attaches it to your message.</p>
-                <a href="/design-your-system" className="btn-ghost mt-4 !px-4 !py-2 text-[14px]">Design your system</a>
-              </div>
+              {FEATURES.designSystem && (
+                <div className="mt-8 border-t border-white/10 pt-6">
+                  <Eyebrow>Before you write</Eyebrow>
+                  <p className="mt-3 text-[14.5px] leading-relaxed text-paper/75">If you have a sense of scale and sensors already, the configurator captures it in a minute and attaches it to your message.</p>
+                  <a href="/design-your-system" className="btn-ghost mt-4 !px-4 !py-2 text-[14px]">Design your system</a>
+                </div>
+              )}
             </aside>
           </div>
         </Container>

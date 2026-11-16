@@ -1,3 +1,6 @@
+import { FEATURES } from './features.js'
+
+// The Design System tab and footer link only show while that page is switched on (data/features.js)
 export const NAV = [
   {
     label: 'PheNode', to: '/phenode',
@@ -20,7 +23,7 @@ export const NAV = [
     ],
   },
   { label: 'Case Studies', to: '/case-studies' },
-  { label: 'Design System', to: '/design-your-system' },
+  ...(FEATURES.designSystem ? [{ label: 'Design System', to: '/design-your-system' }] : []),
   {
     label: 'Resources', to: '/resources',
     children: [
@@ -34,6 +37,6 @@ export const NAV = [
 export const FOOTER = [
   { heading: 'PheNode', links: [['Overview', '/phenode'], ['Wireless Sensor Node', '/phenode/wireless-node'], ['Base Station', '/phenode/base-station'], ['Data Platform', '/phenode/data-platform'], ['Software', '/phenode/software'], ['Specifications', '/phenode#specifications']] },
   { heading: 'Applications', links: [['Transportation & Infrastructure', '/applications/transportation'], ['Agricultural Research', '/applications/agriculture'], ['Ecological Research', '/applications/ecology'], ['Urban Environmental Intelligence', '/applications/urban'], ['Case Studies', '/case-studies']] },
-  { heading: 'Agrela', links: [['Design System', '/design-your-system'], ['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
+  { heading: 'Agrela', links: [...(FEATURES.designSystem ? [['Design System', '/design-your-system']] : []), ['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
   { heading: 'Legal', links: [['Privacy Policy', '/legal/privacy'], ['Terms of service', '/legal/terms']] },
 ]

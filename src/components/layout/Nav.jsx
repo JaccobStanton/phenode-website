@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { NAV } from '../../data/navigation.js'
 import { PheNodeLogo } from '../ui/Logos.jsx'
 import { COMPANY } from '../../data/company.js'
+import { FEATURES } from '../../data/features.js'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
@@ -124,7 +125,7 @@ export default function Nav() {
             <div className="mt-6 flex flex-col gap-3">
               <Link to="/contact?intent=demo" className="btn-primary">Request a demo</Link>
               <a href={COMPANY.appUrl} className="btn-ghost">Sign in</a>
-              <Link to="/design-your-system" className="btn-ghost">Design System</Link>
+              {FEATURES.designSystem && <Link to="/design-your-system" className="btn-ghost">Design System</Link>}
             </div>
             </div>
           </motion.div>

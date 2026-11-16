@@ -48,7 +48,6 @@ Slots render a labelled `AssetPlaceholder` until real photography exists. For an
 | Case study deployment (real site photos) | `case-studies/<slug>/deployment-{800,1600}.webp` | 4:3 | same (Danforth currently shows a software screenshot) |
 | Case study timeline photos | `case-studies/<slug>/<year>-{800,1600}.webp` | 16:9 | same |
 | Case study teaser | `case-studies/<slug>/teaser-{600,1200}.webp` | 4:3 | `sections/home/CaseStudiesTeaser.jsx`, `pages/CaseStudies.jsx` |
-| Team / lab photography | `company/team-{800,1600}.webp` | 4:3 | `pages/Company.jsx` |
 
 ## Software screenshots (in place — captured from phenode.live, 7 Oct 2026)
 
@@ -106,4 +105,45 @@ The earlier `video/software-scroll-1920.*` (Jake's screen recording) is no longe
 
 ## Documents
 
-`public/docs/phenode-buyers-guide-summer-2025.pdf` is live. Everything else listed in `src/data/docs.js` is a placeholder path until the file is added; set `placeholder: false` once it exists.
+The Buyer's Guide PDF moved to `media-src/docs/phenode-buyers-guide-summer-2025.pdf` (hidden for now, `FEATURES.buyersGuide`; move it back to `public/docs/` to publish it again). Support documents (`src/data/docs.js`) are copies of agrelaeco.com's PDFs (Nov 15, checked by SHA-256 against the originals): `public/docs/phenode-quick-start-guide-v3-fall-2026.pdf` (15.8 MB) and, in `public/docs/archive/`, the v2.1 and v2.0 quick start guides (11.7 MB each) and the v1.1 (24.7 MB) and v1.0 (8.7 MB) user manuals.
+
+## Company photography (in place, Nov 15)
+
+- `company/danforth-center-{800,1200,1800}.webp`: the Donald Danforth Plant Science Center, from agrelaeco.com/about-us (Company page, About us). Source 1800×941 in `media-src/company/`.
+- `company/phenode-in-prairie-{800,1200,1800}.webp`: a PheNode in a prairie at dusk, the about-us slideshow's second photo. Not used since Nov 15 (Jake's `DSC02237.jpg` took its place beside Nadia's quote on Support); kept for later. Source 4032×3024 in `media-src/company/`.
+- `company/nadia-{800,1200}.webp`: Dr. Nadia Shakoor presenting on a prototype PheNode in a lab — Jake's photo `nadia.jpg` from his Desktop (Company page, Leadership column, under her quote; caption "Dr. Shakoor presenting on a prototype PheNode" (Jake's wording)). Shown uncropped at 3:2. Source 1200×800 in `media-src/company/nadia-original.jpg`.
+- `company/phenode-in-barley-{800,1200,1800}.webp`: a PheNode in a barley field at sunset, Jake's photo "PheNode in Barley". No longer on the Company page (Nadia's photo took its place); it is the Resources "Applications" thumbnail. Source 1920×1280 in `media-src/company/phenode-in-barley-original.jpg`.
+- `company/about-us-hero-800.webp`: a PheNode on a pole in tall grass at dusk, glass buildings behind — Jake's photo `about-us-hero.jpg` from his Desktop (Company page hero, `position: 50% 45%`). Source 800×1200 in `media-src/company/about-us-hero-original.jpg`; only the 800 size exists, so it is a little soft on high-density screens at desktop widths (a wider export would fix that).
+
+## Page-hero photography (in place, Nov 15)
+
+The heroes of the three pages in the Resources menu put a photo beside the title and lede (`PageHero` in `src/components/layout/Page.jsx`; Jake chose the photos). Resources uses a photo from the agrelaeco.com Gallery; Company uses Jake's `about-us-hero.jpg` (see Company photography) and Support his `DSC02247.jpg` (see Support photography). From 1024 px the photo takes the right five columns and is exactly as tall as the text, so it is cropped differently at each width; `position` (CSS object-position) keeps the PheNode in frame. Below 1024 px it follows the text at 3:2. Originals downloaded from https://www.agrelaeco.com/gallery (the Wix originals on static.wixstatic.com) and kept in `media-src/gallery/`; webp 800/1200/1600 in `public/assets/gallery/`.
+
+| File | Photo | Original | Page |
+|---|---|---|---|
+| `gallery/phenode-greenhouses-*` | A PheNode on a guyed mast in tall grass, greenhouses behind (Gallery 5/6, `ae5d22_a751ef…`) | 2892×3928 | Not used — was the Company hero until Jake swapped in `about-us-hero.jpg`; kept for later (`position: 50% 30%` framed it well) |
+| `gallery/phenode-tripod-field-*` | A PheNode on its tripod in a field, cloudy sky (Gallery 4/6, `ae5d22_abf573…`) | 1961×2614 | Resources (`50% 20%`) |
+| `gallery/phenode-base-station-closeup-*` | Base station close-up with the PheNode logo, brick building behind (Gallery 2/6, `ae5d22_e13c02…`) | 1800×1754 | Was the Support hero until Jake's `DSC02247.jpg` replaced it (Nov 15); still the source of the Resources "Support & documentation" thumbnail |
+
+Not used yet, also in the Gallery: 1/6 a PheNode in tall grass by a pine (3024×4032), 3/6 a wireless node close-up (only 787×1010), 6/6 a PheNode in a prairie with a pink flower in front (3300×2578).
+
+## Support photography (in place — Jake's photos, Nov 15)
+
+- `support/phenode-research-field-{800,1200}.webp`: a PheNode on a guyed mast above rows of plants in a field — Jake's `DSC02247.jpg` from his Desktop (Sony A7 III via Lightroom, 1200×800). Support hero, `position: 60% 50%` (keeps the PheNode centred when the sides are cropped). Source in `media-src/support/phenode-research-field-original.jpg`.
+- `support/phenode-closeup-{800,1200}.webp`: a close-up of a PheNode, enclosure, two solar panels and sensors against a blue sky — Jake's `DSC02237.jpg` (1200×800). Support service block, beside Nadia's quote, uncropped at 3:2 (the figure was 4:3 for the prairie photo). Source in `media-src/support/phenode-closeup-original.jpg`.
+- Both are 1200 px wide, the size Jake has, so no larger versions are exported.
+
+## Resources list thumbnails (in place, Nov 15)
+
+Every entry on the Resources page shows a 3:2 thumbnail beside its title, like an article list (Jake). Files: `public/assets/thumbs/<key>-{320,480}.webp`, cropped from the sources below (`thumb` in `GROUPS`, `src/pages/Resources.jsx`). They are decorative (`alt=""`): the title names each link. Press entries use the lead photo of the article they link to, as Jake asked; those photos belong to the publishers or to whoever they credit, so check that Agrela may reuse them. Article photos were saved in the built-in browser to ~/Downloads, then copied to `media-src/press/`.
+
+| Key | Entry | Source |
+|---|---|---|
+| `support-docs` | Support & documentation | Gallery base-station close-up (`media-src/gallery/phenode-base-station-closeup-original.jpg`) |
+| `specifications` | Specifications | AgFunderNews in-article photo "The PheNode environmental monitoring device", credited to Agrela (`media-src/press/agfundernews-2023-phenode-closeup.jpg`, 1920×1440) |
+| `press-danforth` | Danforth Center article (2026) | The article's featured image, `wp-content/uploads/2026/05/AgrelaPheNodePR.jpg` (PheNode with a FieldDock drone dock; `media-src/press/danforth-2026-agrela-phenode-pr.jpg`, 1600×900; no credit shown on the page) |
+| `press-theray` | The Ray article (Nov 2023) | The article's featured image, "PheNode-Sensor-Array" (a 600×400 render with a transparent background, set on paper-3 #E2DED4; `media-src/press/theray-2023-phenode-sensor-array.webp`) |
+| `press-agfundernews` | AgFunderNews article (Dec 2023) | The article's lead image, Nadia Shakoor's headshot, credited to Agrela (`media-src/press/agfundernews-2023-nadia-shakoor-headshot.jpg`, 1920×1281) |
+| `how-it-works` | How PheNode works | Jake's `about-us-hero.jpg` (as on the Company hero) |
+| `applications` | Applications | Jake's "PheNode in Barley" (`media-src/company/phenode-in-barley-original.jpg`) |
+| `case-studies` | Case studies | AgFunderNews in-article photo of a PheNode in a wildflower meadow at The Ray, credited to Agrela (`media-src/press/agfundernews-2023-exit-6-phenode.jpg`, 1920×1500) |

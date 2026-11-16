@@ -13,6 +13,7 @@ import { CASE_STUDIES } from '../../data/caseStudies.js'
 import { useScrollProgress, seg } from '../../lib/motion.js'
 import { diurnalSeries, soilMoistureSeries } from '../../lib/demoData.js'
 import { Link } from 'react-router-dom'
+import { FEATURES } from '../../data/features.js'
 
 const PACKAGE_FOR = { transportation: 'fire-weather', agriculture: 'research', ecology: 'restoration', urban: 'fire-weather' }
 const PIPELINE = [{ id: 'chamber', kind: 'chamber', label: 'Growth chamber' }, { id: 'greenhouse', kind: 'greenhouse', label: 'Greenhouse' }, { id: 'field', kind: 'field', label: 'Field experiment' }]
@@ -80,7 +81,7 @@ export default function ApplicationPage() {
                     <li className="flex gap-2"><span className="font-mono text-[11px] text-stone-2 pt-1">BASE</span><span>Base station{pkg.base.length ? ' + ' + pkg.base.map((s) => SENSOR_BY_ID[s].short).join(' + ') : ''}</span></li>
                   </ul>
                   <p className="mt-3 text-[12.5px] text-stone-2">Example packages are starting points, not fixed SKUs.</p>
-                  <div className="mt-4 flex flex-wrap gap-2">{needs.map((n) => <Link key={n.id} to={`/design-your-system?need=${n.id}`} className="chip border-ink/20 text-ink hover:bg-ink hover:text-paper">Start: {n.name}</Link>)}</div>
+                  {FEATURES.designSystem && <div className="mt-4 flex flex-wrap gap-2">{needs.map((n) => <Link key={n.id} to={`/design-your-system?need=${n.id}`} className="chip border-ink/20 text-ink hover:bg-ink hover:text-paper">Start: {n.name}</Link>)}</div>}
                 </div>
               )}
             </div>
@@ -114,7 +115,7 @@ export default function ApplicationPage() {
               <li key={c.slug}><Link to={`/case-studies/${c.slug}`} className="group flex flex-col gap-1 py-5"><span className="font-mono text-[11px] tracking-[0.14em] uppercase opacity-60">{c.location} · {c.year}{c.placeholder ? ' · placeholder' : ''}</span><span className="text-[18px] font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{c.project}</span><span className="text-[14px] opacity-70">{c.partner}</span></Link></li>
             )) : <li className="py-5 text-[14px] opacity-70">Case studies for this application are pending customer permission.</li>}
           </ul>
-          <div className="mt-10 flex flex-wrap gap-3"><Button to="/design-your-system" variant={app.pipeline ? 'primary-ink' : 'primary'}>{app.cta}</Button><Button to="/contact" variant={app.pipeline ? 'ghost-ink' : 'ghost'}>Talk to Agrela</Button></div>
+          <div className="mt-10 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant={app.pipeline ? 'primary-ink' : 'primary'}>{app.cta}</Button>}<Button to="/contact" variant={FEATURES.designSystem ? (app.pipeline ? 'ghost-ink' : 'ghost') : (app.pipeline ? 'primary-ink' : 'primary')}>Talk to Agrela</Button></div>
         </Container>
       </Section>
     </Page>

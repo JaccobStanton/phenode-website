@@ -6,6 +6,7 @@ import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import { BASE_STATION, ADD_ON_SENSORS } from '../../data/specs.js'
 import { ScreenCard, LoopVideo } from '../../components/media/media.jsx'
 import DeviceFrame from '../../components/software/DeviceFrame.jsx'
+import { FEATURES } from '../../data/features.js'
 
 export default function BaseStationPage() {
   return (
@@ -48,12 +49,12 @@ export default function BaseStationPage() {
                 {BASE_STATION.includes.map((i) => <li key={i} className="py-3">{i}</li>)}
               </ul>
               <p className="mt-5 text-[14px] leading-relaxed text-paper/70">Core measurements: {BASE_STATION.coreMeasurements.join(', ')}.</p>
-              <div className="mt-8 flex flex-wrap gap-3"><Button to="/design-your-system" variant="primary">Design a system</Button><Button to="/support" variant="ghost">Installation guides</Button></div>
+              <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Design a system</Button>}<Button to="/support" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Installation guides</Button></div>
             </div>
             <div className="lg:col-span-7">
               <SpecTable title="PheNode sensor specifications" rows={BASE_STATION.sensorSpecs} />
               <SpecTable title="Add-on sensor specifications" rows={ADD_ON_SENSORS.flatMap((s) => s.specs)} className="mt-10" />
-              <p className="mt-4 font-mono text-[10.5px] tracking-[0.1em] text-stone">Source: PheNode Summer 2025 Buyer's Guide.</p>
+              {FEATURES.buyersGuide && <p className="mt-4 font-mono text-[10.5px] tracking-[0.1em] text-stone">Source: PheNode Summer 2025 Buyer's Guide.</p>}
             </div>
           </div>
         </Container>

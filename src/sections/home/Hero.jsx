@@ -6,6 +6,7 @@ import PartDetail from '../../components/hardware/PartDetail.jsx'
 import { BASE_STATION_PARTS } from '../../data/baseStationParts.js'
 import { useReducedMotion } from '../../lib/motion.js'
 import { INTRO_LANDED } from '../../lib/intro.js'
+import { FEATURES } from '../../data/features.js'
 
 const GLIDE = [0.65, 0, 0.35, 1]
 const OUT = [0.22, 1, 0.36, 1]
@@ -138,8 +139,8 @@ export default function Hero() {
                   PheNode is a flexible, scalable environmental monitoring platform designed to move from individual measurements to connected, usable data — configured around the question you need to answer.
                 </p>
                 <ButtonPair className="mt-9" style={rv(1.15)}>
-                  <Button to="/design-your-system" variant="primary">Design System</Button>
-                  <Button to="/phenode" variant="ghost">Meet PheNode</Button>
+                  {FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Design System</Button>}
+                  <Button to="/phenode" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Meet PheNode</Button>
                 </ButtonPair>
               </motion.div>
             )}

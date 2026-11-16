@@ -2,6 +2,8 @@ import { Eyebrow, Section, Container, Button, Tag } from '../../components/ui/pr
 import ScaleNetwork, { STAGES, stageFor } from '../../components/viz/ScaleNetwork.jsx'
 import { SceneLegend } from '../../components/viz/scenes.jsx'
 import { useScrollProgress, seg, easeInOut } from '../../lib/motion.js'
+import { FEATURES } from '../../data/features.js'
+import { homeNo } from '../../data/homeSections.js'
 
 export default function Scale() {
   const [ref, raw] = useScrollProgress({ start: 'top top', end: 'bottom bottom' })
@@ -14,7 +16,7 @@ export default function Scale() {
           <Container className="py-24 lg:py-0">
             <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
               <div className="lg:col-span-4">
-                <Eyebrow index="10">Scale</Eyebrow>
+                <Eyebrow index={homeNo('scale')}>Scale</Eyebrow>
                 <h2 className="display-lg mt-5 max-w-[12ch]">From one sensor to an entire network.</h2>
                 <p className="lede mt-5 max-w-[38ch]">A single PheNode commands a fleet of wireless sensors across hundreds of acres. Add base stations and the same data system covers a corridor, a campus, a region.</p>
                 <div className="mt-8 border-t border-white/10 pt-6">
@@ -25,9 +27,11 @@ export default function Scale() {
                 <ol className="mt-6 hidden gap-1 lg:flex" aria-hidden="true">
                   {STAGES.map((s) => <li key={s.at} className={`h-1 flex-1 rounded-full ${progress >= s.at ? 'bg-signal' : 'bg-white/15'}`} />)}
                 </ol>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Button to="/design-your-system" variant="primary">Design your system</Button>
-                </div>
+                {FEATURES.designSystem && (
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Button to="/design-your-system" variant="primary">Design your system</Button>
+                  </div>
+                )}
               </div>
               <div className="relative lg:col-span-8">
                 <div className="relative overflow-hidden rounded-xl border border-white/10 bg-ink-2">

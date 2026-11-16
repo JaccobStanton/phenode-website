@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { Eyebrow, Section, Container, Button, Tag, AssetPlaceholder } from '../../components/ui/primitives.jsx'
 import { CASE_STUDIES } from '../../data/caseStudies.js'
 import { useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 export default function CaseStudiesTeaser() {
   const reveal = useReveal()
@@ -11,7 +12,7 @@ export default function CaseStudiesTeaser() {
     <Section id="case-studies" theme="paper" className="border-t border-ink/10">
       <Container>
         <div ref={reveal}>
-          <Eyebrow index="13" className="reveal">Case studies</Eyebrow>
+          <Eyebrow index={homeNo('case-studies')} className="reveal">Case studies</Eyebrow>
           <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <h2 className="display-lg reveal max-w-[14ch]">Real deployments.</h2>
             <p className="lede reveal max-w-[42ch]">Where PheNode is running today, what it measures, and what the people running it are learning.</p>

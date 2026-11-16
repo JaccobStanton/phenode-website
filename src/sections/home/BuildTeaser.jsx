@@ -3,6 +3,7 @@ import { Minus, Plus } from 'lucide-react'
 import { Eyebrow, Section, Container, Button, Tag } from '../../components/ui/primitives.jsx'
 import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import { useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 const STEPS = ['Application', 'Scale', 'Base station', 'Wireless nodes', 'Configure nodes', 'Software', 'Your system']
 
@@ -15,7 +16,7 @@ export default function BuildTeaser() {
       <Container>
         <div ref={reveal} className="grid gap-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-5">
-            <Eyebrow index="08" className="reveal">Build your PheNode</Eyebrow>
+            <Eyebrow index={homeNo('build')} className="reveal">Build your PheNode</Eyebrow>
             <h2 className="display-lg reveal mt-5 max-w-[14ch]">Build the monitoring system your project needs.</h2>
             <p className="lede reveal mt-6 max-w-[44ch]">Choose the application and the scale, add a base station, set the number of nodes, attach sensors, pick software. Then send the configuration to Agrela to talk it through.</p>
             <ol className="reveal mt-8 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] tracking-[0.14em] uppercase text-stone-2" aria-label="Configurator steps">

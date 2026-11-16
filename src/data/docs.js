@@ -1,64 +1,36 @@
 /**
- * Support documentation index. Organized by product and version; archived versions stay downloadable.
- * File paths are placeholders until the real documents are dropped into /public/docs/.
+ * Support documentation: one list by version, as on https://www.agrelaeco.com/support (Jake, Nov 15, 2026:
+ * "It's all in the quick start guide"). Titles are word for word from that page. The newest version is "Current",
+ * the older ones "Archived".
+ *
+ * The PDFs are copies of the ones agrelaeco.com hosts (Jake, Nov 15), in /public/docs/ (current) and
+ * /public/docs/archive/ (older). `source` is the agrelaeco.com file each was copied from. The Claude preview
+ * build links to those instead (VITE_DOCS_SOURCE=agrelaeco), because the preview can't hold files over 15 MB.
  */
-export const DOC_PRODUCTS = [
+const LOCAL = `${import.meta.env.BASE_URL}docs/`
+const SOURCE = 'https://www.agrelaeco.com/_files/ugd/'
+const fromSource = import.meta.env.VITE_DOCS_SOURCE === 'agrelaeco'
+const doc = (title, file, source, size) => ({ title, file, size, source: SOURCE + source, href: fromSource ? SOURCE + source : LOCAL + file })
+
+export const SUPPORT_DOCS = [
   {
-    id: 'phenode',
-    name: 'PheNode base station',
-    versions: [
-      {
-        version: '2025.1', date: '2025-06', current: true,
-        docs: [
-          { title: 'PheNode Summer 2025 Buyer\'s Guide', type: 'Guide', file: '/docs/phenode-buyers-guide-summer-2025.pdf', size: '5.4 MB' },
-          { title: 'Quick-start guide', type: 'Quick start', file: '/docs/phenode-quick-start-2025.1.pdf', size: '—', placeholder: true },
-          { title: 'Installation guide — frame, pole and tower mounting', type: 'Installation', file: '/docs/phenode-installation-2025.1.pdf', size: '—', placeholder: true },
-          { title: 'Product manual', type: 'Manual', file: '/docs/phenode-manual-2025.1.pdf', size: '—', placeholder: true },
-          { title: 'Sensor specifications', type: 'Technical reference', file: '/docs/phenode-sensor-specs-2025.1.pdf', size: '—', placeholder: true },
-        ],
-      },
-      {
-        version: '2024.2', date: '2024-09', current: false,
-        docs: [
-          { title: 'Product manual (archived)', type: 'Manual', file: '/docs/archive/phenode-manual-2024.2.pdf', size: '—', placeholder: true },
-          { title: 'Installation guide (archived)', type: 'Installation', file: '/docs/archive/phenode-installation-2024.2.pdf', size: '—', placeholder: true },
-        ],
-      },
+    version: 'v3', current: true,
+    docs: [
+      doc('PheNode Quick Start Guide v3 (Fall 2026)', 'phenode-quick-start-guide-v3-fall-2026.pdf', 'ae5d22_112ecc8584754a0796ae6ab084eb6e13.pdf', '15.8 MB'),
     ],
   },
   {
-    id: 'wireless-node',
-    name: 'Agrela wireless sensor',
-    versions: [
-      {
-        version: 'v2 firmware', date: '2025-07', current: true,
-        docs: [
-          { title: 'Wireless sensor quick-start', type: 'Quick start', file: '/docs/wireless-sensor-quick-start-v2.pdf', size: '—', placeholder: true },
-          { title: 'Soil probe connection guide', type: 'Installation', file: '/docs/wireless-sensor-soil-probes.pdf', size: '—', placeholder: true },
-          { title: 'Firmware release notes', type: 'Firmware', file: '/docs/wireless-sensor-firmware-notes.pdf', size: '—', placeholder: true },
-        ],
-      },
-      {
-        version: 'v1 firmware', date: '2024-03', current: false,
-        docs: [
-          { title: 'Wireless sensor manual (archived)', type: 'Manual', file: '/docs/archive/wireless-sensor-manual-v1.pdf', size: '—', placeholder: true },
-        ],
-      },
+    version: 'v2',
+    docs: [
+      doc('PheNode Quick Start Guide v2.1 (Fall 2024)', 'archive/phenode-quick-start-guide-v2.1-fall-2024.pdf', 'ae5d22_5213aac3e5df4c64989e364390cc9f6b.pdf', '11.7 MB'),
+      doc('PheNode Quick Start Guide v2.0 (April 2024)', 'archive/phenode-quick-start-guide-v2.0-april-2024.pdf', 'ae5d22_d8c7f0d7705a44af86691fb60c77777d.pdf', '11.7 MB'),
     ],
   },
   {
-    id: 'software',
-    name: 'PheNode software',
-    versions: [
-      {
-        version: 'Current release', date: '2026', current: true,
-        docs: [
-          { title: 'Dashboard user guide', type: 'Software guide', file: '/docs/software-user-guide.pdf', size: '—', placeholder: true },
-          { title: 'Data downloads and cleaning preferences', type: 'Software guide', file: '/docs/software-downloads-guide.pdf', size: '—', placeholder: true },
-          { title: 'API reference', type: 'Technical reference', file: '/docs/software-api-reference.pdf', size: '—', placeholder: true },
-          { title: 'Dockerized backend — deployment notes', type: 'Technical reference', file: '/docs/software-backend-notes.pdf', size: '—', placeholder: true },
-        ],
-      },
+    version: 'v1',
+    docs: [
+      doc('PheNode User Manual v1.1 (January 2024)', 'archive/phenode-user-manual-v1.1-january-2024.pdf', 'ae5d22_1115ef19f6ee41168d06da7fb6f0ae9d.pdf', '24.7 MB'),
+      doc('PheNode User Manual v1.0 (May 2023)', 'archive/phenode-user-manual-v1.0-may-2023.pdf', 'ae5d22_11b14f1078794ad3bdfbba69f0d57256.pdf', '8.7 MB'),
     ],
   },
 ]

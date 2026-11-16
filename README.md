@@ -23,6 +23,7 @@ Node 20+. Fonts are self-hosted (`@fontsource-variable/inter`, the PheNode app's
 | `VITE_LEAD_ENDPOINT` | Optional. POST target for the contact / configurator forms (JSON body: name, organization, email, projectType, application, locations, sensors, timeline, message, intent, attachment). Without it, forms open a prefilled email to `support@agrelaeco.com` and offer a copy button. |
 | `VITE_BASE` | Optional. Base path when hosting under a sub-path (e.g. `/preview/`). |
 | `VITE_ROUTER` | Optional. `hash` switches to a hash router for hosts that cannot rewrite deep links to `index.html`. |
+| `VITE_DOCS_SOURCE` | Optional. `agrelaeco` links the Support PDFs to agrelaeco.com's copies instead of `public/docs/` (used for the Claude preview, which can't hold files over 15 MB). |
 
 ### Deploy
 
@@ -59,14 +60,18 @@ public/assets/     WebP assets (see docs/asset-manifest.md), public/docs/ docume
 - Named partners and dates come from public press (Danforth Center, The Ray); anything beyond that is a labelled placeholder (`src/data/caseStudies.js`).
 - Charts and maps use seeded demo data and carry a "Demo data" tag. The dashboard is an illustrative recreation of the real GUI's features only.
 - Claims awaiting verification are gated behind `VERIFIED_CLAIMS` in `src/data/specs.js` (e.g. pilot-customer retention).
-- Pricing is intentionally omitted; the Buyer's Guide is downloadable from Support.
-- Testimonial slots (`TestimonialSlot`) render as labelled placeholders until approved quotes exist.
+- Pricing is intentionally omitted. The Buyer's Guide is hidden for now (`FEATURES.buyersGuide`): its Resources entry and the "Source: … Buyer's Guide" credits. Its PDF moved to `media-src/docs/` so it isn't published. Its numbers still back `specs.js`.
+- The privacy policy (`/legal/privacy`) and terms of service (`/legal/terms`, `src/data/legalTerms.jsx`) are Agrela's published ones, copied word for word from agrelaeco.com (Nov 15), typos included.
+- Support (`/support`) is one list of documents by version, as on agrelaeco.com/support (`src/data/docs.js`). The PDFs are copies of agrelaeco.com's, in `public/docs/` (current) and `public/docs/archive/`. The Claude preview build sets `VITE_DOCS_SOURCE=agrelaeco` to link to agrelaeco.com's copies instead (the preview can't hold files over 15 MB).
+- Customer quotes (`TestimonialSlot`) are hidden for now (`FEATURES.customerQuotes`); they render as labelled placeholders until approved quotes exist. Nadia's quotes (home, Company, Support) stay.
 
 ## Personalization
 
 Home 05 is a sentence to complete: "I'm a [role] and I need to understand [question]." Picking a role reorders the application chapters and changes CTA language; the question shows a demo deployment and a suggested starting point, and pre-fills the configurator (`/design-your-system?need=soil`). Until a role is picked the sentence shows an example and nothing is reordered. Both persist in `localStorage` under `agrela.personalization.v1`.
 
 ## Configurator
+
+**Switched off for now** (`FEATURES.designSystem = false` in `src/data/features.js`): the page, its navbar tab, the menu and footer buttons, home "Build your PheNode" and every button or chip that leads to it are hidden, and `/design-your-system` redirects to Contact. Set the flag to `true` to bring it all back (the home section numbers adjust themselves, `src/data/homeSections.js`).
 
 `/design-your-system` — seven visual steps or a four-question guided mode. Configurations save to `localStorage` (`agrela.config.v1`) and to the URL (`?c=…`) with a reference ID (`PHN-XXXXXX`, a hash of the configuration). "Talk to Agrela about this system" attaches the configuration to the lead form.
 

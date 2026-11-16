@@ -80,6 +80,8 @@ Beat by beat:
 | 13 | Case studies | Paper | Editorial teasers | Image parallax |
 | 14 | Final CTA | Ink | Full system composite | Slow assembly |
 
+> **Nov 15, 2026:** the configurator ("Design your system", `/design-your-system`) is switched off for now, together with the Build teaser and every button that leads to it: `FEATURES.designSystem` in `src/data/features.js`. The on-page section numbers close up while it is off (`src/data/homeSections.js`).
+
 ---
 
 ## 4. Animation choreography

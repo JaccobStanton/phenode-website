@@ -3,6 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { Eyebrow, Section, Container, Button, ButtonPair, Img } from '../../components/ui/primitives.jsx'
 import SystemChain from '../../components/viz/SystemChain.jsx'
 import { useScrollProgress, useReveal } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 // The four parts are the way into the product pages; the system chain below tells the story in order. So each card
 // says something the chain doesn't (how it's built, what it costs to run, what you take away, what you see), every
@@ -31,7 +32,7 @@ export default function WhatIsPheNode() {
           <div className="contents lg:flex lg:flex-col">
             <div className="order-1 lg:min-h-[var(--elev-h)]">
               <div className="lg:sticky lg:top-28">
-                <Eyebrow index="02" className="reveal">What is PheNode?</Eyebrow>
+                <Eyebrow index={homeNo('what-is')} className="reveal">What is PheNode?</Eyebrow>
                 <h2 className="display-lg reveal mt-5 max-w-[14ch]"><span className="block whitespace-nowrap">One system.</span> Built around your environment.</h2>
                 <p className="lede reveal mt-6 max-w-[46ch]">PheNode is a flexible, scalable environmental monitoring platform that can be tailored to the needs of the user. It is not a sensor, a weather station or a data logger. It is the whole path from a physical measurement to a dataset you can act on.</p>
                 <ul className="reveal mt-10 -mx-3 grid border-t hairline pt-3 sm:grid-cols-2" aria-label="What PheNode includes">

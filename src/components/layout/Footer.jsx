@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FOOTER } from '../../data/navigation.js'
 import { COMPANY } from '../../data/company.js'
 import { PheNodeLogo, AgrelaLogo } from '../ui/Logos.jsx'
+import { FEATURES } from '../../data/features.js'
 
 export default function Footer() {
   return (
@@ -12,7 +13,7 @@ export default function Footer() {
             <PheNodeLogo height={22} />
             <p className="max-w-[34ch] text-[15px] text-stone">A flexible, scalable environmental monitoring platform, built around the question you need to answer.</p>
             <div className="flex flex-col gap-3">
-              <Link to="/design-your-system" className="btn-primary w-fit !px-4 !py-2 text-[14px]">Design System</Link>
+              {FEATURES.designSystem && <Link to="/design-your-system" className="btn-primary w-fit !px-4 !py-2 text-[14px]">Design System</Link>}
               <a href={`mailto:${COMPANY.supportEmail}`} className="font-mono text-[12px] tracking-[0.1em] text-stone hover:text-paper">{COMPANY.supportEmail}</a>
             </div>
           </div>

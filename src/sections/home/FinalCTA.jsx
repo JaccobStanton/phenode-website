@@ -1,6 +1,7 @@
 import { Section, Container, Button, Img } from '../../components/ui/primitives.jsx'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
 import { useReveal } from '../../lib/motion.js'
+import { FEATURES } from '../../data/features.js'
 
 export default function FinalCTA() {
   const { primaryCta } = usePersonalization()
@@ -14,8 +15,8 @@ export default function FinalCTA() {
           <h2 className="display-xl reveal mt-5 max-w-[14ch]">Build around the environment you need to understand.</h2>
           <p className="lede reveal mt-6 max-w-[52ch]">Base station, wireless nodes, sensors, software. Configure the hardware. Configure the software. Configure the science.</p>
           <div className="reveal mt-9 flex flex-wrap justify-center gap-3">
-            <Button to="/design-your-system" variant="primary">{primaryCta === 'Design your system' ? 'Design your system' : primaryCta}</Button>
-            <Button to="/contact" variant="ghost">Talk to Agrela</Button>
+            {FEATURES.designSystem && <Button to="/design-your-system" variant="primary">{primaryCta === 'Design your system' ? 'Design your system' : primaryCta}</Button>}
+            <Button to="/contact" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Talk to Agrela</Button>
           </div>
           <div className="reveal relative mt-16 w-full max-w-[1100px]">
             <div aria-hidden="true" className="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(closest-side,rgba(244,242,236,0.08),transparent_70%)]" />

@@ -6,6 +6,7 @@ import { Screen, SCREENS, SCREEN_RATIO, PhoneScreen, PHONE_SCREENS, PHONE_RATIO 
 import { TestimonialSlot } from '../../sections/home/Proof.jsx'
 import { SOFTWARE } from '../../data/specs.js'
 import { SOFTWARE_MODULES } from '../../data/sensors.js'
+import { FEATURES } from '../../data/features.js'
 
 // Views with a real screenshot (`shot`) are selectable; the rest are listed without one.
 const VIEWS = [
@@ -66,7 +67,7 @@ export default function SoftwarePage() {
                 {SOFTWARE_MODULES.map((m) => <li key={m.id} className={`rounded-lg border p-4 ${m.default ? 'border-data/40 bg-data/5' : 'border-white/10'}`}><p className="text-[14.5px] font-medium">{m.name}</p><p className="mt-0.5 text-[13px] text-paper/65">{m.text}</p><p className={`mt-2 font-mono text-[10px] tracking-[0.12em] uppercase ${m.default ? 'text-data' : 'text-stone'}`}>{m.default ? 'Included' : 'Optional'}</p></li>)}
               </ul>
               <TestimonialSlot context="Access to data" className="mt-8" />
-              <div className="mt-8 flex flex-wrap gap-3"><Button to="/design-your-system" variant="primary">Choose software for your system</Button><Button to="/contact?intent=demo" variant="ghost">Request a demo</Button></div>
+              <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Choose software for your system</Button>}<Button to="/contact?intent=demo" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Request a demo</Button></div>
             </div>
           </div>
         </Container>

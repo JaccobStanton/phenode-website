@@ -8,6 +8,8 @@ import { NodeGlyph } from '../../components/viz/scenes.jsx'
 import { SOFTWARE } from '../../data/specs.js'
 import { SOFTWARE_MODULES } from '../../data/sensors.js'
 import { useScrollProgress, useReveal, seg, easeOut, lerp } from '../../lib/motion.js'
+import { FEATURES } from '../../data/features.js'
+import { homeNo } from '../../data/homeSections.js'
 
 // What the Precipitation page adds, beyond the three screens shown.
 const PRECIPITATION = [
@@ -28,7 +30,7 @@ export default function Software() {
     <Section id="software" theme="ink" className="overflow-hidden border-t border-white/10">
       <Container>
         <div ref={reveal}>
-          <Eyebrow index="09" className="reveal">Software</Eyebrow>
+          <Eyebrow index={homeNo('software')} className="reveal">Software</Eyebrow>
           <div className="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
             <h2 className="display-lg reveal max-w-[14ch] lg:col-span-7">The hardware is configurable. The software is too.</h2>
             <p className="lede reveal max-w-[44ch] lg:col-span-5">One browser-based platform for the whole fleet: status, wireless networks, measurements, imaging, downloads, remote control — and an API underneath all of it.</p>
@@ -122,7 +124,7 @@ export default function Software() {
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button to="/phenode/software" variant="primary">Explore the software</Button>
-              <Button to="/design-your-system" variant="ghost">Build a system with these modules</Button>
+              {FEATURES.designSystem && <Button to="/design-your-system" variant="ghost">Build a system with these modules</Button>}
             </div>
           </div>
         </div>

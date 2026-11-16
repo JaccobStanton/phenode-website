@@ -13,6 +13,8 @@ import { SENSOR_BY_ID } from '../../data/sensors.js'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
 import { diurnalSeries, soilMoistureSeries } from '../../lib/demoData.js'
 import { useReveal, useReducedMotion } from '../../lib/motion.js'
+import { FEATURES } from '../../data/features.js'
+import { homeNo } from '../../data/homeSections.js'
 
 /*
  * Home 05: Choose your perspective. One sentence the visitor completes:
@@ -132,7 +134,7 @@ export default function Perspective() {
       <Container>
         <div ref={reveal}>
           <h2 className="eyebrow reveal flex items-center gap-3">
-            <span aria-hidden="true">05</span><span aria-hidden="true" className="h-px w-6 bg-current opacity-40" />Choose your perspective
+            <span aria-hidden="true">{homeNo('perspective')}</span><span aria-hidden="true" className="h-px w-6 bg-current opacity-40" />Choose your perspective
           </h2>
 
           {/* The sentence: each clause on its own line from tablets up */}
@@ -213,7 +215,7 @@ function Deployment({ need }) {
   )
 }
 
-/** Right: the suggested starting point, step by step, ending in the insight it gives and the way into the configurator. */
+/** Right: the suggested starting point, step by step, ending in the insight it gives and (while the design page is on) the way into the configurator. */
 function StartingPoint({ need }) {
   const app = APPLICATION_BY_ID[need.app]
   const sensors = [...new Map(need.sensors.map((id) => SENSOR_BY_ID[id]).filter(Boolean).map((s) => [s.id, s])).values()]
@@ -256,8 +258,8 @@ function StartingPoint({ need }) {
         </div>
         <div className="mt-auto pt-8">
           <div className="flex flex-wrap gap-3 border-t border-white/10 pt-6">
-          <Button to={`/design-your-system?need=${need.id}`} variant="primary">Start with this configuration</Button>
-          <Button to={app.route} variant="ghost" icon={null}>Read the application</Button>
+          {FEATURES.designSystem && <Button to={`/design-your-system?need=${need.id}`} variant="primary">Start with this configuration</Button>}
+          <Button to={app.route} variant={FEATURES.designSystem ? 'ghost' : 'primary'} icon={FEATURES.designSystem ? null : 'arrow'}>Read the application</Button>
           </div>
         </div>
       </div>

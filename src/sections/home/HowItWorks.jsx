@@ -2,6 +2,7 @@ import { Eyebrow, Section, Container, Button, ButtonPair } from '../../component
 import DataJourney, { JOURNEY, JourneyList } from '../../components/viz/DataJourney.jsx'
 import JourneyStage from '../../components/viz/JourneyStage.jsx'
 import { useScrollProgress, seg, easeInOut } from '../../lib/motion.js'
+import { homeNo } from '../../data/homeSections.js'
 
 export default function HowItWorks() {
   // Tall wrapper + sticky stage (on screens tall enough to pin): the journey plays as the visitor scrolls ~1.6 screens.
@@ -19,7 +20,7 @@ export default function HowItWorks() {
             {/* Title, lede and the next steps on the left; the stop being described, pictured and explained on the right */}
             <div className="grid gap-10 md:grid-cols-12 md:items-center md:gap-x-12">
               <div className="md:col-span-7">
-                <Eyebrow index="04">How PheNode works</Eyebrow>
+                <Eyebrow index={homeNo('how-it-works')}>How PheNode works</Eyebrow>
                 {/* display-lg, also capped by height so the pinned stage fits short laptop screens */}
                 <h2 className="display-lg mt-5 max-w-[16ch]" style={{ fontSize: 'clamp(2.25rem, min(5vw, 9.5vh), 4.5rem)' }}>From measurement to meaningful data.</h2>
                 <p className="lede mt-[clamp(1rem,2.6vh,1.5rem)] max-w-[44ch]">Environmental readings leave the hardware as a signal and arrive in your workflow as structured datasets, and you maintain control at every step.</p>

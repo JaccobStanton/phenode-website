@@ -1,3 +1,4 @@
+import { Children } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
 
@@ -39,9 +40,11 @@ export function Button({ to, href, variant = 'primary', icon = 'arrow', children
   return <button type="button" className={cls} {...rest}>{inner}</button>
 }
 
-/** Two CTAs at equal width (the longer label sets both); stacked on phones. Pass layout classes (margins, reveal) via className. */
+/** Two CTAs at equal width (the longer label sets both); stacked on phones. Pass layout classes (margins, reveal) via className.
+ *  With only one button (the other switched off), it is a single column, so a centred pair stays centred. */
 export function ButtonPair({ children, className = '', style }) {
-  return <div className={`grid w-fit grid-cols-1 gap-3 sm:grid-cols-2 ${className}`} style={style}>{children}</div>
+  const two = Children.toArray(children).length > 1
+  return <div className={`grid w-fit grid-cols-1 gap-3 ${two ? 'sm:grid-cols-2' : ''} ${className}`} style={style}>{children}</div>
 }
 
 /** Responsive WebP image from /public/assets with width variants. */

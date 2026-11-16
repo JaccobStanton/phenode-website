@@ -1,10 +1,11 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { BrowserRouter, HashRouter, MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, HashRouter, MemoryRouter, Navigate, Routes, Route, useLocation } from 'react-router-dom'
 import Nav from './components/layout/Nav.jsx'
 import Footer from './components/layout/Footer.jsx'
 import { PersonalizationProvider } from './context/PersonalizationContext.jsx'
 import { ScrollTrigger } from './lib/motion.js'
 import { clearIntroHeader } from './lib/intro.js'
+import { FEATURES } from './data/features.js'
 
 const Home = lazy(() => import('./pages/Home.jsx'))
 const PheNodeOverview = lazy(() => import('./pages/phenode/Overview.jsx'))
@@ -65,7 +66,8 @@ export default function App() {
               <Route path="/applications/:id" element={<ApplicationPage />} />
               <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/case-studies/:slug" element={<CaseStudy />} />
-              <Route path="/design-your-system" element={<DesignYourSystem />} />
+              {/* switched off for now (data/features.js): the address goes to Contact, and the page's code isn't loaded */}
+              <Route path="/design-your-system" element={FEATURES.designSystem ? <DesignYourSystem /> : <Navigate to="/contact" replace />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/support" element={<Support />} />
               <Route path="/contact" element={<Contact />} />

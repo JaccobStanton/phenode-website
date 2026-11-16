@@ -7,13 +7,13 @@ export const COMPANY = {
   short: 'Agrela',
   product: 'PheNode',
   founded: 2016,
-  origin: 'Founded by plant scientists at the Donald Danforth Plant Science Center, St. Louis',
+  origin: 'Founded by plant scientists at the Donald Danforth Plant Science Center, St.\u00a0Louis', // no line break inside "St. Louis"
   commercialSince: 2023,
   website: 'https://www.agrelaeco.com',
   appUrl: 'https://phenode.live', // the PheNode software (customer sign-in)
   supportEmail: 'support@agrelaeco.com',
   leadership: [
-    { name: 'Nadia Shakoor, PhD', title: 'Co-founder & CEO' },
+    { name: 'Nadia Shakoor, PhD', title: 'Co-founder & CSO' },
     { name: 'Bill Kezele', title: 'President' },
   ],
   publicPartners: [
@@ -25,7 +25,7 @@ export const COMPANY = {
   founderQuote: {
     text: 'PheNode was designed to fill a gap that we felt every day as researchers.',
     name: 'Nadia Shakoor, PhD',
-    title: 'Co-founder & CEO, Agrela Ecosystems',
+    title: 'Co-founder & CSO, Agrela Ecosystems',
     source: 'Danforth Plant Science Center, 2026',
   },
 }
