@@ -20,7 +20,7 @@ export const COMPANY = {
     { name: 'The Ray', detail: 'Vegetation, soil and air monitoring along interstate rights-of-way' },
     { name: 'Georgia Department of Transportation', detail: '18-mile pilot along Interstate 85 in West Georgia' },
     { name: 'Washington State Department of Transportation', detail: 'Expanded roadside deployment' },
-    { name: 'Donald Danforth Plant Science Center', detail: 'Agricultural research and specialty crops' },
+    { name: 'Donald Danforth Plant Science Center', detail: 'Agricultural research' },
   ],
   founderQuote: {
     text: 'PheNode was designed to fill a gap that we felt every day as researchers.',

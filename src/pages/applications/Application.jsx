@@ -112,7 +112,13 @@ export default function ApplicationPage() {
           </div>
           <ul className={`mt-8 flex flex-col divide-y border-y ${app.pipeline ? 'divide-ink/10 border-ink/10' : 'divide-white/10 border-white/10'}`}>
             {cases.length ? cases.map((c) => (
-              <li key={c.slug}><Link to={`/case-studies/${c.slug}`} className="group flex flex-col gap-1 py-5"><span className="font-mono text-[11px] tracking-[0.14em] uppercase opacity-60">{c.location} · {c.year}{c.placeholder ? ' · placeholder' : ''}</span><span className="text-[18px] font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{c.project}</span><span className="text-[14px] opacity-70">{c.partner}</span></Link></li>
+              <li key={c.slug}>{(() => {
+                const inner = <><span className="font-mono text-[11px] tracking-[0.14em] uppercase opacity-60">{c.location} · {c.year}{c.placeholder ? ' · placeholder' : ''}{!FEATURES.caseStudyPages && c.press?.length ? ' · press release' : ''}</span><span className="text-[18px] font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{c.project}</span><span className="text-[14px] opacity-70">{c.partner}</span></>
+                // the case study page, or its first press release while those pages are hidden (data/features.js)
+                return FEATURES.caseStudyPages || !c.press?.length
+                  ? <Link to={FEATURES.caseStudyPages ? `/case-studies/${c.slug}` : '/case-studies'} className="group flex flex-col gap-1 py-5">{inner}</Link>
+                  : <a href={c.press[0].href} target="_blank" rel="noreferrer" className="group flex flex-col gap-1 py-5">{inner}</a>
+              })()}</li>
             )) : <li className="py-5 text-[14px] opacity-70">Case studies for this application are pending customer permission.</li>}
           </ul>
           <div className="mt-10 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant={app.pipeline ? 'primary-ink' : 'primary'}>{app.cta}</Button>}<Button to="/contact" variant={FEATURES.designSystem ? (app.pipeline ? 'ghost-ink' : 'ghost') : (app.pipeline ? 'primary-ink' : 'primary')}>Talk to Agrela</Button></div>

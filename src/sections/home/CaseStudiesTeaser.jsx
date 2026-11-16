@@ -4,6 +4,13 @@ import { Eyebrow, Section, Container, Button, Tag, AssetPlaceholder } from '../.
 import { CASE_STUDIES } from '../../data/caseStudies.js'
 import { useReveal } from '../../lib/motion.js'
 import { homeNo } from '../../data/homeSections.js'
+import { FEATURES } from '../../data/features.js'
+
+/** A row opens the case study page, or its first press release while those pages are hidden (data/features.js). */
+function RowLink({ c, className, children }) {
+  if (FEATURES.caseStudyPages || !c.press?.length) return <Link to={FEATURES.caseStudyPages ? `/case-studies/${c.slug}` : '/case-studies'} className={className}>{children}</Link>
+  return <a href={c.press[0].href} target="_blank" rel="noreferrer" className={className}>{children}</a>
+}
 
 export default function CaseStudiesTeaser() {
   const reveal = useReveal()
@@ -20,7 +27,7 @@ export default function CaseStudiesTeaser() {
           <ol className="mt-14 flex flex-col divide-y divide-ink/10 border-y border-ink/10">
             {items.map((c, i) => (
               <li key={c.slug} className="reveal">
-                <Link to={`/case-studies/${c.slug}`} className="group grid gap-6 py-8 md:grid-cols-12 md:items-center">
+                <RowLink c={c} className="group grid gap-6 py-8 md:grid-cols-12 md:items-center">
                   <div className="md:col-span-3">
                     <AssetPlaceholder label={`Photo · ${c.partner.split(' · ')[0]}`} ratio="4 / 3" className="text-ink/50" />
                   </div>
@@ -32,8 +39,8 @@ export default function CaseStudiesTeaser() {
                     <h3 className="display-sm mt-3 max-w-[30ch] group-hover:underline group-hover:underline-offset-4">{c.project}</h3>
                     <p className="mt-2 text-[14.5px] text-ink/70">{c.partner}</p>
                   </div>
-                  <div className="md:col-span-2 md:text-right"><span className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.14em] uppercase text-ink">Read <ArrowUpRight size={14} /></span></div>
-                </Link>
+                  <div className="md:col-span-2 md:text-right"><span className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.14em] uppercase text-ink">{FEATURES.caseStudyPages ? 'Read' : 'Press release'} <ArrowUpRight size={14} /></span></div>
+                </RowLink>
               </li>
             ))}
           </ol>

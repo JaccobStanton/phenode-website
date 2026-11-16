@@ -33,4 +33,11 @@ export const FEATURES = {
    * the customer-quote placeholder) are not customer quotes and stay.
    */
   customerQuotes: false,
+
+  /**
+   * The individual case study pages (/case-studies/<slug>). Hidden for now (Jake, Nov 15): the Case Studies page, the
+   * home "Case studies" section and the application pages link to each deployment's press releases instead, and the
+   * pages' addresses go to /case-studies. Set to true to link the case study pages again.
+   */
+  caseStudyPages: false,
 }

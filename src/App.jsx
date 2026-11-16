@@ -65,7 +65,8 @@ export default function App() {
               <Route path="/applications" element={<ApplicationsIndex />} />
               <Route path="/applications/:id" element={<ApplicationPage />} />
               <Route path="/case-studies" element={<CaseStudies />} />
-              <Route path="/case-studies/:slug" element={<CaseStudy />} />
+              {/* switched off for now (data/features.js): the deployments link to their press releases */}
+              <Route path="/case-studies/:slug" element={FEATURES.caseStudyPages ? <CaseStudy /> : <Navigate to="/case-studies" replace />} />
               {/* switched off for now (data/features.js): the address goes to Contact, and the page's code isn't loaded */}
               <Route path="/design-your-system" element={FEATURES.designSystem ? <DesignYourSystem /> : <Navigate to="/contact" replace />} />
               <Route path="/resources" element={<Resources />} />

@@ -44,7 +44,7 @@ Slots render a labelled `AssetPlaceholder` until real photography exists. For an
 | Slot | Suggested path | Size / ratio | Component |
 |---|---|---|---|
 | Application heroes (transportation, agriculture, ecology, urban) | `photos/<name>-{800,1600,2400}.webp` | 21:9, ≥ 2400 wide | `pages/applications/Application.jsx` via `data/applications.js` |
-| Case study opener | `case-studies/<slug>/opener-{1200,2400}.webp` | 2:1, 2400×1200 | `pages/CaseStudy.jsx` |
+| Case study opener (case study pages are hidden for now) | `case-studies/<slug>/opener-{1200,2400}.webp` | 2:1, 2400×1200 | `pages/CaseStudy.jsx` |
 | Case study deployment (real site photos) | `case-studies/<slug>/deployment-{800,1600}.webp` | 4:3 | same (Danforth currently shows a software screenshot) |
 | Case study timeline photos | `case-studies/<slug>/<year>-{800,1600}.webp` | 16:9 | same |
 | Case study teaser | `case-studies/<slug>/teaser-{600,1200}.webp` | 4:3 | `sections/home/CaseStudiesTeaser.jsx`, `pages/CaseStudies.jsx` |
@@ -132,6 +132,15 @@ Not used yet, also in the Gallery: 1/6 a PheNode in tall grass by a pine (3024×
 - `support/phenode-research-field-{800,1200}.webp`: a PheNode on a guyed mast above rows of plants in a field — Jake's `DSC02247.jpg` from his Desktop (Sony A7 III via Lightroom, 1200×800). Support hero, `position: 60% 50%` (keeps the PheNode centred when the sides are cropped). Source in `media-src/support/phenode-research-field-original.jpg`.
 - `support/phenode-closeup-{800,1200}.webp`: a close-up of a PheNode, enclosure, two solar panels and sensors against a blue sky — Jake's `DSC02237.jpg` (1200×800). Support service block, beside Nadia's quote, uncropped at 3:2 (the figure was 4:3 for the prairie photo). Source in `media-src/support/phenode-closeup-original.jpg`.
 - Both are 1200 px wide, the size Jake has, so no larger versions are exported.
+
+## Case study card photos (in place — Jake's photos, Nov 15)
+
+One photo per card on the Case Studies page (`photo` in `src/data/caseStudies.js`), cropped to 16:10: `public/assets/case-studies/<slug>/card-{800,1200,1600}.webp` (q72). Jake left them on his Desktop as case_study_01–03; he chose to swap 01 and 03, because case_study_03 is the same photo AgFunderNews captions as The Ray's Exit 6 wildflower meadow on I-85.
+
+- `the-ray-i85`: Jake's `case_study_03.jpg` (3300×2578; the Exit 6 meadow, a pink wildflower in front). Crop at 50% from the top. Source `media-src/case-studies/the-ray-i85-original.jpg`.
+- `danforth-center-research`: Jake's `case_study_02.jpg` (1200×900, iPhone, Aug 2023; a PheNode in tall grass in front of greenhouses). Crop at 35%; 800 and 1200 only. Source `media-src/case-studies/danforth-center-research-original.jpg`.
+- `wsdot-expansion`: the same scene as Jake's `case_study_01.png` (a PheNode on a pole beneath a large conifer), from the full-size original in the agrelaeco.com Gallery (1/6, `ae5d22_c438f5…`, 3024×4032; downloaded with Jake's OK), because his file is only 722×943. Its colours were matched to his file (per-channel histogram match), then cropped at 32%. Sources: `media-src/case-studies/wsdot-expansion-original.jpg` (Gallery original) and `wsdot-expansion-jake-edit.png` (his file, the colour reference).
+- Home "Case studies" rows still show placeholders.
 
 ## Resources list thumbnails (in place, Nov 15)
 

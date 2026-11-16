@@ -57,7 +57,7 @@ public/assets/     WebP assets (see docs/asset-manifest.md), public/docs/ docume
 ## Content rules baked in
 
 - Every number comes from the PheNode Summer 2025 Buyer's Guide or agrelaeco.com (`src/data/specs.js`). No invented specifications.
-- Named partners and dates come from public press (Danforth Center, The Ray); anything beyond that is a labelled placeholder (`src/data/caseStudies.js`).
+- Named partners and dates come from public press (Danforth Center, The Ray, AP News); anything beyond that is a labelled placeholder (`src/data/caseStudies.js`). The individual case study pages are hidden for now (`FEATURES.caseStudyPages`): the Case Studies page, the home "Case studies" rows and the application pages link to each deployment's press releases (`press` in `caseStudies.js`), and `/case-studies/<slug>` redirects to `/case-studies`.
 - Charts and maps use seeded demo data and carry a "Demo data" tag. The dashboard is an illustrative recreation of the real GUI's features only.
 - Claims awaiting verification are gated behind `VERIFIED_CLAIMS` in `src/data/specs.js` (e.g. pilot-customer retention).
 - Pricing is intentionally omitted. The Buyer's Guide is hidden for now (`FEATURES.buyersGuide`): its Resources entry and the "Source: … Buyer's Guide" credits. Its PDF moved to `media-src/docs/` so it isn't published. Its numbers still back `specs.js`.
