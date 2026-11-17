@@ -1,11 +1,8 @@
 import { Section, Container, Button } from '../../components/ui/primitives.jsx'
 import SystemPair from '../../components/hardware/SystemPair.jsx'
-import { usePersonalization } from '../../context/PersonalizationContext.jsx'
 import { useReveal } from '../../lib/motion.js'
-import { FEATURES } from '../../data/features.js'
 
 export default function FinalCTA() {
-  const { primaryCta } = usePersonalization()
   // fades in a little later than the other sections, once it is well up the screen, so the fade is seen (Jake, Nov 16)
   const reveal = useReveal({ rootMargin: '0px 0px -22% 0px', stagger: 110 })
   return (
@@ -17,8 +14,7 @@ export default function FinalCTA() {
           {/* Jake, Nov 16: this title, no line under it, and one way on: to the PheNode page */}
           <h2 className="display-xl reveal mt-5 max-w-[14ch]">Built for the environment you need to understand.</h2>
           <div className="reveal mt-9 flex flex-wrap justify-center gap-3">
-            {FEATURES.designSystem && <Button to="/design-your-system" variant="primary">{primaryCta === 'Design your system' ? 'Design your system' : primaryCta}</Button>}
-            <Button to="/phenode" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Let’s get started</Button>
+            <Button to="/phenode" variant="primary">Let’s get started</Button>
           </div>
           <div className="reveal relative mt-16 w-full max-w-[1100px]">
             <div aria-hidden="true" className="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(closest-side,rgba(244,242,236,0.08),transparent_70%)]" />

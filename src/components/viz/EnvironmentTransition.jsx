@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { SCENES, BaseStationGlyph, NodeGlyph, Link, VB, SceneLegend } from './scenes.jsx'
 import { nodeLayout } from '../../lib/demoData.js'
-import { seg } from '../../lib/motion.js'
 
 /**
  * The same PheNode hardware stays fixed while the environment behind it changes.
@@ -39,7 +38,3 @@ export default function EnvironmentTransition({ stages, progress = 0, count = 6,
   )
 }
 
-export function stageProgressLabel(progress, stages) {
-  const i = Math.round(seg(progress, 0, 1) * (stages.length - 1))
-  return stages[i]
-}

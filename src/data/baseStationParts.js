@@ -1,3 +1,7 @@
+/** The exported widths of the front render (public/assets/hardware/base-station-v4-<w>.webp; 800 and 1200 added Nov 17
+ *  so phones get a size close to what they need — a 3× phone took the 1600). */
+export const BASE_STATION_WIDTHS = [600, 800, 1000, 1200, 1600, 2400]
+
 /**
  * The base-station components, in the order they read left-to-right around the frame.
  * `x`/`y` are percentages of the front render (hardware/base-station-v4, 2400 × 1625).

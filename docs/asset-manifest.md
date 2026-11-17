@@ -8,16 +8,16 @@ All raster assets are served from `public/assets/` as WebP with width variants (
 
 | Slot | File(s) | Variants | Notes |
 |---|---|---|---|
-| Base station, front render (v4, 2026) | `hardware/base-station-v4` | 600 · 1000 · 1600 · 2400 (2400×1625) | Transparent; used in hero, PheNode page › Base station, Overview card and the 2D fallback of the 3D explorer |
-| Full system (node + base station) | `hardware/base-station-v4` + `hardware/wireless-node-2026` (`components/hardware/SystemPair.jsx`) | as those two images | The PheNode page hero's 2026 composition, used in the home closing section and the configurator summary (Nov 16). The old `hardware/system-composite` image was deleted |
+| Base station, front render (v4, 2026) | `hardware/base-station-v4` | 600 · 800 · 1000 · 1200 · 1600 · 2400 (2400×1625; 800 and 1200 added Nov 17, from the 2400) | Transparent; used in hero, PheNode page › Base station, Overview card and the 2D fallback of the 3D explorer. The widths are listed once, `BASE_STATION_WIDTHS` in `src/data/baseStationParts.js` |
+| Base station silhouette | `hardware/base-station-v4-mask-800.webp` (800×542, 8 KB) | — | The render's alpha channel alone, white: the mask of the home hero's hover spotlight (`PartExplorer.jsx`, Nov 17; it used the 100 KB render). Regenerate it from the 2400 render if the render changes |
+| Full system (node + base station) | `hardware/base-station-v4` + `hardware/wireless-node-2026` (`components/hardware/SystemPair.jsx`) | as those two images | The PheNode page hero's 2026 composition, used in the home closing section (Nov 16). The old `hardware/system-composite` image was deleted |
 | Wireless node, front (2026) | `hardware/wireless-node-2026` (from `Wireless Sensor Node.png`) | 320 · 600 · 880 (880×930) | Transparent; PheNode page › Wireless sensor node, 3D fallback |
 | Base station on the tower (2026) | `hardware/base-station-pole-2026` (from `PheNode rendering with pole 2026.png`) | 460 · 910 (910×2015) | Transparent; PheNode page › Base station ("Tower configuration") and home → 02 What is PheNode |
 | Standard soil sensor | `hardware/sensor-soil-standard` | 400 · 700 · 1100 | Transparent |
 | Water potential sensor (2026) | `hardware/sensor-water-potential-2026` (from `Teros 22.png`) | 400 · 700 | Transparent; PheNode page › Wireless sensor node › Sensor add-ons card |
 | Ambient air sensor | `hardware/sensor-atmos-14` (from `Atmos 14.png`) | 300 · 590 | Transparent; base station explorer info card when "Ambient air" is selected (`photo` in `baseStationParts.js`); Sensor add-ons card |
 | Solar radiation sensor (Apogee SP-421) | `hardware/sensor-solar-radiation` (from Jake's `Solar Radiation.png`, Nov 17) | 150 only (the source is 150 × 179) | Transparent; Sensor add-ons card, the home hero's "Solar radiation" close-up and the PheNode page base station explorer's info card (Nov 17). A larger source would look sharper on high-density screens |
-| Soil profile probe | `hardware/sensor-profile-probe` (260) · `sensor-profile-probe-angle` (400 · 800 · 1400) | — | Transparent |
-| Node with two soil probes | `hardware/wireless-node-with-probes` | 400 · 680 | Transparent; still shows the older node (with the radiation shield) |
+| Soil profile probe | `hardware/sensor-profile-probe-angle` (400 · 800 · 1400) | — | Transparent; Sensor add-ons card. (The straight-on `sensor-profile-probe-260`, the configurator's, was deleted on Nov 17) |
 
 **Wanted:** a studio shot of the base station from the side (`hardware/base-station-side`, ≥ 2400 px wide, transparent) and an exploded view (`hardware/node-exploded`, ≥ 1600 px, transparent). Both slots are optional; the 3D explorer covers the exploded view today.
 
@@ -36,7 +36,7 @@ To swap in a designer-made drawing, replace the file with the same name; anythin
 
 ## Logos (in place)
 
-`logos/agrela-ecosystems-dark-{400,800,1600}.webp`, `logos/agrela-ecosystems-light-{…}.webp` (wordmark recolored to paper for ink backgrounds), `logos/agrela-icon-{128,256}.webp`. The PheNode wordmark is inline SVG (`src/components/ui/Logos.jsx`) from the official logo file.
+`logos/agrela-ecosystems-light-{200,400}.webp`: the Agrela Ecosystems wordmark recolored to paper for ink backgrounds (the footer's 100 px logo; 200 added Nov 17). The dark version, the larger light sizes and the Agrela icon were unused and were deleted on Nov 17. The PheNode wordmark is inline SVG (`src/components/ui/Logos.jsx`) from the official logo file.
 
 ## Environmental photography (placeholders today)
 
@@ -45,9 +45,6 @@ Slots render a labelled `AssetPlaceholder` until real photography exists. For an
 | Slot | Suggested path | Size / ratio | Component |
 |---|---|---|---|
 | Application heroes (transportation, agriculture, ecology, urban) | `photos/<name>-{800,1600,2400}.webp` | 21:9, ≥ 2400 wide | `pages/applications/Application.jsx` via `data/applications.js` |
-| Case study opener (case study pages are hidden for now) | `case-studies/<slug>/opener-{1200,2400}.webp` | 2:1, 2400×1200 | `pages/CaseStudy.jsx` |
-| Case study deployment (real site photos) | `case-studies/<slug>/deployment-{800,1600}.webp` | 4:3 | same (Danforth currently shows a software screenshot) |
-| Case study timeline photos | `case-studies/<slug>/<year>-{800,1600}.webp` | 16:9 | same |
 | Case study teaser | `case-studies/<slug>/teaser-{600,1200}.webp` | 4:3 | `sections/home/CaseStudiesTeaser.jsx`, `pages/CaseStudies.jsx` |
 
 ## Software screenshots (in place — captured from phenode.live, 7 Oct 2026)
@@ -80,14 +77,14 @@ Captured by Claude from the live software (admin account, read-only browsing) at
 
 Phone captures (390 × 844 browser size, 2×): `software/mobile-fleet-{390,780}.webp` and `software/mobile-base-station-{390,780}.webp`, keyed in `PHONE_SCREENS` and shown with `<PhoneScreen>` in `DeviceFrame kind="phone" aspect={PHONE_RATIO}` (PheNode page › Software → "On a phone, too").
 
-Still showing a real site name: the home 03 map (`software/hyperlocal-map`, Jake's capture) labels the Danforth Field Research Site PheNode. Swap it for a neutral capture if partners shouldn't be named. `DashboardMock` is no longer used by any page.
+The home 03 map is drawn in SVG (`components/viz/HyperlocalMap.jsx`); the earlier capture (`software/hyperlocal-map`) and the illustrative `DashboardMock` were unused and were deleted on Nov 17.
 
 ## 3D models (in place — from the Nov 2026 CAD exports)
 
 | File | Source | Size | Shown in |
 |---|---|---|---|
-| `public/models/wireless-node.glb` | `WS for web.glb` (node "WS for web") | ≈ 0.45 MB, 33k triangles | `NodeExplorer` (home Hardware, PheNode page › Wireless sensor node) |
-| `public/models/base-station.glb` | `PheNode for web.glb` (node "PheNode Complete for web") | ≈ 0.65 MB, 51k triangles | `BaseStationExplorer` (home Hardware, PheNode page › Base station) |
+| `public/models/wireless-node.glb` | `WS for web.glb` (node "WS for web") | ≈ 0.45 MB, 33k triangles | `NodeExplorer` (PheNode page › Wireless sensor node) |
+| `public/models/base-station.glb` | `PheNode for web.glb` (node "PheNode Complete for web") | ≈ 0.65 MB, 51k triangles | `BaseStationExplorer` (PheNode page › Base station) |
 
 Both are drawn by `src/components/three/ProductModel3D.jsx` (lazy-loaded, mounted near the viewport, paused off-screen; meshopt decoding only, so no third-party decoder is fetched). Without WebGL the explorers fall back to `hardware/wireless-node-front` and the annotated `hardware/base-station-v4` render.
 
@@ -106,25 +103,25 @@ The earlier `video/software-scroll-1920.*` (Jake's screen recording) is no longe
 
 ## Documents
 
-The Buyer's Guide PDF moved to `media-src/docs/phenode-buyers-guide-summer-2025.pdf` (hidden for now, `FEATURES.buyersGuide`; move it back to `public/docs/` to publish it again). Support documents (`src/data/docs.js`) are copies of agrelaeco.com's PDFs (Nov 15, checked by SHA-256 against the originals): `public/docs/phenode-quick-start-guide-v3-fall-2026.pdf` (15.8 MB) and, in `public/docs/archive/`, the v2.1 and v2.0 quick start guides (11.7 MB each) and the v1.1 (24.7 MB) and v1.0 (8.7 MB) user manuals.
+The Buyer's Guide PDF is in `media-src/docs/phenode-buyers-guide-summer-2025.pdf`, unpublished (the site's links to it were deleted on Nov 17). Support documents (`src/data/docs.js`) are copies of agrelaeco.com's PDFs (Nov 15, checked by SHA-256 against the originals): `public/docs/phenode-quick-start-guide-v3-fall-2026.pdf` (15.8 MB) and, in `public/docs/archive/`, the v2.1 and v2.0 quick start guides (11.7 MB each) and the v1.1 (24.7 MB) and v1.0 (8.7 MB) user manuals.
 
 ## Company photography (in place, Nov 15)
 
 - `company/danforth-center-{800,1200,1800}.webp`: the Donald Danforth Plant Science Center, from agrelaeco.com/about-us (Company page, About us). Source 1800×941 in `media-src/company/`.
-- `company/phenode-in-prairie-{800,1200,1800}.webp`: a PheNode in a prairie at dusk, the about-us slideshow's second photo. Not used since Nov 15 (Jake's `DSC02237.jpg` took its place beside Nadia's quote on Support); kept for later. Source 4032×3024 in `media-src/company/`.
+- A PheNode in a prairie at dusk (the about-us slideshow's second photo): unused since Nov 15, its WebPs deleted on Nov 17. Source 4032×3024 in `media-src/company/`.
 - `company/nadia-{800,1200}.webp`: Dr. Nadia Shakoor presenting on a prototype PheNode in a lab — Jake's photo `nadia.jpg` from his Desktop (Company page, Leadership column, under her quote; caption "Dr. Shakoor presenting on a prototype PheNode" (Jake's wording)). Shown uncropped at 3:2. Source 1200×800 in `media-src/company/nadia-original.jpg`.
-- `company/phenode-in-barley-{800,1200,1800}.webp`: a PheNode in a barley field at sunset, Jake's photo "PheNode in Barley". No longer on the Company page (Nadia's photo took its place); it is the Resources "Applications" thumbnail. Source 1920×1280 in `media-src/company/phenode-in-barley-original.jpg`.
+- Jake's "PheNode in Barley" (a PheNode in a barley field at sunset): no longer on the Company page (Nadia's photo took its place), its WebPs deleted on Nov 17; it is still the source of the Resources "Applications" thumbnail (`thumbs/applications`). Source 1920×1280 in `media-src/company/phenode-in-barley-original.jpg`.
 - `company/about-us-hero-800.webp`: a PheNode on a pole in tall grass at dusk, glass buildings behind — Jake's photo `about-us-hero.jpg` from his Desktop (Company page hero, `position: 50% 45%`). Source 800×1200 in `media-src/company/about-us-hero-original.jpg`; only the 800 size exists, so it is a little soft on high-density screens at desktop widths (a wider export would fix that).
 
 ## Page-hero photography (in place, Nov 15)
 
-The heroes of the three pages in the Resources menu put a photo beside the title and lede (`PageHero` in `src/components/layout/Page.jsx`; Jake chose the photos). Resources uses a photo from the agrelaeco.com Gallery; Company uses Jake's `about-us-hero.jpg` (see Company photography) and Support his `DSC02247.jpg` (see Support photography). From 1024 px the photo takes the right five columns and is exactly as tall as the text, so it is cropped differently at each width; `position` (CSS object-position) keeps the PheNode in frame. Below 1024 px it follows the text at 3:2. Originals downloaded from https://www.agrelaeco.com/gallery (the Wix originals on static.wixstatic.com) and kept in `media-src/gallery/`; webp 800/1200/1600 in `public/assets/gallery/`.
+The heroes of the three pages in the Resources menu put a photo beside the title and lede (`PageHero` in `src/components/layout/Page.jsx`; Jake chose the photos). Resources uses a photo from the agrelaeco.com Gallery; Company uses Jake's `about-us-hero.jpg` (see Company photography) and Support his `DSC02247.jpg` (see Support photography). From 1024 px the photo takes the right five columns and is exactly as tall as the text, so it is cropped differently at each width; `position` (CSS object-position) keeps the PheNode in frame. Below 1024 px it follows the text at 3:2. Originals downloaded from https://www.agrelaeco.com/gallery (the Wix originals on static.wixstatic.com) and kept in `media-src/gallery/`; webp 800/1200/1600 in `public/assets/gallery/` for the photo in use (the unused ones were deleted on Nov 17).
 
 | File | Photo | Original | Page |
 |---|---|---|---|
-| `gallery/phenode-greenhouses-*` | A PheNode on a guyed mast in tall grass, greenhouses behind (Gallery 5/6, `ae5d22_a751ef…`) | 2892×3928 | Not used — was the Company hero until Jake swapped in `about-us-hero.jpg`; kept for later (`position: 50% 30%` framed it well) |
+| (deleted Nov 17) `gallery/phenode-greenhouses-*` | A PheNode on a guyed mast in tall grass, greenhouses behind (Gallery 5/6, `ae5d22_a751ef…`) | 2892×3928 | Unused since Jake swapped in `about-us-hero.jpg` for the Company hero (`position: 50% 30%` framed it well); original kept |
 | `gallery/phenode-tripod-field-*` | A PheNode on its tripod in a field, cloudy sky (Gallery 4/6, `ae5d22_abf573…`) | 1961×2614 | Resources (`50% 20%`) |
-| `gallery/phenode-base-station-closeup-*` | Base station close-up with the PheNode logo, brick building behind (Gallery 2/6, `ae5d22_e13c02…`) | 1800×1754 | Was the Support hero until Jake's `DSC02247.jpg` replaced it (Nov 15); still the source of the Resources "Support & documentation" thumbnail |
+| (deleted Nov 17) `gallery/phenode-base-station-closeup-*` | Base station close-up with the PheNode logo, brick building behind (Gallery 2/6, `ae5d22_e13c02…`) | 1800×1754 | Was the Support hero until Jake's `DSC02247.jpg` replaced it (Nov 15); the original is still the source of the Resources "Support & documentation" thumbnail |
 
 Not used yet, also in the Gallery: 1/6 a PheNode in tall grass by a pine (3024×4032), 3/6 a wireless node close-up (only 787×1010), 6/6 a PheNode in a prairie with a pink flower in front (3300×2578).
 
@@ -141,7 +138,6 @@ One photo per card on the Case Studies page (`photo` in `src/data/caseStudies.js
 - `the-ray-i85`: Jake's `case_study_03.jpg` (3300×2578; the Exit 6 meadow, a pink wildflower in front). Crop at 50% from the top. Source `media-src/case-studies/the-ray-i85-original.jpg`.
 - `danforth-center-research`: Jake's `case_study_02.jpg` (1200×900, iPhone, Aug 2023; a PheNode in tall grass in front of greenhouses). Crop at 35%; 800 and 1200 only. Source `media-src/case-studies/danforth-center-research-original.jpg`.
 - `wsdot-expansion`: the same scene as Jake's `case_study_01.png` (a PheNode on a pole beneath a large conifer), from the full-size original in the agrelaeco.com Gallery (1/6, `ae5d22_c438f5…`, 3024×4032; downloaded with Jake's OK), because his file is only 722×943. Its colours were matched to his file (per-channel histogram match), then cropped at 32%. Sources: `media-src/case-studies/wsdot-expansion-original.jpg` (Gallery original) and `wsdot-expansion-jake-edit.png` (his file, the colour reference).
-- Home "Case studies" rows still show placeholders.
 
 ## Resources list thumbnails (in place, Nov 15)
 
@@ -150,7 +146,6 @@ Every entry on the Resources page shows a 3:2 thumbnail beside its title, like a
 | Key | Entry | Source |
 |---|---|---|
 | `support-docs` | Support & documentation | Gallery base-station close-up (`media-src/gallery/phenode-base-station-closeup-original.jpg`) |
-| `specifications` | Specifications | AgFunderNews in-article photo "The PheNode environmental monitoring device", credited to Agrela (`media-src/press/agfundernews-2023-phenode-closeup.jpg`, 1920×1440) |
 | `press-danforth` | Danforth Center article (2026) | The article's featured image, `wp-content/uploads/2026/05/AgrelaPheNodePR.jpg` (PheNode with a FieldDock drone dock; `media-src/press/danforth-2026-agrela-phenode-pr.jpg`, 1600×900; no credit shown on the page) |
 | `press-theray` | The Ray article (Nov 2023) | The article's featured image, "PheNode-Sensor-Array" (a 600×400 render with a transparent background, set on paper-3 #E2DED4; `media-src/press/theray-2023-phenode-sensor-array.webp`) |
 | `press-agfundernews` | AgFunderNews article (Dec 2023) | The article's lead image, Nadia Shakoor's headshot, credited to Agrela (`media-src/press/agfundernews-2023-nadia-shakoor-headshot.jpg`, 1920×1281) |

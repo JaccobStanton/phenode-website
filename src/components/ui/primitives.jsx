@@ -55,25 +55,11 @@ export function Img({ name, widths, alt, sizes = '(min-width: 1024px) 50vw, 100v
   return <img src={`${base}-${largest}.webp`} srcSet={srcSet} sizes={sizes} alt={alt} loading={loading} decoding="async" className={className} style={style} {...rest} />
 }
 
-/** Oversized number + label. */
-export function Stat({ value, label, note, className = '' }) {
-  return (
-    <div className={`flex flex-col gap-2 ${className}`}>
-      <div className="stat-xl">{value}</div>
-      <div className="font-mono text-[12px] tracking-[0.16em] uppercase opacity-80">{label}</div>
-      {note && <div className="text-sm opacity-60 max-w-[26ch]">{note}</div>}
-    </div>
-  )
-}
-
 /** Small "Demo data" / "Illustrative" tag. */
 export function Tag({ children, tone = 'muted', className = '' }) {
   const tones = { muted: 'border-current/20 opacity-85', signal: 'border-signal text-signal', data: 'border-data text-data' }
   return <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] tracking-[0.14em] uppercase ${tones[tone]} ${className}`}>{children}</span>
 }
-
-/** Hairline rule. */
-export function Rule({ className = '' }) { return <hr className={`border-t hairline ${className}`} /> }
 
 /** Placeholder frame for assets awaiting delivery. */
 export function AssetPlaceholder({ label, ratio = '16 / 9', className = '' }) {

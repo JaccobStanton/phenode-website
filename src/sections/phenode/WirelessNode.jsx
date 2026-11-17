@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
 import { ScreenCard } from '../../components/media/media.jsx'
-import { Container, Section, Eyebrow, Button, Img, Tag } from '../../components/ui/primitives.jsx'
+import { Container, Section, Eyebrow, Img } from '../../components/ui/primitives.jsx'
 import NodeExplorer from '../../components/hardware/NodeExplorer.jsx'
 import SensorAddOns from '../../components/hardware/SensorAddOns.jsx'
 import SpecTable from '../../components/ui/SpecTable.jsx'
 import { WIRELESS_NODE, ADD_ON_SENSORS } from '../../data/specs.js'
-import { FEATURES } from '../../data/features.js'
 
 /**
  * PheNode page, "Wireless sensor node" part (/phenode#wireless-node). Until Nov 16 this was its own page,
@@ -23,7 +22,7 @@ export default function WirelessNodePart() {
             {/* headline and lede: Jake, Nov 16 */}
             <h2 className="display-xl mt-4">Install a sensor wherever conditions vary.</h2>
             <p className="lede mt-6 max-w-[46ch]">Battery-operated, solar-powered nodes collect data every 15 minutes and send it back to the nearest PheNode up to 1 km away.</p>
-            <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Add nodes to a system</Button>}<Link to="/phenode#wireless-node-specs" className={FEATURES.designSystem ? 'btn-ghost' : 'btn-primary'}>Specifications</Link></div>
+            <div className="mt-8 flex flex-wrap gap-3"><Link to="/phenode#wireless-node-specs" className="btn-primary">Specifications</Link></div>
           </div>
           <div className="relative lg:col-span-6">
             <div aria-hidden="true" className="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(closest-side,rgba(244,242,236,0.08),transparent_70%)]" />
@@ -52,7 +51,6 @@ export default function WirelessNodePart() {
             <div id="wireless-node-specs" className="scroll-mt-28 lg:col-span-7">
               <SpecTable title="Wireless sensor specifications" rows={WIRELESS_NODE.sensorSpecs} />
               <SpecTable title="Add-on soil probes" rows={soil.specs} className="mt-10" />
-              {FEATURES.buyersGuide && <p className="mt-4 font-mono text-[10.5px] tracking-[0.1em] text-stone-2">Source: PheNode Summer 2025 Buyer's Guide.</p>}
             </div>
           </div>
           {/* the add-on sensor cards, moved here from the home page's Hardware section (Jake, Nov 17) */}
@@ -62,19 +60,8 @@ export default function WirelessNodePart() {
 
       <Section theme="ink">
         <Container>
-          {/* "Indoors and out": hidden for now (FEATURES.nodeIndoorsOutdoors) */}
-          {FEATURES.nodeIndoorsOutdoors && <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-5">
-              <Eyebrow>Indoors and out</Eyebrow>
-              <h3 className="display-md mt-4 max-w-[16ch]">The same node in a growth chamber and a field.</h3>
-              <p className="mt-4 text-[15px] leading-relaxed text-paper/75">Track water content, ambient conditions and environmental variability in controlled environments by deploying a wireless sensor network — then move the same nodes outdoors. Battery-operated and solar-powered, with USB-C recharge for up to a growing season without sunlight.</p>
-            </div>
-            <div className="relative lg:col-span-7">
-              <Img name="hardware/wireless-node-with-probes" widths={[400, 680]} sizes="(min-width:1024px) 50vw, 90vw" width={680} height={388} alt="Wireless node with two soil probes attached" className="mx-auto h-auto w-full max-w-[640px] object-contain" />
-              <div className="absolute left-0 top-0"><Tag>Two agnostic sensor ports · shown with soil probes</Tag></div>
-            </div>
-          </div>}
-          <div className={FEATURES.nodeIndoorsOutdoors ? 'mt-24 border-t border-white/10 pt-12' : ''}>
+          {/* "Indoors and out" stood above this until Nov 17 (hidden on the 17th, then deleted, Jake) */}
+          <div>
             <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-6"><Eyebrow>In the software</Eyebrow><h3 className="display-md mt-4 max-w-[18ch]">Every node, on the map and on the chart.</h3></div>
               <p className="max-w-[48ch] text-[15px] leading-relaxed text-paper/75 lg:col-span-6">Each wireless node appears in the PheNode software at its location, with its latest readings, battery and connected probes — and a full measurement history one click away.</p>

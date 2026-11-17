@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
 import Page, { PageHero } from '../components/layout/Page.jsx'
 import { Container, Section, Eyebrow, Img } from '../components/ui/primitives.jsx'
-import { FEATURES } from '../data/features.js'
 
 /**
  * Each entry shows a 3:2 thumbnail, like an article list (Jake, Nov 15): `thumb` names public/assets/thumbs/<thumb>-{320,480}.webp.
@@ -10,11 +9,7 @@ import { FEATURES } from '../data/features.js'
  */
 const GROUPS = [
   { heading: 'Guides', items: [
-    // hidden for now (data/features.js)
-    ...(FEATURES.buyersGuide ? [{ title: 'PheNode Summer 2025 Buyer\'s Guide', text: 'System overview, specifications and expansion options.', href: '/docs/phenode-buyers-guide-summer-2025.pdf', external: true }] : []),
     { title: 'Support & documentation', text: 'PheNode quick start guides and user manuals, current and archived.', to: '/support', thumb: 'support-docs' },
-    // its target (the PheNode page's Technical capabilities) is hidden for now (data/features.js)
-    ...(FEATURES.phenodeTechSections ? [{ title: 'Specifications', text: 'Every published number for the base station, the wireless node and add-on sensors.', to: '/phenode#specifications', thumb: 'specifications' }] : []),
   ] },
   { heading: 'Press', items: [
     { title: 'Agrela Ecosystems expands nationally as PheNode moves from agricultural research into transportation infrastructure', text: 'Danforth Plant Science Center, 2026', href: 'https://www.danforthcenter.org/news/agrela-ecosystems-phenode-expands-nationally-into-transportation-infrastructure/', external: true, thumb: 'press-danforth' },
@@ -30,7 +25,7 @@ const GROUPS = [
 
 export default function Resources() {
   return (
-    <Page title="Resources" description="PheNode guides, specifications, press and learning resources from Agrela Ecosystems.">
+    <Page title="Resources" description="PheNode guides, press and learning resources from Agrela Ecosystems.">
       <PageHero
         eyebrow="Resources"
         title="Read before you deploy."

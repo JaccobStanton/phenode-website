@@ -1,16 +1,17 @@
 // Finds clickable elements whose hit area is covered by another element (e.g. an invisible decorative layer).
 // Usage: npx vite preview --port 4173 & node scripts/hit-scan.mjs [baseUrl] [route ...]
-import { chromium } from 'playwright'
+import { launch, homeReady } from './browser.mjs'
 const base = process.argv[2] && process.argv[2].startsWith('http') ? process.argv[2] : 'http://localhost:4173'
 const args = process.argv.slice(2).filter((a) => a.startsWith('/'))
-const routes = args.length ? args : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company']
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const routes = args.length ? args : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/resources', '/support', '/contact', '/company']
+const browser = await launch()
 let issues = 0
 for (const [w, h] of [[1440, 900], [1024, 768], [820, 1180], [390, 844]]) {
   const page = await browser.newPage({ viewport: { width: w, height: h } })
   await page.addInitScript(() => localStorage.setItem('agrela.personalization.v1', JSON.stringify({ roleId: 'infrastructure' })))
   for (const r of routes) {
     await page.goto(base + r, { waitUntil: 'networkidle' })
+    await homeReady(page)
     await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })
     await page.waitForTimeout(1200)
     const found = new Map()

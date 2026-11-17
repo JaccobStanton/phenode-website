@@ -1,13 +1,15 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef, useState } from 'react'
 
-gsap.registerPlugin(ScrollTrigger)
-gsap.defaults({ ease: 'power3.out', duration: 0.9 })
+/*
+ * Motion helpers without GSAP: reduced motion, reveal on scroll into view, easing math and count-up. The scroll-driven
+ * helpers that need GSAP's ScrollTrigger live in lib/scroll.js, so pages without scroll-driven sections (case studies,
+ * contact, resources…) never download GSAP (Nov 17, performance pass).
+ */
 
-export { gsap, ScrollTrigger }
-
-export const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'
+let refresher = null
+/** Re-measures the page's scroll-driven animations, if it has any (lib/scroll.js registers itself when it loads). */
+export const refreshScroll = () => refresher?.()
+export const setScrollRefresher = (fn) => { refresher = fn }
 
 const mq = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null
 
@@ -55,34 +57,6 @@ export function useReveal(options = {}) {
   return ref
 }
 
-/**
- * useScrollProgress — returns a ref and a 0..1 progress value as the element scrolls through the viewport.
- * `start`/`end` follow ScrollTrigger semantics. Reduced motion → progress jumps to 1 once in view.
- */
-export function useScrollProgress({ start = 'top 80%', end = 'bottom 40%', pin = false, scrub = 0.8 } = {}) {
-  const ref = useRef(null)
-  const [progress, setProgress] = useState(0)
-  useLayoutEffect(() => {
-    const el = ref.current
-    if (!el) return
-    if (prefersReducedMotion()) {
-      const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { setProgress(1); io.disconnect() } }), { threshold: 0.2 })
-      io.observe(el)
-      return () => io.disconnect()
-    }
-    let frame = 0
-    const st = ScrollTrigger.create({
-      trigger: el, start, end, pin, scrub, anticipatePin: pin ? 1 : 0,
-      onUpdate: (self) => {
-        cancelAnimationFrame(frame)
-        frame = requestAnimationFrame(() => setProgress(self.progress))
-      },
-    })
-    return () => { cancelAnimationFrame(frame); st.kill() }
-  }, [start, end, pin, scrub])
-  return [ref, progress]
-}
-
 /** Clamp + map helper for scrubbed sequences: maps p from [a,b] to [0,1]. */
 export const seg = (p, a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)))
 export const easeOut = (t) => 1 - Math.pow(1 - t, 3)
@@ -97,14 +71,20 @@ export function useCountUp(target, { duration = 1.4, enabled = true, from } = {}
   useEffect(() => {
     const el = ref.current
     if (!el || !enabled || prefersReducedMotion()) return
+    let frame = 0
     const io = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) return
       io.disconnect()
-      const obj = { v: start }
-      gsap.to(obj, { v: target, duration, ease: 'power2.out', onUpdate: () => setValue(obj.v) })
+      const t0 = performance.now()
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / (duration * 1000))
+        setValue(start + (target - start) * easeOut(k)) // cubic ease-out (was GSAP's power2.out, the same curve)
+        if (k < 1) frame = requestAnimationFrame(step)
+      }
+      frame = requestAnimationFrame(step)
     }, { threshold: 0.4 })
     io.observe(el)
-    return () => io.disconnect()
+    return () => { io.disconnect(); cancelAnimationFrame(frame) }
   }, [target, duration, enabled, start])
   return [ref, value]
 }

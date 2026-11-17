@@ -25,6 +25,12 @@ export const introWillShow = () => ALWAYS_SHOW || !hasSeen()
  */
 export const INTRO_LANDED = 'agrela:intro-landed'
 
+/**
+ * Asks the home page for everything below the intro now. It loads it a moment after the intro starts, or on the
+ * visitor's first scroll, touch or key (pages/Home.jsx); "Explore PheNode" fires this on window in case it isn't there yet.
+ */
+export const WANT_REST = 'agrela:want-rest'
+
 /** Whether the app is starting on the home page (BrowserRouter, or the preview's HashRouter). */
 function startingOnHome() {
   if (import.meta.env.VITE_ROUTER === 'hash') return /^#?\/?(\?.*)?$/.test(window.location.hash)

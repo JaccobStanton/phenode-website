@@ -1,6 +1,6 @@
 // Viewport screenshots at a list of scroll positions or element selectors on one route.
 // Usage: node scripts/sectionshots.mjs <route> <width> <sel-or-y>... e.g. node scripts/sectionshots.mjs / 1440 0 '#what-is-phenode' '#hyperlocal'
-import { chromium } from 'playwright'
+import { launch, homeReady } from './browser.mjs'
 import fs from 'node:fs'
 
 const [route = '/', widthArg = '1440', ...targets] = process.argv.slice(2)
@@ -10,13 +10,14 @@ const base = process.env.BASE || 'http://localhost:4173'
 const out = process.env.SHOT_DIR || 'shots/sections'
 fs.mkdirSync(out, { recursive: true })
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await launch()
 const ctx = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 })
 const page = await ctx.newPage()
 const errors = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => { if (m.type() === 'error' && !m.text().includes('ERR_TUNNEL')) errors.push(m.text()) })
 await page.goto(base + route, { waitUntil: 'networkidle' })
+await homeReady(page)
 await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })
 await page.waitForTimeout(800)
 // warm scroll so lazy sections mount

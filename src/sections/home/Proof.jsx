@@ -1,8 +1,7 @@
-import { Eyebrow, Section, Container, Button, Tag } from '../../components/ui/primitives.jsx'
+import { Eyebrow, Section, Container, Button } from '../../components/ui/primitives.jsx'
 import { COMPANY } from '../../data/company.js'
 import { useReveal, useCountUp } from '../../lib/motion.js'
 import { homeNo } from '../../data/homeSections.js'
-import { FEATURES } from '../../data/features.js'
 
 function BigNumber({ value, suffix = '', label, note }) {
   const numeric = typeof value === 'number'
@@ -13,18 +12,6 @@ function BigNumber({ value, suffix = '', label, note }) {
       <p className="mt-2 font-mono text-[11px] tracking-[0.16em] uppercase text-paper/80">{label}</p>
       {note && <p className="mt-1 text-[13.5px] text-stone">{note}</p>}
     </div>
-  )
-}
-
-/** A customer quote (a labelled placeholder until approved quotes exist). Renders nothing while customer quotes are off. */
-export function TestimonialSlot({ context, className = '' }) {
-  if (!FEATURES.customerQuotes) return null
-  return (
-    <figure className={`rounded-lg border border-dashed border-white/20 p-5 ${className}`} aria-label={`Testimonial placeholder: ${context}`}>
-      <div className="flex items-center gap-2"><Tag>Placeholder</Tag><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-stone">Customer quote · {context}</span></div>
-      <blockquote className="mt-3 text-[16px] leading-relaxed text-paper/60">"A concise, approved customer quote about {context.toLowerCase()} will appear here, with name, title, organization and project."</blockquote>
-      <figcaption className="mt-3 font-mono text-[11px] tracking-[0.1em] text-stone">Name · Title · Organization — pending permission</figcaption>
-    </figure>
   )
 }
 
@@ -62,12 +49,6 @@ export default function Proof() {
               <p className="reveal mt-3 font-mono text-[10.5px] tracking-[0.1em] text-stone">Sources: Danforth Plant Science Center (2026), The Ray. Customer locations are never shown without permission.</p>
             </div>
           </div>
-          {FEATURES.customerQuotes && (
-            <div className="reveal mt-14 grid gap-4 md:grid-cols-2">
-              <TestimonialSlot context="Deployment flexibility" />
-              <TestimonialSlot context="Working with Agrela" />
-            </div>
-          )}
           <div className="reveal mt-10 flex flex-wrap gap-3">
             <Button to="/case-studies" variant="primary">View case studies</Button>
             <Button to="/company" variant="ghost">About Agrela</Button>

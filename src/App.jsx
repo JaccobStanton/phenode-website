@@ -3,24 +3,22 @@ import { BrowserRouter, HashRouter, MemoryRouter, Navigate, Routes, Route, useLo
 import Nav from './components/layout/Nav.jsx'
 import Footer from './components/layout/Footer.jsx'
 import { PersonalizationProvider } from './context/PersonalizationContext.jsx'
-import { ScrollTrigger, prefersReducedMotion } from './lib/motion.js'
+import { refreshScroll, prefersReducedMotion } from './lib/motion.js'
 import { clearIntroHeader } from './lib/intro.js'
-import { FEATURES } from './data/features.js'
 import { PHENODE_PARTS } from './data/navigation.js'
+import { PAGES, preloadPage } from './lib/pages.js'
 
-const Home = lazy(() => import('./pages/Home.jsx'))
-const PheNodePage = lazy(() => import('./pages/PheNode.jsx'))
-const ApplicationsIndex = lazy(() => import('./pages/applications/Index.jsx'))
-const ApplicationPage = lazy(() => import('./pages/applications/Application.jsx'))
-const CaseStudies = lazy(() => import('./pages/CaseStudies.jsx'))
-const CaseStudy = lazy(() => import('./pages/CaseStudy.jsx'))
-const DesignYourSystem = lazy(() => import('./pages/DesignYourSystem.jsx'))
-const Resources = lazy(() => import('./pages/Resources.jsx'))
-const Support = lazy(() => import('./pages/Support.jsx'))
-const Contact = lazy(() => import('./pages/Contact.jsx'))
-const Company = lazy(() => import('./pages/Company.jsx'))
-const Legal = lazy(() => import('./pages/Legal.jsx'))
-const NotFound = lazy(() => import('./pages/NotFound.jsx'))
+const Home = lazy(PAGES.home)
+const PheNodePage = lazy(PAGES.phenode)
+const ApplicationsIndex = lazy(PAGES.applications)
+const ApplicationPage = lazy(PAGES.application)
+const CaseStudies = lazy(PAGES.caseStudies)
+const Resources = lazy(PAGES.resources)
+const Support = lazy(PAGES.support)
+const Contact = lazy(PAGES.contact)
+const Company = lazy(PAGES.company)
+const Legal = lazy(PAGES.legal)
+const NotFound = lazy(PAGES.notFound)
 
 // Anything the visitor does to scroll themselves ends scrollToPart's hold on the target.
 const TAKE_OVER = ['wheel', 'touchstart', 'keydown', 'pointerdown']
@@ -72,7 +70,7 @@ function scrollToPart(id, glide) {
     window.addEventListener('scroll', onScroll, { passive: true })
     quiet = setTimeout(check, 160)
     hold = setTimeout(stop, 4000)
-    if (!glide) refresh = setTimeout(() => ScrollTrigger.refresh(), 120) // a new page: let ScrollTrigger measure it
+    if (!glide) refresh = setTimeout(() => refreshScroll(), 120) // a new page: let ScrollTrigger measure it
   }
   find()
   return stop
@@ -95,7 +93,7 @@ function ScrollManager() {
     }
     if (samePage) { window.scrollTo({ top: 0, left: 0, behavior: prefersReducedMotion() ? 'instant' : 'smooth' }); return undefined }
     // Give lazy content a tick to mount before ScrollTrigger measures.
-    const t = setTimeout(() => ScrollTrigger.refresh(), 120)
+    const t = setTimeout(() => refreshScroll(), 120)
     return () => clearTimeout(t)
   }, [pathname, hash, key])
   return null
@@ -111,13 +109,39 @@ function PheNodePartRedirect() {
   return <Navigate to={`/phenode#${to}`} replace />
 }
 
+// A screen tall, so the footer starts below the fold while a page loads: at 60vh it showed, then jumped down when the
+// page arrived (a 0.4 layout shift on every page, Nov 17).
 function Loading() {
-  return <div className="theme-ink flex min-h-[60vh] items-center justify-center font-mono text-[11px] tracking-[0.2em] uppercase text-stone" aria-live="polite">Loading</div>
+  return <div className="theme-ink flex min-h-[100svh] items-center justify-center font-mono text-[11px] tracking-[0.2em] uppercase text-stone" aria-live="polite">Loading</div>
+}
+
+/** Pointing at, focusing or touching a link to another page starts loading that page (lib/pages.js). */
+function usePreloadOnIntent() {
+  useEffect(() => {
+    const hashRouter = import.meta.env.VITE_ROUTER === 'hash'
+    const onIntent = (e) => {
+      const a = e.target instanceof Element ? e.target.closest('a[href]') : null
+      if (!a || a.target === '_blank') return
+      const url = new URL(a.href, window.location.href)
+      if (url.origin !== window.location.origin) return
+      preloadPage(hashRouter ? url.hash.slice(1) : url.pathname)
+    }
+    const opts = { passive: true }
+    document.addEventListener('pointerover', onIntent, opts)
+    document.addEventListener('focusin', onIntent)
+    document.addEventListener('touchstart', onIntent, opts)
+    return () => {
+      document.removeEventListener('pointerover', onIntent, opts)
+      document.removeEventListener('focusin', onIntent)
+      document.removeEventListener('touchstart', onIntent, opts)
+    }
+  }, [])
 }
 
 const Router = import.meta.env.VITE_ROUTER === 'hash' ? HashRouter : import.meta.env.VITE_ROUTER === 'memory' ? MemoryRouter : BrowserRouter
 
 export default function App() {
+  usePreloadOnIntent()
   return (
     <Router>
       <PersonalizationProvider>
@@ -133,10 +157,10 @@ export default function App() {
               <Route path="/applications" element={<ApplicationsIndex />} />
               <Route path="/applications/:id" element={<ApplicationPage />} />
               <Route path="/case-studies" element={<CaseStudies />} />
-              {/* switched off for now (data/features.js): the deployments link to their press releases */}
-              <Route path="/case-studies/:slug" element={FEATURES.caseStudyPages ? <CaseStudy /> : <Navigate to="/case-studies" replace />} />
-              {/* switched off for now (data/features.js): the address goes to Contact, and the page's code isn't loaded */}
-              <Route path="/design-your-system" element={FEATURES.designSystem ? <DesignYourSystem /> : <Navigate to="/contact" replace />} />
+              {/* the case study pages and the Design Your System configurator were hidden on Nov 15 and deleted on Nov 17;
+                  their old addresses still land somewhere useful */}
+              <Route path="/case-studies/:slug" element={<Navigate to="/case-studies" replace />} />
+              <Route path="/design-your-system" element={<Navigate to="/contact" replace />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/support" element={<Support />} />
               <Route path="/contact" element={<Contact />} />

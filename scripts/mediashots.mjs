@@ -1,17 +1,17 @@
 // Screenshots of every section that carries real PheNode software media (captures of 7 Oct 2026).
 // Usage: npx vite preview --port 4173 & node scripts/mediashots.mjs [width]
-import { chromium } from 'playwright'
+import { launch, homeReady } from './browser.mjs'
 import fs from 'node:fs'
 const width = Number(process.argv[2] || 1440)
 const out = 'shots/media'; fs.mkdirSync(out, { recursive: true })
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await launch()
 const page = await browser.newPage({ viewport: { width, height: width < 500 ? 844 : 900 } })
 const errors = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => { if (m.type() === 'error' && !m.text().includes('ERR_TUNNEL')) errors.push(m.text()) })
 page.on('requestfailed', (r) => errors.push('FAILED ' + r.url()))
 page.on('response', (r) => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`) })
-const go = async (path) => { await page.goto('http://localhost:4173' + path, { waitUntil: 'networkidle' }); await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' }) }
+const go = async (path) => { await page.goto('http://localhost:4173' + path, { waitUntil: 'networkidle' }); await homeReady(page); await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' }) }
 const at = async (sel, name, offset = -80) => {
   const el = page.locator(sel).first()
   await el.scrollIntoViewIfNeeded(); await page.evaluate(async (o) => { window.scrollBy(0, o) }, offset)

@@ -2,9 +2,10 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { ArrowDown } from 'lucide-react'
 import { Button } from '../../components/ui/primitives.jsx'
-import { ScrollTrigger, prefersReducedMotion } from '../../lib/motion.js'
-import { createSensorField } from '../../components/viz/sensorField.js'
-import { ALWAYS_SHOW, INTRO_LANDED, hasSeen, markSeen } from '../../lib/intro.js'
+import { prefersReducedMotion } from '../../lib/motion.js'
+import { ScrollTrigger } from '../../lib/scroll.js'
+import { mountSensorField } from '../../components/viz/sensorFieldHost.js'
+import { ALWAYS_SHOW, INTRO_LANDED, WANT_REST, hasSeen, markSeen } from '../../lib/intro.js'
 
 const IDLE_MS = 180 // a pause this long (no scrolling, no finger down) is a safe moment to remove the intro
 
@@ -30,15 +31,18 @@ const IDLE_MS = 180 // a pause this long (no scrolling, no finger down) is a saf
 export default function IntroHero() {
   const [gone, setGone] = useState(() => !ALWAYS_SHOW && hasSeen())
   const section = useRef(null)
-  const canvas = useRef(null)
+  const fieldHost = useRef(null)
   const copy = useRef(null)
   const explore = useRef(null)
 
   useLayoutEffect(() => {
     const el = section.current
-    if (gone || !el || !canvas.current || !copy.current) return undefined
+    if (gone || !el || !fieldHost.current || !copy.current) return undefined
     const reduced = prefersReducedMotion()
-    const next = el.nextElementSibling // the hero
+    // the hero, just below; looked up when needed, because it arrives a moment after the intro (pages/Home.jsx) —
+    // until then a screen-tall placeholder stands in for it
+    const next = () => el.nextElementSibling
+    const heroHere = () => { const n = next(); return !!n && !n.hasAttribute('data-rest-placeholder') }
     const root = document.documentElement
 
     // The header: reduced while the intro is in view, full once the visitor is on the hero (see lib/intro.js).
@@ -57,7 +61,8 @@ export default function IntroHero() {
       const s = el.getBoundingClientRect(), c = copy.current.getBoundingClientRect()
       keep = { x: c.left - s.left, y: c.top - s.top, w: c.width, h: c.height }
     }
-    const field = createSensorField(canvas.current, { reduced, avoid: () => keep })
+    // drawn in a worker where the browser can, so it never holds up the page (sensorFieldHost.js)
+    const field = mountSensorField(fieldHost.current, { reduced, avoid: () => keep })
     const ro = new ResizeObserver(() => { measure(); field.resize() })
     ro.observe(el)
     measure()
@@ -75,7 +80,7 @@ export default function IntroHero() {
     let idle = 0, frame = 0, slide = 0, lastY = window.scrollY
 
     const focusHero = () => {
-      const heading = next?.querySelector('h1')
+      const heading = next()?.querySelector('h1')
       if (heading) heading.focus({ preventScroll: true })
     }
 
@@ -86,9 +91,10 @@ export default function IntroHero() {
       // Remove the intro and move the scroll position by the same amount, so the hero stays exactly where it is.
       // The browser's own scroll anchoring is paused meanwhile so it can't adjust as well.
       root.style.overflowAnchor = 'none'
-      const before = next ? next.getBoundingClientRect().top : 0
+      const hero = next()
+      const before = hero ? hero.getBoundingClientRect().top : 0
       flushSync(() => setGone(true)) // unmounts the intro; the cleanup below stops the field and the listeners
-      const after = next ? next.getBoundingClientRect().top : 0
+      const after = hero ? hero.getBoundingClientRect().top : 0
       if (Math.abs(after - before) > 0.5) window.scrollTo({ top: window.scrollY + (after - before), left: 0, behavior: 'instant' })
       ScrollTrigger.refresh() // every trigger further down the page moved up
       requestAnimationFrame(() => { root.style.overflowAnchor = '' })
@@ -135,9 +141,10 @@ export default function IntroHero() {
       window.removeEventListener('touchstart', userTakesOver)
       window.removeEventListener('keydown', userTakesOver)
     }
-    explore.current = () => {
-      if (!next) return
-      const to = next.getBoundingClientRect().top + window.scrollY
+    const slideToHero = () => {
+      const hero = next()
+      if (!hero) return
+      const to = hero.getBoundingClientRect().top + window.scrollY
       // landed: the hero plays its entrance now (see INTRO_LANDED in lib/intro.js)
       const land = () => { stopSlide(); collapse(); focusHero(); window.dispatchEvent(new Event(INTRO_LANDED)) }
       if (reduced) { window.scrollTo({ top: to, left: 0, behavior: 'instant' }); land(); return }
@@ -158,6 +165,17 @@ export default function IntroHero() {
         else land()
       }
       slide = requestAnimationFrame(stepSlide)
+    }
+    explore.current = () => {
+      if (heroHere()) { slideToHero(); return }
+      // the rest of the page isn't in yet: ask for it now, and slide as soon as the hero is in place
+      window.dispatchEvent(new Event(WANT_REST))
+      const t0 = performance.now()
+      const wait = () => {
+        if (heroHere()) slideToHero()
+        else if (performance.now() - t0 < 10000) slide = requestAnimationFrame(wait)
+      }
+      slide = requestAnimationFrame(wait)
     }
 
     return () => {
@@ -182,7 +200,8 @@ export default function IntroHero() {
   return (
     <section ref={section} className="intro theme-ink relative h-[100svh] min-h-[560px] overflow-hidden" aria-label="Welcome">
       <div aria-hidden="true" className="intro-sky pointer-events-none absolute inset-0" />
-      <canvas ref={canvas} aria-hidden="true" className="intro-field pointer-events-none absolute inset-0 h-full w-full" />
+      {/* the field of points and, above it, the pings and readings: two canvases mountSensorField puts in here */}
+      <div ref={fieldHost} aria-hidden="true" className="intro-field pointer-events-none absolute inset-0" />
       <div aria-hidden="true" className="intro-fade pointer-events-none absolute inset-0" />
 
       <div className="intro-stage relative z-10 flex h-full items-center justify-center px-5">

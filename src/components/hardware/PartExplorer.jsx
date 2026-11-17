@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Img } from '../ui/primitives.jsx'
-import { BASE_STATION_PARTS } from '../../data/baseStationParts.js'
+import { BASE_STATION_PARTS, BASE_STATION_WIDTHS } from '../../data/baseStationParts.js'
 import { useReducedMotion } from '../../lib/motion.js'
 
-const MASK = `url(${import.meta.env.BASE_URL}assets/hardware/base-station-v4-1000.webp)`
+// the render's silhouette alone (8 KB; it was the 100 KB render itself, fetched a second time for the mask, Nov 17)
+const MASK = `url(${import.meta.env.BASE_URL}assets/hardware/base-station-v4-mask-800.webp)`
 const ASPECT = 2400 / 1625
 const REACH = 16 // how close (in % of the render's height) the pointer must be to a component to pick it
 const GLIDE = 'cubic-bezier(0.65, 0, 0.35, 1)'
@@ -89,7 +90,7 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
           <div aria-hidden="true" className="absolute inset-0 rounded-[28px] border border-white/10 bg-[radial-gradient(70%_70%_at_50%_45%,rgba(26,117,224,0.16),rgba(255,255,255,0.025)_70%)]" style={{ opacity: sel ? 1 : 0, transition: glide(['opacity']) }} />
           <div className="absolute inset-0" style={{ transform: `translate(${(-z * (fx - 50)).toFixed(3)}%, ${(-z * (fy - 50)).toFixed(3)}%) scale(${z})`, transition: glide(['transform']) }}>
             <Img
-              name="hardware/base-station-v4" widths={[600, 1000, 1600, 2400]} sizes={hiRes ? '(min-width:1024px) 140vw, 260vw' : imageSizes}
+              name="hardware/base-station-v4" widths={BASE_STATION_WIDTHS} sizes={hiRes ? '(min-width:1024px) 140vw, 260vw' : imageSizes}
               alt="PheNode base station: aluminum sensor frame with rain gauge, solar panel, wind sensor, radiation shield, imager, control box and a soil probe."
               className="relative h-full w-full object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.55)]" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined}
             />

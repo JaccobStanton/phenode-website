@@ -1,7 +1,8 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Button, ButtonPair, Img } from '../../components/ui/primitives.jsx'
-import { ScrollTrigger, prefersReducedMotion, seg, easeOut, easeInOut } from '../../lib/motion.js'
-import { FEATURES } from '../../data/features.js'
+import { prefersReducedMotion, seg, easeOut, easeInOut } from '../../lib/motion.js'
+import { ScrollTrigger } from '../../lib/scroll.js'
+import { BASE_STATION_WIDTHS } from '../../data/baseStationParts.js'
 
 // Phrases in [brackets] pick up a soft Agrela-blue glow as they light.
 const STATEMENT = 'Hardware, communications, data and software — designed as [one solution], configured around the question [you need to answer].'
@@ -206,7 +207,7 @@ export default function OverviewHero() {
             <div className="relative aspect-[2400/1625]" style={{ width: 'min(100%, calc((100svh - var(--head) - var(--foot)) * 1.477), 1180px)' }}>
               <div aria-hidden="true" className="absolute inset-x-[8%] bottom-[1%] h-[9%] rounded-[50%] bg-black/80 blur-2xl" />
               <Img
-                name="hardware/base-station-v4" widths={[600, 1000, 1600, 2400]} sizes="(min-width:1024px) 70vw, 100vw" loading="eager"
+                name="hardware/base-station-v4" widths={BASE_STATION_WIDTHS} sizes="(min-width:1024px) 70vw, 100vw" loading="eager"
                 alt="PheNode base station: rain gauge, solar panel, wind sensor, radiation shield, control box and imager on its aluminum frame."
                 className="absolute inset-0 h-full w-full object-contain"
               />
@@ -221,7 +222,6 @@ export default function OverviewHero() {
           <div ref={cta} className="seq-cta absolute inset-x-0 bottom-6 px-4 md:bottom-7">
             <ButtonPair className="mx-auto">
               <Button to="/contact?intent=demo" variant="primary">Request a demo</Button>
-              {FEATURES.designSystem && <Button to="/design-your-system" variant="ghost">Design your system</Button>}
             </ButtonPair>
           </div>
         </div>

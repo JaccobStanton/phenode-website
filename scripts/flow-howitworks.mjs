@@ -1,11 +1,11 @@
 // Visual check for home 04 "How PheNode works": the sticky journey at each stage, plus layout fit.
 // Usage: npx vite preview --port 4173 & node scripts/flow-howitworks.mjs [baseUrl] [WxH ...]
-import { chromium } from 'playwright'
+import { launch, homeReady } from './browser.mjs'
 import fs from 'node:fs'
 const out = 'shots/howitworks'; fs.mkdirSync(out, { recursive: true })
 const base = process.argv[2] && process.argv[2].startsWith('http') ? process.argv[2] : 'http://localhost:4173'
 const sizes = process.argv.slice(2).filter((a) => /^\d+x\d+$/.test(a)).map((s) => s.split('x').map(Number))
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await launch()
 const STAGES = 8
 // invert easeInOut so each shot lands in the middle of a stage
 const inv = (y) => (y < 0.5 ? Math.sqrt(y / 2) : 1 - Math.sqrt(2 * (1 - y)) / 2)
@@ -16,6 +16,7 @@ async function run(width, height, { reduced = false } = {}) {
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('response', (r) => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`) })
   await page.goto(base + '/', { waitUntil: 'networkidle' })
+  await homeReady(page)
   await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })
   const tag = `${width}x${height}${reduced ? '-reduced' : ''}`
   const geo = await page.evaluate(() => {

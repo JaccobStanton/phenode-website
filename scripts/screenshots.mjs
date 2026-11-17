@@ -1,16 +1,16 @@
 // Screenshot every route at desktop / tablet / mobile widths against a running preview server.
 // Usage: node scripts/screenshots.mjs [baseUrl] [routes...]
-import { chromium } from 'playwright'
+import { launch, homeReady } from './browser.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
 
 const base = process.argv[2] || 'http://localhost:4173'
-const routes = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/phenode', '/applications', '/applications/transportation', '/applications/agriculture', '/applications/ecology', '/applications/urban', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company', '/legal/privacy']
+const routes = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/phenode', '/applications', '/applications/transportation', '/applications/agriculture', '/applications/ecology', '/applications/urban', '/case-studies', '/resources', '/support', '/contact', '/company', '/legal/privacy']
 const sizes = { desktop: [1440, 900], tablet: [1024, 1366], mobile: [390, 844] }
 const out = process.env.SHOT_DIR || 'shots'
 fs.mkdirSync(out, { recursive: true })
 
-const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await launch()
 for (const [name, [w, h]] of Object.entries(sizes)) {
   if (process.env.SIZES && !process.env.SIZES.split(',').includes(name)) continue
   const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: process.env.REDUCED ? 'reduce' : 'no-preference' })
@@ -20,6 +20,7 @@ for (const [name, [w, h]] of Object.entries(sizes)) {
   page.on('console', (m) => { if (m.type() === 'error') errors.push(`${name} console: ${m.text()}`) })
   for (const r of routes) {
     await page.goto(base + r, { waitUntil: 'networkidle' })
+    await homeReady(page)
     await page.addStyleTag({ content: 'html{scroll-behavior:auto !important}' })
     await page.waitForTimeout(600)
     // Scroll through the page so scroll-triggered content reveals, then back to top.

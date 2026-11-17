@@ -6,7 +6,6 @@
 
 export const BASE_STATION = {
   name: 'PheNode base station',
-  tagline: 'Control box, sensor frame, and the standard sensor suite — solar powered, cellular or Wi-Fi with satellite backup.',
   includes: [
     'Control box and sensor frame (durable aluminum construction)',
     '10 W / 6 V solar panel',
@@ -37,7 +36,6 @@ export const BASE_STATION = {
 
 export const WIRELESS_NODE = {
   name: 'Agrela wireless sensor',
-  tagline: 'Battery-operated, solar-powered nodes that collect data hundreds of meters from the base station.',
   includes: [
     '6 V solar panel and internal rechargeable battery (USB-C recharge)',
     'LoRaWAN communication — low power, long range',
@@ -142,47 +140,10 @@ export const ADD_ON_SENSORS = [
 
 export const SOFTWARE = {
   name: 'PheNode software',
-  capabilities: [
-    { id: 'fleet', name: 'Fleet management', text: 'Manage, view and download data for an entire PheNode fleet from one place.' },
-    { id: 'wireless', name: 'Wireless sensor network', text: 'View the wireless sensor network data for every PheNode in your fleet.' },
-    { id: 'viz', name: 'Data visualization', text: 'Flexible, robust time-series visualization.' },
-    { id: 'precipitation', name: 'Precipitation', text: 'Rainfall, storms, forecast and drought for every PheNode, tracked against local references, with a monthly check of each rain gauge against the official gauges nearby.' },
-    { id: 'cleaning', name: 'Data cleaning preferences', text: 'Set cleaning preferences for .csv downloads so datasets arrive the way your analysis expects.' },
-    { id: 'imaging', name: 'Imaging', text: 'View your operations remotely with images captured by PheNode (1–4 per day per PheNode over cellular).' },
-    { id: 'control', name: 'Remote PheNode control', text: 'Adjust settings on deployed hardware without a site visit.' },
-    { id: 'accounts', name: 'Sub-accounts', text: 'Create sub-accounts for employees, partners or public demonstrations.' },
-    { id: 'api', name: 'API access', text: 'Pull structured data into your own tools and pipelines.' },
-    { id: 'backend', name: 'Dockerized backend', text: 'Control your data flow with a portable backend for advanced deployments.' },
-  ],
   dataPlan: [
     'All cellular and cloud infrastructure fees are covered by the service subscription',
     'Your data is stored and kept safe even if a subscription expires',
     'The hardware warranty covers failed components and sensors while the subscription is active',
     'Tech support, software demos and real-time remote installation support',
   ],
-}
-
-export const CONNECTIVITY = {
-  base: ['Cellular', 'Wi-Fi', 'Satellite backup'],
-  node: ['LoRaWAN to the base station'],
-}
-
-// Big numbers used in the Technical Capabilities section — all from published Agrela material.
-export const HEADLINE_NUMBERS = [
-  { value: '1 km', label: 'Wireless node range', note: 'Line of sight, node to base station' },
-  { value: '500+', label: 'Acres from one PheNode', note: 'With a fleet of wireless sensors (agrelaeco.com)' },
-  { value: '2', label: 'Agnostic sensor ports per node', note: 'Soil probes or other sensors' },
-  { value: '5 MP', label: 'On-board imager', note: 'RGB, 1–4 images per day per PheNode' },
-  { value: '−40 °C', label: 'Operating range low end', note: 'Temperature sensing to 85 °C' },
-  { value: '4', label: 'Profile-probe depths', note: '15, 30, 45 and 60 cm' },
-]
-
-/**
- * Claims that need internal verification before they appear on the site.
- * Flip to true only once Agrela has confirmed the definition, date range and substantiation.
- */
-export const VERIFIED_CLAIMS = {
-  pilotRetention: false, // "100 % pilot-customer retention since 2023" — not to be shown publicly (Jake's PM, Nov 16); nothing reads this any more
-  deploymentCount: false,
-  measurementsCollected: false,
 }

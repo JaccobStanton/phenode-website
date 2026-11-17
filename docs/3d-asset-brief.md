@@ -10,7 +10,7 @@ You can send this file to the designer as is. The website draws the products in 
 |---|---|
 | `wireless-node.glb` | The wireless sensor node, assembled |
 | `base-station.glb` | The base station (frame plus all mounted sensors), assembled |
-| `soil-probe-standard.glb`, `soil-profile-probe.glb`, `water-potential.glb` | *Optional.* Add-on sensors as separate models, for the configurator |
+| `soil-probe-standard.glb`, `soil-profile-probe.glb`, `water-potential.glb` | *Optional.* Add-on sensors as separate models (they were wanted for the configurator, deleted on Nov 17) |
 | Renders (PNG, transparent background, 2400 px wide) | Assembled front, assembled ¾, and exploded ¾ for each product. Used as the fallback on phones, for reduced motion and when WebGL is unavailable. |
 | Source files | The native CAD (STEP plus SolidWorks/Fusion/etc.) and the DCC scene (Blender/Max/C4D) the GLBs were exported from, so we can re-export later |
 | *Optional:* `.usdz` of each product | Lets iPhone/iPad users view it in AR (Quick Look) |

@@ -6,13 +6,11 @@ import BaseStationPart from '../sections/phenode/BaseStation.jsx'
 import WirelessNodePart from '../sections/phenode/WirelessNode.jsx'
 import DataPlatformPart from '../sections/phenode/DataPlatform.jsx'
 import SoftwarePart from '../sections/phenode/Software.jsx'
-import { Container, Section, Eyebrow, Button, Stat } from '../components/ui/primitives.jsx'
+import { Container, Section, Eyebrow } from '../components/ui/primitives.jsx'
 import SystemChain from '../components/viz/SystemChain.jsx'
-import ArchitectureDiagram from '../components/viz/ArchitectureDiagram.jsx'
-import { HEADLINE_NUMBERS } from '../data/specs.js'
 import { PHENODE_PARTS } from '../data/navigation.js'
-import { useScrollProgress, useReveal } from '../lib/motion.js'
-import { FEATURES } from '../data/features.js'
+import { useReveal } from '../lib/motion.js'
+import { useScrollProgress } from '../lib/scroll.js'
 
 // The PheNode tab is one long page (Jake, Nov 16; it was five pages): the overview, then each part in the order of
 // PHENODE_PARTS (data/navigation.js), which the header menu and the footer follow too. Each part sits at /phenode#<id>.
@@ -54,33 +52,6 @@ export default function PheNodePage() {
           </div>
         </Container>
       </Section>
-
-      {/* "Technical capabilities" and "System architecture": hidden for now (FEATURES.phenodeTechSections). The Data
-          platform part below has its own System architecture section, which stays (Jake, Nov 16), so with this on the
-          diagram would show twice. */}
-      {FEATURES.phenodeTechSections && <Section id="specifications" theme="ink">
-        <Container>
-          <Eyebrow>Technical capabilities</Eyebrow>
-          <h2 className="display-lg mt-5 max-w-[16ch]">Numbers from the spec sheet. Nothing else.</h2>
-          <div className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {HEADLINE_NUMBERS.map((n) => <Stat key={n.label} value={n.value} label={n.label} note={n.note} />)}
-          </div>
-          <div className="mt-12 flex flex-wrap gap-3"><Button to="/phenode#base-station-specs" variant="primary">Base station specifications</Button><Button to="/phenode#wireless-node-specs" variant="ghost">Node specifications</Button></div>
-        </Container>
-      </Section>}
-
-      {FEATURES.phenodeTechSections && <Section theme="paper">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <Eyebrow>System architecture</Eyebrow>
-              <h2 className="display-md mt-4 max-w-[14ch]">From sensor to dataset.</h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-ink/75">The complete stack, for technically sophisticated visitors. Expand it for the second layer of detail.</p>
-            </div>
-            <div className="lg:col-span-8"><ArchitectureDiagram /></div>
-          </div>
-        </Container>
-      </Section>}
 
       {PHENODE_PARTS.map(({ id }) => {
         const Part = PART_SECTIONS[id]

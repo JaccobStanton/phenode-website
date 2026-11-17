@@ -1,8 +1,8 @@
-import { Eyebrow, Section, Container, Button, Tag } from '../../components/ui/primitives.jsx'
+import { Eyebrow, Section, Container, Tag } from '../../components/ui/primitives.jsx'
 import ScaleNetwork, { STAGES, stageFor } from '../../components/viz/ScaleNetwork.jsx'
 import { SceneLegend } from '../../components/viz/scenes.jsx'
-import { useScrollProgress, seg, easeInOut } from '../../lib/motion.js'
-import { FEATURES } from '../../data/features.js'
+import { seg, easeInOut } from '../../lib/motion.js'
+import { useScrollProgress } from '../../lib/scroll.js'
 import { homeNo } from '../../data/homeSections.js'
 
 export default function Scale() {
@@ -27,11 +27,6 @@ export default function Scale() {
                 <ol className="mt-6 hidden gap-1 lg:flex" aria-hidden="true">
                   {STAGES.map((s) => <li key={s.at} className={`h-1 flex-1 rounded-full ${progress >= s.at ? 'bg-signal' : 'bg-white/15'}`} />)}
                 </ol>
-                {FEATURES.designSystem && (
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    <Button to="/design-your-system" variant="primary">Design your system</Button>
-                  </div>
-                )}
               </div>
               <div className="relative lg:col-span-8">
                 <div className="relative overflow-hidden rounded-xl border border-white/10 bg-ink-2">

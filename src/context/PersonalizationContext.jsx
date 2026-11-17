@@ -24,8 +24,7 @@ export function PersonalizationProvider({ children }) {
     const need = NEEDS.find((n) => n.id === needId) || null
     const order = role ? role.order : APPLICATIONS.map((a) => a.id)
     const applications = order.map((id) => APPLICATIONS.find((a) => a.id === id)).filter(Boolean)
-    const primaryCta = role ? role.cta : 'Design your system'
-    return { roleId, role, setRoleId, needId, need, setNeedId, applications, primaryCta }
+    return { roleId, role, setRoleId, needId, need, setNeedId, applications }
   }, [roleId, needId, setRoleId, setNeedId])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

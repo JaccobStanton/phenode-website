@@ -9,7 +9,18 @@
  *
  * Canvas 2D with pre-rendered glow sprites drawn additively: no WebGL, small, and cheap enough for phones. The caller
  * pauses it off screen. Reduced motion gets a single still frame with a few readings.
+ *
+ * Two canvases (Nov 17, performance pass): the field of soft glows, drawn at a lower resolution on phones (filling the
+ * pixels is most of each frame's cost there, and a glow looks the same), and an overlay above it for the pings, beams
+ * and readings, kept sharp. Without an overlay canvas everything is drawn on the one canvas, as before.
+ *
+ * It runs on the page or in a worker on OffscreenCanvases (sensorFieldHost.js decides; sensorField.worker.js): nothing
+ * here needs the document, given `measure`.
  */
+
+// a frame: requestAnimationFrame, which workers have too where OffscreenCanvas is supported (a timer otherwise)
+const nextFrame = (cb) => (typeof requestAnimationFrame === 'function' ? requestAnimationFrame(cb) : setTimeout(() => cb(performance.now()), 16))
+const cancelFrame = (id) => (typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame(id) : clearTimeout(id))
 
 export const HORIZON = 0.6 // horizon height as a fraction of the stage (desktop / tablet)
 export const HORIZON_PHONE = 0.62
@@ -18,6 +29,7 @@ const TAU = Math.PI * 2
 const CAM_H = 2.4 // camera height above the ground (world units)
 const Z_FAR = 25 // draw distance
 const GLIDE = 0.34 // forward drift, world units per second
+const FIELD_DPR_PHONE = 1.5 // the field's resolution cap on phones (the overlay keeps up to 2×)
 const NC = 20 // cool colour steps
 const NW = 4 // warm steps
 const COOL = [[16, 48, 118], [26, 117, 224], [64, 188, 246], [116, 244, 238]] // deep blue → Agrela blue → sky → PheNode cyan
@@ -87,7 +99,7 @@ function makeSprites() {
     for (let ci = 0; ci < NC; ci++) {
       const [r, g, b] = (wi === 0 ? coolRGB(ci / (NC - 1)) : WARM[wi - 1]).map((c) => Math.round(c))
       const hot = [r, g, b].map((c) => Math.round(c + (255 - c) * 0.6))
-      const cv = document.createElement('canvas')
+      const cv = typeof document === 'undefined' ? new OffscreenCanvas(48, 48) : document.createElement('canvas')
       cv.width = cv.height = 48
       const x = cv.getContext('2d')
       const grd = x.createRadialGradient(24, 24, 0, 24, 24, 24)
@@ -114,11 +126,16 @@ const overlaps = (a, b, pad) => a.x < b.x + b.w + pad && a.x + a.w + pad > b.x &
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {{ reduced?: boolean, avoid?: () => ({x:number,y:number,w:number,h:number}|null) }} opts
+ * @param {HTMLCanvasElement|OffscreenCanvas} canvas
+ * @param {{ overlay?: HTMLCanvasElement|OffscreenCanvas, reduced?: boolean,
+ *   avoid?: () => ({x:number,y:number,w:number,h:number}|null), measure?: () => ({w:number,h:number,dpr:number}) }} opts
+ *   overlay: a canvas the same size, above the field, for the pings and readings.
  *   avoid: the area (in canvas CSS px) that readings must stay clear of — the headline and button.
+ *   measure: the canvases' size in CSS px and the screen's pixel ratio (by default read from the canvas and window).
  */
-export function createSensorField(canvas, { reduced = false, avoid = () => null } = {}) {
+export function createSensorField(canvas, { overlay = null, reduced = false, avoid = () => null, measure = null } = {}) {
   const ctx = canvas.getContext('2d')
+  const octx = overlay ? overlay.getContext('2d') : ctx
   const noise = perlin(0x2026)
   const sprites = makeSprites()
   const height = (xw, zw) => 0.65 * noise(xw * 0.055 + 31.7, zw * 0.055 + 3.1) // gentle hills
@@ -131,7 +148,7 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
   // warm pockets: small, scattered hot spots in an otherwise cool field
   const heatAt = (xw, zw, t) => clamp((noise(xw * 0.085 + 101.7 + t * 0.012, zw * 0.085 + 57.1) - 0.24) / 0.2, 0, 1)
 
-  let w = 1, h = 1, dpr = 1, hz = 0, f = 1, dx = 0.62
+  let w = 1, h = 1, dpr = 1, odpr = 1, hz = 0, f = 1, dx = 0.62
   const dz = 0.62
   let time = reduced ? 8 : 0
   let offset = 0, exit = 0, last = 0, raf = 0, running = false
@@ -167,12 +184,14 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
         const sy = hz + ((H - height(xw, zj)) * f) / zv
         if (sy > h + 8) continue
         const sx = w / 2 + (xw * f) / zv
+        // while the network switches on, points beyond the front (and its glow) are skipped before the noise lookups
+        const front = revealing ? reveal - Math.hypot(xw, zj - 13) : 0
+        if (revealing && front <= -1.4) continue
         const F = fieldAt(xw, zj, time)
         const heat = heatAt(xw, zj, time)
         let a = (0.1 + 0.95 * F * F) * fog * (1 - 0.45 * near)
         let boost = 0
         if (revealing) {
-          const front = reveal - Math.hypot(xw, zj - 13)
           a *= clamp(front / 2.5, 0, 1)
           boost += clamp(1 - Math.abs(front) / 1.4, 0, 1) * 0.6
         }
@@ -184,6 +203,10 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
         ctx.drawImage(spriteAt(F, heat).img, sx - s / 2, sy - s / 2, s, s)
         if (zv > 4.5 && zv < 15 && ((i ^ k) & 1) === 0 && sy > hz + 14) cands.push(xw, zj, F)
       }
+    }
+    if (octx !== ctx) {
+      octx.setTransform(odpr, 0, 0, odpr, 0, 0)
+      octx.clearRect(0, 0, w, h)
     }
     drawPings(H)
   }
@@ -198,68 +221,68 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
       const sx = w / 2 + (p.xw * f) / z
       const sy = hz + ((H - gy) * f) / z
       const flat = clamp((H - gy) / z, 0.12, 0.6)
-      ctx.globalCompositeOperation = 'lighter'
+      octx.globalCompositeOperation = 'lighter'
       const flash = clamp(1 - age / 0.9, 0, 1)
       if (flash > 0) {
         const s = clamp((0.05 * f) / z, 0.45, 3.4) * 11
-        ctx.globalAlpha = flash
-        ctx.drawImage(p.sprite.img, sx - s / 2, sy - s / 2, s, s)
+        octx.globalAlpha = flash
+        octx.drawImage(p.sprite.img, sx - s / 2, sy - s / 2, s, s)
       }
-      ctx.lineWidth = 1.25
-      ctx.strokeStyle = `rgb(${p.sprite.rgb})`
+      octx.lineWidth = 1.25
+      octx.strokeStyle = `rgb(${p.sprite.rgb})`
       for (const delay of [0, 0.45]) {
         const a = age - delay
         if (a < 0 || a > 1.9) continue
         const rad = (0.15 + (1 - (1 - a / 1.9) ** 3) * 1.6) * (f / z)
-        ctx.globalAlpha = (1 - a / 1.9) * 0.75
-        ctx.beginPath()
-        ctx.ellipse(sx, sy, rad, rad * flat, 0, 0, TAU)
-        ctx.stroke()
+        octx.globalAlpha = (1 - a / 1.9) * 0.75
+        octx.beginPath()
+        octx.ellipse(sx, sy, rad, rad * flat, 0, 0, TAU)
+        octx.stroke()
       }
       if (p.beam) {
         // a reading going up: a soft column of light rising from the point into the sky, gone in under two seconds
         const ba = clamp(age / 0.25, 0, 1) * (1 - smooth(0.5, 1.8, age))
         if (ba > 0.01) {
           const topY = hz - h * 0.34
-          const col = ctx.createLinearGradient(0, sy, 0, topY)
+          const col = octx.createLinearGradient(0, sy, 0, topY)
           col.addColorStop(0, `rgba(${p.sprite.rgb},0.6)`)
           col.addColorStop(0.3, `rgba(${p.sprite.rgb},0.22)`)
           col.addColorStop(1, `rgba(${p.sprite.rgb},0)`)
-          ctx.globalAlpha = ba
-          ctx.fillStyle = col
-          ctx.fillRect(sx - 1.5, topY, 3, sy - topY)
-          ctx.fillRect(sx - 0.5, topY, 1, sy - topY)
+          octx.globalAlpha = ba
+          octx.fillStyle = col
+          octx.fillRect(sx - 1.5, topY, 3, sy - topY)
+          octx.fillRect(sx - 0.5, topY, 1, sy - topY)
         }
       }
       if (!p.reading) continue
       const la = smooth(0.12, 0.5, age) * (1 - smooth(2.6, 3.3, age))
       if (la < 0.01) continue
       // a leader up from the point, with the reading flagged off its top
-      ctx.globalCompositeOperation = 'source-over'
-      ctx.globalAlpha = la
+      octx.globalCompositeOperation = 'source-over'
+      octx.globalAlpha = la
       const top = sy - 30
-      const lead = ctx.createLinearGradient(0, sy - 5, 0, top)
+      const lead = octx.createLinearGradient(0, sy - 5, 0, top)
       lead.addColorStop(0, `rgba(${p.sprite.rgb},0)`)
       lead.addColorStop(1, `rgba(${p.sprite.rgb},0.9)`)
-      ctx.strokeStyle = lead
-      ctx.lineWidth = 1
-      ctx.beginPath()
-      ctx.moveTo(Math.round(sx) + 0.5, sy - 5)
-      ctx.lineTo(Math.round(sx) + 0.5, top)
-      ctx.stroke()
+      octx.strokeStyle = lead
+      octx.lineWidth = 1
+      octx.beginPath()
+      octx.moveTo(Math.round(sx) + 0.5, sy - 5)
+      octx.lineTo(Math.round(sx) + 0.5, top)
+      octx.stroke()
       const tx = p.right ? Math.round(sx) + 7 : Math.round(sx) - 6
-      ctx.textAlign = p.right ? 'left' : 'right'
-      ctx.shadowColor = 'rgba(0,0,0,0.7)'
-      ctx.shadowBlur = 8
-      ctx.font = `500 9.5px ${MONO}`
-      if ('letterSpacing' in ctx) ctx.letterSpacing = '1.4px'
-      ctx.fillStyle = 'rgba(150,200,255,0.85)'
-      ctx.fillText(p.reading.kind.toUpperCase(), tx, top + 2)
-      ctx.font = `500 13px ${MONO}`
-      if ('letterSpacing' in ctx) ctx.letterSpacing = '0px'
-      ctx.fillStyle = 'rgba(244,242,236,0.96)'
-      ctx.fillText(p.reading.value, tx, top + 18)
-      ctx.shadowBlur = 0
+      octx.textAlign = p.right ? 'left' : 'right'
+      octx.shadowColor = 'rgba(0,0,0,0.7)'
+      octx.shadowBlur = 8
+      octx.font = `500 9.5px ${MONO}`
+      if ('letterSpacing' in octx) octx.letterSpacing = '1.4px'
+      octx.fillStyle = 'rgba(150,200,255,0.85)'
+      octx.fillText(p.reading.kind.toUpperCase(), tx, top + 2)
+      octx.font = `500 13px ${MONO}`
+      if ('letterSpacing' in octx) octx.letterSpacing = '0px'
+      octx.fillStyle = 'rgba(244,242,236,0.96)'
+      octx.fillText(p.reading.value, tx, top + 18)
+      octx.shadowBlur = 0
     }
   }
 
@@ -318,7 +341,7 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
     offset += dt * GLIDE * (1 + 6 * exit * exit)
     step(dt)
     draw()
-    raf = requestAnimationFrame(tick)
+    raf = nextFrame(tick)
   }
 
   /** Reduced motion: one still frame, with a few readings already up. */
@@ -330,13 +353,19 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
   }
 
   function resize() {
-    const r = canvas.getBoundingClientRect()
-    w = Math.max(1, r.width)
-    h = Math.max(1, r.height)
+    const m = measure ? measure() : { w: canvas.getBoundingClientRect().width, h: canvas.getBoundingClientRect().height, dpr: window.devicePixelRatio }
+    w = Math.max(1, m.w)
+    h = Math.max(1, m.h)
     const phone = w < 720
-    dpr = Math.min(window.devicePixelRatio || 1, phone ? 1.75 : 2)
+    // the field at up to 1.5× on phones (it was 1.75×), the overlay's rings and readings at up to 2×
+    dpr = Math.min(m.dpr || 1, phone ? FIELD_DPR_PHONE : 2)
+    odpr = Math.min(m.dpr || 1, 2)
     canvas.width = Math.round(w * dpr)
     canvas.height = Math.round(h * dpr)
+    if (overlay) {
+      overlay.width = Math.round(w * odpr)
+      overlay.height = Math.round(h * odpr)
+    }
     hz = h * (phone ? HORIZON_PHONE : HORIZON)
     f = (3.3 * (h - hz)) / CAM_H // the nearest visible row sits about 3.3 units ahead
     dx = phone ? 0.5 : 0.62
@@ -351,17 +380,17 @@ export function createSensorField(canvas, { reduced = false, avoid = () => null 
       if (reduced || running) return
       running = true
       last = 0
-      raf = requestAnimationFrame(tick)
+      raf = nextFrame(tick)
     },
     stop() {
       running = false
-      cancelAnimationFrame(raf)
+      cancelFrame(raf)
       raf = 0
     },
     setExit(p) { exit = clamp(p, 0, 1) },
     destroy() {
       running = false
-      cancelAnimationFrame(raf)
+      cancelFrame(raf)
       pings.length = 0
     },
   }

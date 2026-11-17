@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { FOOTER } from '../../data/navigation.js'
 import { COMPANY } from '../../data/company.js'
 import { PheNodeLogo, AgrelaLogo } from '../ui/Logos.jsx'
-import { FEATURES } from '../../data/features.js'
 
 export default function Footer() {
   return (
@@ -13,7 +12,6 @@ export default function Footer() {
             <PheNodeLogo height={22} />
             <p className="max-w-[34ch] text-[15px] text-stone">A flexible, scalable environmental monitoring platform, built around the question you need to answer.</p>
             <div className="flex flex-col gap-3">
-              {FEATURES.designSystem && <Link to="/design-your-system" className="btn-primary w-fit !px-4 !py-2 text-[14px]">Design System</Link>}
               <a href={`mailto:${COMPANY.supportEmail}`} className="font-mono text-[12px] tracking-[0.1em] text-stone hover:text-paper">{COMPANY.supportEmail}</a>
             </div>
           </div>
@@ -30,7 +28,7 @@ export default function Footer() {
         </div>
         <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center">
           <div className="flex items-center gap-4">
-            <AgrelaLogo tone="light" height={26} />
+            <AgrelaLogo height={26} />
             <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-stone">St. Louis, Missouri</span>
           </div>
           <p className="font-mono text-[11px] tracking-[0.08em] text-stone">© {COMPANY.founded}–{new Date().getFullYear()} {COMPANY.name}. PheNode® is a registered trademark of Agrela Ecosystems.</p>

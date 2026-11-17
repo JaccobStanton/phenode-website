@@ -32,15 +32,3 @@ export default function DataPulse({ d, color = 'var(--color-signal)', toColor, d
   )
 }
 
-/** A static measurement dot with a soft expanding ring (CSS keyframes, cheap). */
-export function Beacon({ x, y, color = 'var(--color-signal)', size = 8, delay = 0, label, side = 'right', className = '' }) {
-  return (
-    <div className={`absolute flex items-center gap-2 ${side === 'left' ? 'flex-row-reverse' : ''} ${className}`} style={{ left: `${x}%`, top: `${y}%`, transform: 'translate(-50%,-50%)' }}>
-      <span className="relative block" style={{ width: size, height: size }}>
-        <span className="absolute inset-0 rounded-full" style={{ background: color }} />
-        <span className="absolute inset-0 rounded-full" style={{ background: color, animation: `pulse-ring 2.8s ${delay}s ease-out infinite` }} />
-      </span>
-      {label && <span className="whitespace-nowrap rounded-md border border-white/10 bg-ink/70 px-2 py-1 font-mono text-[11px] tracking-[0.08em] text-paper/90 backdrop-blur-sm">{label}</span>}
-    </div>
-  )
-}

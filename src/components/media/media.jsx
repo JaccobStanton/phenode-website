@@ -66,7 +66,8 @@ export function ScreenCard({ id, caption, sizes, className = '', tone = 'ink' })
 }
 
 /**
- * Muted, inline, looping screen recording. Loads only when near the viewport and pauses off-screen.
+ * Muted, inline, looping screen recording. The poster and the video load a screen before it's reached (the poster used
+ * to load with the page: ~80 KB each on the home and PheNode pages, Nov 17); it plays while in view, pauses off-screen.
  * Under reduced motion it stays on the poster frame and offers a play control instead of autoplaying.
  */
 export function LoopVideo({ name, poster, label, className = '' }) {
@@ -79,21 +80,21 @@ export function LoopVideo({ name, poster, label, className = '' }) {
   useEffect(() => {
     const el = ref.current
     if (!el || typeof IntersectionObserver === 'undefined') return
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) setNear(true)
-      if (reduced) return
+    const nearby = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setNear(true); nearby.disconnect() } }, { rootMargin: '100% 0px' })
+    nearby.observe(el)
+    const inView = reduced ? null : new IntersectionObserver(([e]) => {
       if (e.isIntersecting && e.intersectionRatio > 0.25) el.play?.().catch(() => {})
       else el.pause?.()
-    }, { rootMargin: '200px 0px', threshold: [0, 0.25, 0.6] })
-    io.observe(el)
-    return () => io.disconnect()
+    }, { threshold: [0, 0.25, 0.6] })
+    inView?.observe(el)
+    return () => { nearby.disconnect(); inView?.disconnect() }
   }, [reduced])
 
   return (
     <div className={`relative h-full w-full ${className}`}>
       <video
         ref={ref} muted loop playsInline preload="none" aria-label={label}
-        poster={`${base}${poster}`}
+        poster={near ? `${base}${poster}` : undefined}
         onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}
         className="block h-full w-full object-cover object-top"
       >

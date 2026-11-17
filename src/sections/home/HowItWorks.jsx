@@ -1,7 +1,8 @@
 import { Eyebrow, Section, Container, Button, ButtonPair } from '../../components/ui/primitives.jsx'
 import DataJourney, { JOURNEY, JourneyList } from '../../components/viz/DataJourney.jsx'
 import JourneyStage from '../../components/viz/JourneyStage.jsx'
-import { useScrollProgress, useReveal, seg, easeInOut } from '../../lib/motion.js'
+import { useReveal, seg, easeInOut } from '../../lib/motion.js'
+import { useScrollProgress } from '../../lib/scroll.js'
 import { homeNo } from '../../data/homeSections.js'
 
 export default function HowItWorks() {

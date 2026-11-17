@@ -21,27 +21,23 @@ export function PheNodeLogo({ className = '', height = 22, markColor = '#1A75E0'
   )
 }
 
-/** The PheNode mark alone. */
-export function PheNodeMark({ size = 24, color = '#1A75E0', className = '' }) {
-  return (
-    <svg className={className} width={size} height={size} viewBox="0 0 59.5 59.5" aria-hidden="true">
-      <path fill={color} d="M0.391,44.596l30.45,0.004c1.125,4.156,4.924,7.215,9.435,7.215c5.398,0,9.774-4.377,9.774-9.774 s-4.376-9.772-9.774-9.772c-4.485,0-8.264,3.021-9.414,7.142L0.39,39.414V0.084h59.066v59.065H0.391V44.596z" />
-    </svg>
-  )
-}
-
 /** Agrela Ecosystems logo (raster from the brand file). `tone` picks the wordmark color for the background. */
-export function AgrelaLogo({ tone = 'light', height = 28, className = '' }) {
-  const base = `${import.meta.env.BASE_URL}assets/logos/agrela-ecosystems-${tone}`
+// The Agrela Ecosystems wordmark (light, for dark backgrounds; 400 × 111). It sits in the footer at 26 px tall (94 px
+// wide), so 200 and 400 px files cover 1–3× screens, and it loads lazily (Nov 17: the 800 / 1600 px files and the dark
+// variant weren't used).
+export function AgrelaLogo({ height = 28, className = '', loading = 'lazy' }) {
+  const base = `${import.meta.env.BASE_URL}assets/logos/agrela-ecosystems-light`
+  const width = Math.round((height * 400) / 111)
   return (
     <img
-      src={`${base}-800.webp`}
-      srcSet={`${base}-400.webp 400w, ${base}-800.webp 800w, ${base}-1600.webp 1600w`}
-      sizes={`${Math.round(height * 3.6)}px`}
+      src={`${base}-400.webp`}
+      srcSet={`${base}-200.webp 200w, ${base}-400.webp 400w`}
+      sizes={`${width}px`}
+      width={width}
       height={height}
-      style={{ height, width: 'auto' }}
       alt="Agrela Ecosystems"
       className={className}
+      loading={loading}
       decoding="async"
     />
   )

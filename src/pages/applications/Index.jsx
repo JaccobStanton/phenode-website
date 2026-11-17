@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Page from '../../components/layout/Page.jsx'
-import { Container, Section, Eyebrow, Button } from '../../components/ui/primitives.jsx'
+import { Container, Section } from '../../components/ui/primitives.jsx'
 import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import { APPLICATIONS } from '../../data/applications.js'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
-import { FEATURES } from '../../data/features.js'
 
 export default function ApplicationsIndex() {
   const { applications, role } = usePersonalization()
@@ -38,7 +37,6 @@ export default function ApplicationsIndex() {
               </li>
             ))}
           </ol>
-          {FEATURES.designSystem && <div className="mt-10"><Button to="/design-your-system" variant="primary">Design your system</Button></div>}
         </Container>
       </Section>
     </Page>

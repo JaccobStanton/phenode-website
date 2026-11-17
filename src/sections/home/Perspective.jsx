@@ -1,7 +1,7 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowDown, ArrowRight, Bird, Building2, Cable, ChartSpline, Check, ClipboardList, CloudSun, Cpu, Database, Droplets, Ellipsis,
+  ArrowRight, Bird, Building2, Cable, ChartSpline, Check, ClipboardList, CloudSun, Cpu, Database, Droplets, Ellipsis,
   FlaskConical, Flame, Gauge, LayoutDashboard, Leaf, Lightbulb, MapPin, Microscope, Mountain, Radar, RotateCcw, Route,
   Shovel, Sprout, ThermometerSun, TreePine, Wheat,
 } from 'lucide-react'
@@ -13,8 +13,7 @@ import { ROLES, ROLE_GROUPS, NEEDS, APPLICATION_BY_ID } from '../../data/applica
 import { SENSOR_BY_ID } from '../../data/sensors.js'
 import { usePersonalization } from '../../context/PersonalizationContext.jsx'
 import { diurnalSeries, soilMoistureSeries } from '../../lib/demoData.js'
-import { useReveal, useReducedMotion } from '../../lib/motion.js'
-import { FEATURES } from '../../data/features.js'
+import { useReveal } from '../../lib/motion.js'
 import { homeNo } from '../../data/homeSections.js'
 
 /*
@@ -107,7 +106,6 @@ export default function Perspective() {
   const need = pickedNeed || NEED_BY_ID[shown.needs[0] || 'environmental-intelligence']
   const sentence = useRef(null)
   const reveal = useReveal()
-  const reduced = useReducedMotion()
 
   const pickRole = (id) => {
     const next = ROLE_BY_ID[id]
@@ -121,14 +119,6 @@ export default function Perspective() {
     requestAnimationFrame(() => sentence.current?.querySelector('[role="combobox"]')?.focus())
   }
   const first = role ? APPLICATION_BY_ID[role.order[0]] : null
-
-  const seeApplications = () => {
-    const el = document.getElementById('applications')
-    if (!el) return
-    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' })
-    const h = el.querySelector('h2')
-    if (h) { h.setAttribute('tabindex', '-1'); h.setAttribute('data-focus-target', ''); h.focus({ preventScroll: true }) }
-  }
 
   return (
     <Section id="perspective" theme="ink" className="border-t border-white/10">
@@ -154,16 +144,14 @@ export default function Perspective() {
               {first ? (
                 <>
                   <Check size={16} strokeWidth={2.4} aria-hidden="true" className="mt-0.5 shrink-0 text-phenode-green" />
-                  {/* with the home Applications section hidden, the role still orders the Applications page */}
-                  <span>{FEATURES.homeApplications ? 'Applications below now start with ' : 'Applications now start with '}<span className="text-paper">{first.kicker}</span>.</span>
+                  {/* the role orders the Applications page (the home Applications section was deleted on Nov 17) */}
+                  <span>Applications now start with <span className="text-paper">{first.kicker}</span>.</span>
                 </>
               ) : null /* no line before a role is picked (Jake, Nov 16); the live region stays so the change is announced */}
             </p>
             {first && (
               <span className="flex items-center gap-5">
-                {FEATURES.homeApplications
-                  ? <button type="button" onClick={seeApplications} className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowDown size={14} aria-hidden="true" /></button>
-                  : <Link to="/applications" className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowRight size={14} aria-hidden="true" /></Link>}
+                <Link to="/applications" className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowRight size={14} aria-hidden="true" /></Link>
                 <button type="button" onClick={reset} aria-label="Reset your role and question" className="inline-flex items-center gap-1.5 transition-colors hover:text-paper"><RotateCcw size={13} aria-hidden="true" />Reset</button>
               </span>
             )}
@@ -260,8 +248,7 @@ function StartingPoint({ need }) {
         </div>
         <div className="mt-auto pt-8">
           <div className="flex flex-wrap gap-3 border-t border-white/10 pt-6">
-          {FEATURES.designSystem && <Button to={`/design-your-system?need=${need.id}`} variant="primary">Start with this configuration</Button>}
-          <Button to={app.route} variant={FEATURES.designSystem ? 'ghost' : 'primary'} icon={FEATURES.designSystem ? null : 'arrow'}>Read the application</Button>
+          <Button to={app.route} variant="primary" icon="arrow">Read the application</Button>
           </div>
         </div>
       </div>

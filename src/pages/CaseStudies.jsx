@@ -1,8 +1,6 @@
-import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import { FEATURES } from '../data/features.js'
 import Page from '../components/layout/Page.jsx'
-import { Container, Section, Eyebrow, Tag, AssetPlaceholder, Button, Img } from '../components/ui/primitives.jsx'
+import { Container, Section, Tag, AssetPlaceholder, Button, Img } from '../components/ui/primitives.jsx'
 import { CASE_STUDIES } from '../data/caseStudies.js'
 import { APPLICATION_BY_ID } from '../data/applications.js'
 
@@ -21,16 +19,16 @@ export default function CaseStudies() {
           <ol className="flex flex-col gap-16">
             {CASE_STUDIES.map((c, i) => (
               <li key={c.slug} className="border-t border-ink/10 pt-10">
-                {/* The card links only to its press releases while the case study pages are hidden (data/features.js) */}
+                {/* The card links only to its press releases (the case study pages were deleted on Nov 17) */}
                 <div className="grid gap-8 lg:grid-cols-12">
                   <div className="lg:col-span-7">
                     {c.photo
-                      ? <Img name={c.photo.name} widths={c.photo.widths} sizes="(min-width: 1024px) 54vw, 100vw" alt={c.photo.alt} className="aspect-[16/10] h-auto w-full rounded-xl bg-ink/5 object-cover" />
+                      ? <Img name={c.photo.name} widths={c.photo.widths} sizes="(min-width: 1024px) 54vw, 100vw" alt={c.photo.alt} className="aspect-[16/10] h-auto w-full rounded-xl bg-ink/5 object-cover" loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : undefined} />
                       : <AssetPlaceholder label={`Deployment photography · ${c.partner.split(' · ')[0]} · 2000×1250`} ratio="16 / 10" className="text-ink/50" />}
                   </div>
                   <div className="flex flex-col lg:col-span-5">
                     <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.14em] uppercase text-stone-2"><span>{String(i + 1).padStart(2, '0')}</span><span className="opacity-40">/</span><span>{APPLICATION_BY_ID[c.application]?.kicker}</span>{c.placeholder && <Tag tone="signal">Placeholder · pending approval</Tag>}</div>
-                    <h2 className="display-md mt-4">{FEATURES.caseStudyPages ? <Link to={`/case-studies/${c.slug}`} className="hover:underline hover:underline-offset-4">{c.project}</Link> : c.project}</h2>
+                    <h2 className="display-md mt-4">{c.project}</h2>
                     <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-ink/10 pt-5 font-mono text-[11px] tracking-[0.08em]">
                       <div><dt className="uppercase text-stone-2">Location</dt><dd className="mt-0.5 font-sans text-[14px] tracking-normal text-ink">{c.location}</dd></div>
                       <div><dt className="uppercase text-stone-2">Partner</dt><dd className="mt-0.5 font-sans text-[14px] tracking-normal text-ink">{c.partner}</dd></div>

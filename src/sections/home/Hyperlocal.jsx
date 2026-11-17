@@ -1,7 +1,8 @@
 import { Sprout, Tractor, Route, TreePine, GraduationCap, Building2 } from 'lucide-react'
 import { Eyebrow, Section, Container, Button, ButtonPair } from '../../components/ui/primitives.jsx'
 import HyperlocalMap from '../../components/viz/HyperlocalMap.jsx'
-import { useScrollProgress, useReveal } from '../../lib/motion.js'
+import { useReveal } from '../../lib/motion.js'
+import { useScrollProgress } from '../../lib/scroll.js'
 import { homeNo } from '../../data/homeSections.js'
 
 const FACTORS = ['Soil type', 'Slope', 'Canopy', 'Irrigation', 'Pavement', 'Shade']

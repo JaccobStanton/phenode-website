@@ -40,17 +40,6 @@ export function soilMoistureSeries({ seed = 7, days = 14, start = 32, rainAt = [
   return out
 }
 
-export function rainfallSeries({ seed = 3, days = 14, events = [[60, 6], [200, 11]] } = {}) {
-  const rnd = mulberry32(seed)
-  const out = []
-  for (let h = 0; h < days * 24; h++) {
-    let v = 0
-    events.forEach(([at, total]) => { if (h >= at && h < at + 5) v += (total / 5) * (0.6 + rnd() * 0.8) })
-    out.push({ t: h, v: Math.round(v * 100) / 100 })
-  }
-  return out
-}
-
 /** 2D field variability grid, values 0..1, with a gentle gradient + patches. */
 export function fieldGrid({ seed = 11, cols = 12, rows = 8 } = {}) {
   const rnd = mulberry32(seed)

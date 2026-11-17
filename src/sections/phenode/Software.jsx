@@ -1,12 +1,9 @@
-import { Container, Section, Eyebrow, Button, Tag } from '../../components/ui/primitives.jsx'
+import { Container, Section, Eyebrow, Tag } from '../../components/ui/primitives.jsx'
 import { useState, useRef, useEffect } from 'react'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import DeviceFrame from '../../components/software/DeviceFrame.jsx'
 import { Screen, SCREENS, SCREEN_RATIO, PhoneScreen, PHONE_SCREENS, PHONE_RATIO } from '../../components/media/media.jsx'
-import { TestimonialSlot } from '../../sections/home/Proof.jsx'
-import { SOFTWARE_MODULES } from '../../data/sensors.js'
 import { prefersReducedMotion } from '../../lib/motion.js'
-import { FEATURES } from '../../data/features.js'
+import { ScrollTrigger } from '../../lib/scroll.js'
 
 // Views with a real screenshot (`shot`) are selectable; the rest are listed without one.
 const VIEWS = [
@@ -54,27 +51,6 @@ export default function SoftwarePart() {
           <OnAPhone />
         </Container>
       </Section>
-
-      {/* The "Capabilities" list ("What the software does today") that sat on the left here is removed (Jake, Nov 17);
-          the configurable modules take the section, title on the left as in the other sections. Hidden for now too
-          (FEATURES.softwareModules, Jake, Nov 17). */}
-      {FEATURES.softwareModules && <Section theme="ink">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <Eyebrow>Configurable modules</Eyebrow>
-              <h3 className="display-md mt-4 max-w-[16ch]">The hardware is configurable. The software is too.</h3>
-              <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Choose software for your system</Button>}<Button to="/contact?intent=demo" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Request a demo</Button></div>
-            </div>
-            <div className="lg:col-span-7">
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {SOFTWARE_MODULES.map((m) => <li key={m.id} className={`rounded-lg border p-4 ${m.default ? 'border-data/40 bg-data/5' : 'border-white/10'}`}><p className="text-[14.5px] font-medium">{m.name}</p><p className="mt-0.5 text-[13px] text-paper/65">{m.text}</p><p className={`mt-2 font-mono text-[10px] tracking-[0.12em] uppercase ${m.default ? 'text-data' : 'text-stone'}`}>{m.default ? 'Included' : 'Optional'}</p></li>)}
-              </ul>
-              <TestimonialSlot context="Access to data" className="mt-8" />
-            </div>
-          </div>
-        </Container>
-      </Section>}
     </>
   )
 }

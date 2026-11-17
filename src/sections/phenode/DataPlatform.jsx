@@ -1,12 +1,12 @@
 import { useMemo, useRef, useCallback, useLayoutEffect } from 'react'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Container, Section, Eyebrow, Button, Tag } from '../../components/ui/primitives.jsx'
 import DataJourney, { JOURNEY, JourneyList, journeyArt } from '../../components/viz/DataJourney.jsx'
 import ArchitectureDiagram from '../../components/viz/ArchitectureDiagram.jsx'
 import MiniChart, { Legend } from '../../components/viz/MiniChart.jsx'
 import { SOFTWARE } from '../../data/specs.js'
 import { ScreenCard } from '../../components/media/media.jsx'
-import { useScrollProgress, seg, easeInOut } from '../../lib/motion.js'
+import { seg, easeInOut } from '../../lib/motion.js'
+import { ScrollTrigger, useScrollProgress } from '../../lib/scroll.js'
 import { soilMoistureSeries } from '../../lib/demoData.js'
 
 const CSV = `timestamp_utc,device,node,air_temp_c,rh_pct,pressure_hpa,soil_vwc_probe1,soil_temp_c_probe1,soil_ec_ds_m_probe1
@@ -18,7 +18,7 @@ const CSV = `timestamp_utc,device,node,air_temp_c,rh_pct,pressure_hpa,soil_vwc_p
  * PheNode page, "Data platform" part (/phenode#data-platform; the header's "How It Works" leads here too). Until Nov 16
  * this was its own page, /phenode/data-platform; Jake merged the PheNode pages into one scroll page (pages/PheNode.jsx),
  * and the old address now lands here. Its "System architecture" section stays (Jake, Nov 16), unlike the PheNode
- * overview's own one, which is hidden (FEATURES.phenodeTechSections).
+ * overview's own one (hidden on Nov 16 with Technical capabilities, deleted on Nov 17).
  */
 // From lg the journey pins while its packet travels. The pinned block is only as tall as its content, so before it pins
 // it sits just under the title (Jake, Nov 17: it used to start half a screen lower, centred in a screen-tall box), and

@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Eyebrow, Section, Container, Button, ButtonPair, Img } from '../../components/ui/primitives.jsx'
 import SystemChain from '../../components/viz/SystemChain.jsx'
-import { useScrollProgress, useReveal } from '../../lib/motion.js'
+import { useReveal } from '../../lib/motion.js'
+import { useScrollProgress } from '../../lib/scroll.js'
 import { homeNo } from '../../data/homeSections.js'
 
 // The four parts are the way into the product pages; the system chain below tells the story in order. So each card

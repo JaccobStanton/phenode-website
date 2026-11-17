@@ -1,5 +1,3 @@
-import { FEATURES } from './features.js'
-
 /**
  * The parts of the PheNode page (/phenode), in page order. They were separate pages until Jake made them one scroll
  * page (Nov 16): the header menu, the footer and the page itself all follow this list, each part at /phenode#<id>, and
@@ -12,7 +10,6 @@ export const PHENODE_PARTS = [
   { id: 'software', label: 'Software', text: 'Dashboard, downloads, API' },
 ]
 
-// The Design System tab and footer link only show while that page is switched on (data/features.js)
 export const NAV = [
   {
     label: 'PheNode', to: '/phenode',
@@ -32,11 +29,10 @@ export const NAV = [
     ],
   },
   { label: 'Case Studies', to: '/case-studies' },
-  ...(FEATURES.designSystem ? [{ label: 'Design System', to: '/design-your-system' }] : []),
   {
     label: 'Resources', to: '/resources',
     children: [
-      { label: 'Resources', to: '/resources', text: 'Guides, press, specifications' },
+      { label: 'Resources', to: '/resources', text: 'Guides, press, learning' },
       { label: 'Support & Documentation', to: '/support', text: 'Current and archived docs' },
       { label: 'Company', to: '/company', text: 'Agrela Ecosystems' },
     ],
@@ -44,8 +40,8 @@ export const NAV = [
 ]
 
 export const FOOTER = [
-  { heading: 'PheNode', links: [['Overview', '/phenode'], ...PHENODE_PARTS.map((p) => [p.label, `/phenode#${p.id}`]), ...(FEATURES.phenodeTechSections ? [['Specifications', '/phenode#specifications']] : [])] },
+  { heading: 'PheNode', links: [['Overview', '/phenode'], ...PHENODE_PARTS.map((p) => [p.label, `/phenode#${p.id}`])] },
   { heading: 'Applications', links: [['Transportation & Infrastructure', '/applications/transportation'], ['Agricultural Research', '/applications/agriculture'], ['Ecological Research', '/applications/ecology'], ['Urban Environmental Intelligence', '/applications/urban'], ['Case Studies', '/case-studies']] },
-  { heading: 'Agrela', links: [...(FEATURES.designSystem ? [['Design System', '/design-your-system']] : []), ['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
+  { heading: 'Agrela', links: [['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
   { heading: 'Legal', links: [['Privacy Policy', '/legal/privacy'], ['Terms of Service', '/legal/terms']] },
 ]

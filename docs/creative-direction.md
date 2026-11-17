@@ -80,7 +80,7 @@ Beat by beat:
 | 13 | Case studies | Paper | Editorial teasers | Image parallax |
 | 14 | Final CTA | Ink | Full system composite | Slow assembly |
 
-> **Nov 15, 2026:** the configurator ("Design your system", `/design-your-system`) is switched off for now, together with the Build teaser and every button that leads to it: `FEATURES.designSystem` in `src/data/features.js`. The on-page section numbers close up while it is off (`src/data/homeSections.js`).
+> **Nov 15–17, 2026:** the site has moved on from this storyboard. The home page now opens on an intro ("Capture Hyperlocal Environmental Intelligence" over a live sensor field), then runs 01 Hero, 02 What is PheNode, 03 Hyperlocal, 04 How PheNode works, 05 Choose your perspective, 06 Software, 07 Scale, 08 Your data, 09 Proof and the closing section (`src/data/homeSections.js`). Applications, Hardware, the Build teaser and Case studies were hidden on Nov 15–16 and **deleted on Nov 17** (Jake), together with the configurator page (`/design-your-system` now leads to Contact), the individual case study pages (`/case-studies/<slug>` leads to the Case Studies page) and the customer-quote slots. Picking a role in 05 reorders the Applications page rather than this page.
 
 ---
 
@@ -138,6 +138,8 @@ Sensors (onboard + add-on, SDI-12 / RS-485)
 
 ## 8. Design Your System — the configurator
 
+> **Deleted on Nov 17, 2026** (switched off since Nov 15). Kept here as the brief it was built from.
+
 A seven-step visual assembly, built as a dedicated page and previewed on the homepage.
 
 1. **Application** — Environmental Intelligence · Agricultural Research · Soil Monitoring · Transportation · Restoration · Fire Weather · Urban Heat · Ecological Research · Custom
@@ -154,11 +156,15 @@ A **guided mode** ("I'd rather answer questions") asks what to monitor, area siz
 
 ## 9. Case-study presentation
 
+> **Nov 17, 2026:** the individual case study pages were deleted; the Case Studies page lists the deployments and links to their press releases.
+
 Editorial, not cards: full-bleed opening image (placeholder until photography is cleared), a mono "data strip" (PROJECT · LOCATION · PARTNER · DEPLOYMENT · MEASUREMENTS), then long-form sections — Challenge, PheNode deployment, Data collected, Result/insight — with a timeline (e.g. 2025 Installation → 2026 Establishment → 2027 Vegetation development) and charts animating beside photography. Public deployments (The Ray / Georgia DOT I-85 pilot; Danforth Center research; WSDOT expansion) are presented with only publicly reported facts; everything else is a labelled placeholder awaiting customer permission.
 
 ---
 
 ## 10. Conversion journey
+
+> **Nov 17, 2026:** with the configurator and the quote slots gone, the primary actions are Request a demo (header, hero, closing section) and the contact page; lead capture is the contact page.
 
 Curiosity → Understanding PheNode → Understanding the system → Seeing their own application → Technical confidence → Exploring a configuration → Contacting Agrela.
 

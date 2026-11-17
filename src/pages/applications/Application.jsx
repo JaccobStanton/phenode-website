@@ -6,14 +6,13 @@ import { Photo } from '../../components/media/media.jsx'
 import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import EnvironmentTransition from '../../components/viz/EnvironmentTransition.jsx'
 import MiniChart, { Legend } from '../../components/viz/MiniChart.jsx'
-import { TestimonialSlot } from '../../sections/home/Proof.jsx'
-import { APPLICATION_BY_ID, NEEDS } from '../../data/applications.js'
+import { APPLICATION_BY_ID } from '../../data/applications.js'
 import { PACKAGES, SENSOR_BY_ID } from '../../data/sensors.js'
 import { CASE_STUDIES } from '../../data/caseStudies.js'
-import { useScrollProgress, seg } from '../../lib/motion.js'
+import { seg } from '../../lib/motion.js'
+import { useScrollProgress } from '../../lib/scroll.js'
 import { diurnalSeries, soilMoistureSeries } from '../../lib/demoData.js'
 import { Link } from 'react-router-dom'
-import { FEATURES } from '../../data/features.js'
 
 const PACKAGE_FOR = { transportation: 'fire-weather', agriculture: 'research', ecology: 'restoration', urban: 'fire-weather' }
 const PIPELINE = [{ id: 'chamber', kind: 'chamber', label: 'Growth chamber' }, { id: 'greenhouse', kind: 'greenhouse', label: 'Greenhouse' }, { id: 'field', kind: 'field', label: 'Field experiment' }]
@@ -27,7 +26,6 @@ export default function ApplicationPage() {
     : [{ name: 'Air temp °C — site 1', data: diurnalSeries({ seed: 53, base: 27, amp: 7 }), color: 'var(--color-signal)' }, { name: 'Air temp °C — site 2', data: diurnalSeries({ seed: 54, base: 23.5, amp: 5 }), color: 'var(--color-data)' }]), [id])
   if (!app) return <Navigate to="/applications" replace />
   const pkg = PACKAGES.find((p) => p.id === PACKAGE_FOR[id])
-  const needs = NEEDS.filter((n) => n.app === id)
   const cases = CASE_STUDIES.filter((c) => c.application === id)
   const count = app.environment === 'corridor' ? 10 : app.environment === 'city' ? 14 : 8
   return (
@@ -80,7 +78,6 @@ export default function ApplicationPage() {
                     <li className="flex gap-2"><span className="font-mono text-[11px] text-stone-2 pt-1">BASE</span><span>Base station{pkg.base.length ? ' + ' + pkg.base.map((s) => SENSOR_BY_ID[s].short).join(' + ') : ''}</span></li>
                   </ul>
                   <p className="mt-3 text-[12.5px] text-stone-2">Example packages are starting points, not fixed SKUs.</p>
-                  {FEATURES.designSystem && <div className="mt-4 flex flex-wrap gap-2">{needs.map((n) => <Link key={n.id} to={`/design-your-system?need=${n.id}`} className="chip border-ink/20 text-ink hover:bg-ink hover:text-paper">Start: {n.name}</Link>)}</div>}
                 </div>
               )}
             </div>
@@ -98,7 +95,6 @@ export default function ApplicationPage() {
               </div>
               <div className="mt-8 overflow-hidden rounded-xl border border-white/10 bg-ink-2"><EnvironmentTransition stages={PIPELINE} progress={seg(pp, 0.05, 0.95)} count={6} /></div>
             </div>
-            <TestimonialSlot context="Deployment flexibility" className="mt-10" />
           </Container>
         </Section>
       )}
@@ -112,15 +108,15 @@ export default function ApplicationPage() {
           <ul className={`mt-8 flex flex-col divide-y border-y ${app.pipeline ? 'divide-ink/10 border-ink/10' : 'divide-white/10 border-white/10'}`}>
             {cases.length ? cases.map((c) => (
               <li key={c.slug}>{(() => {
-                const inner = <><span className="font-mono text-[11px] tracking-[0.14em] uppercase opacity-60">{c.location} · {c.year}{c.placeholder ? ' · placeholder' : ''}{!FEATURES.caseStudyPages && c.press?.length ? ' · press release' : ''}</span><span className="text-[18px] font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{c.project}</span><span className="text-[14px] opacity-70">{c.partner}</span></>
-                // the case study page, or its first press release while those pages are hidden (data/features.js)
-                return FEATURES.caseStudyPages || !c.press?.length
-                  ? <Link to={FEATURES.caseStudyPages ? `/case-studies/${c.slug}` : '/case-studies'} className="group flex flex-col gap-1 py-5">{inner}</Link>
-                  : <a href={c.press[0].href} target="_blank" rel="noreferrer" className="group flex flex-col gap-1 py-5">{inner}</a>
+                const inner = <><span className="font-mono text-[11px] tracking-[0.14em] uppercase opacity-60">{c.location} · {c.year}{c.placeholder ? ' · placeholder' : ''}{c.press?.length ? ' · press release' : ''}</span><span className="text-[18px] font-semibold tracking-tight group-hover:underline group-hover:underline-offset-4">{c.project}</span><span className="text-[14px] opacity-70">{c.partner}</span></>
+                // its first press release (the case study pages were deleted on Nov 17), or the Case Studies page
+                return c.press?.length
+                  ? <a href={c.press[0].href} target="_blank" rel="noreferrer" className="group flex flex-col gap-1 py-5">{inner}</a>
+                  : <Link to="/case-studies" className="group flex flex-col gap-1 py-5">{inner}</Link>
               })()}</li>
             )) : <li className="py-5 text-[14px] opacity-70">Case studies for this application are pending customer permission.</li>}
           </ul>
-          <div className="mt-10 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant={app.pipeline ? 'primary-ink' : 'primary'}>{app.cta}</Button>}<Button to="/contact" variant={FEATURES.designSystem ? (app.pipeline ? 'ghost-ink' : 'ghost') : (app.pipeline ? 'primary-ink' : 'primary')}>Talk to Agrela</Button></div>
+          <div className="mt-10 flex flex-wrap gap-3"><Button to="/contact" variant={app.pipeline ? 'primary-ink' : 'primary'}>Talk to Agrela</Button></div>
         </Container>
       </Section>
     </Page>

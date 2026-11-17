@@ -109,7 +109,7 @@ body {
   --surface: #0E2350; --rule: rgba(160, 196, 255, 0.14); --fg-muted: #A3B1CC;
 }
 /* Accent text on paper surfaces uses the darker ramp so small mono labels stay legible (WCAG AA). */
-.theme-paper .text-data, .theme-paper .text-data-2 { color: var(--color-data-3); }
+.theme-paper .text-data { color: var(--color-data-3); }
 .theme-paper .text-signal, .theme-paper .text-signal-2 { color: #9A5612; }
 .theme-paper .border-data { border-color: var(--color-data-3); }
 .theme-paper .border-signal { border-color: #9A5612; }
@@ -172,6 +172,13 @@ body {
 /* The menu button and the menu panel it opens (Jake, Nov 17: no blue highlight on hover): the button fills Agrela blue
    like the filled buttons; the panel's links pick up a blue row and blue text (the lighter blue, 5.3:1 on ink). */
 .nav-sheet-link { transition: background-color 0.2s, color 0.2s; }
+/* Header dropdowns and the menu panel stay in the page and are shown with CSS: hidden they're visibility: hidden (no
+   focus, not read), and the visibility change waits for the fade-out to finish. */
+.nav-drop { opacity: 0; transform: translate3d(0, 6px, 0); visibility: hidden; pointer-events: none; transition: opacity 0.22s var(--ease-out-quint), transform 0.22s var(--ease-out-quint), visibility 0s linear 0.22s; }
+.nav-drop[data-open] { opacity: 1; transform: none; visibility: visible; pointer-events: auto; transition: opacity 0.22s var(--ease-out-quint), transform 0.22s var(--ease-out-quint), visibility 0s; }
+.nav-sheet { opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0s linear 0.25s; }
+.nav-sheet[data-open] { opacity: 1; visibility: visible; transition: opacity 0.25s ease, visibility 0s; }
+@media (prefers-reduced-motion: reduce) { .nav-drop, .nav-drop[data-open], .nav-sheet, .nav-sheet[data-open] { transition: none; transform: none; } }
 @media (hover: hover) {
   .nav-burger:hover { background-color: var(--color-phenode-blue-deep); color: #fff; box-shadow: 0 6px 18px -8px rgba(26, 117, 224, 0.85), 0 0 16px -6px rgba(26, 117, 224, 0.55); }
   .nav-sheet-link:hover { background-color: rgba(26, 117, 224, 0.16); color: var(--color-phenode-blue-light); }
@@ -253,8 +260,6 @@ body {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* Device frames -------------------------------------------------------- */
-.device-screen { background: #061127; }
 
 /* Grain overlay for atmospheric sections ------------------------------- */
 .grain::after {
@@ -312,23 +317,12 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 }
 
 /* 03 fleet map overlay — transform/opacity only, so it runs on the compositor. */
-.hl-ring, .hl-packet { position: absolute; border-radius: 9999px; pointer-events: none; will-change: transform, opacity; }
+.hl-ring { position: absolute; border-radius: 9999px; pointer-events: none; will-change: transform, opacity; }
 .hl-ring { width: 12px; height: 12px; margin: -6px 0 0 -6px; border: 1.5px solid; opacity: 0; animation: hl-ring 2.6s ease-out infinite; }
 .hl-ring--signal { border-color: var(--color-signal); }
 .hl-ring--data { width: 22px; height: 22px; margin: -11px 0 0 -11px; border-color: var(--color-data); animation-duration: 2.8s; }
 .hl-ring.hl-static { animation: none; opacity: 0.6; }
 @keyframes hl-ring { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(3); opacity: 0; } }
-.hl-packet {
-  width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: var(--color-signal);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-signal) 22%, transparent), 0 0 12px var(--color-signal);
-  opacity: 0; animation: hl-packet 2.6s linear infinite;
-}
-@keyframes hl-packet {
-  0% { transform: translate3d(0, 0, 0); opacity: 0; }
-  10% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translate3d(var(--dx), var(--dy), 0); opacity: 0; }
-}
 /* The same reading, drawn inside an SVG (home 03 map): --dx/--dy are viewBox units, so it scales with the map and can
    pass under the info card. */
 .hl-spacket { opacity: 0; animation: hl-spacket 2.6s linear infinite; will-change: transform, opacity; }

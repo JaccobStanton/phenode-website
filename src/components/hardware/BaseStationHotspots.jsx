@@ -1,5 +1,5 @@
 import { Img } from '../ui/primitives.jsx'
-import { BASE_STATION_PARTS } from '../../data/baseStationParts.js'
+import { BASE_STATION_PARTS, BASE_STATION_WIDTHS } from '../../data/baseStationParts.js'
 
 /**
  * The annotated 2D base-station render (hardware/base-station-v4): the base station explorer's "Annotated" view, and
@@ -9,7 +9,7 @@ import { BASE_STATION_PARTS } from '../../data/baseStationParts.js'
 export default function BaseStationHotspots({ active = null, onSelect = () => {}, className = 'w-full' }) {
   return (
     <div className={`relative aspect-[2400/1625] ${className}`}>
-      <Img name="hardware/base-station-v4" widths={[600, 1000, 1600, 2400]} sizes="(min-width:1024px) 60vw, 92vw" alt="PheNode base station with each component annotated." className="h-full w-full object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.18)]" />
+      <Img name="hardware/base-station-v4" widths={BASE_STATION_WIDTHS} sizes="(min-width:1024px) 60vw, 92vw" alt="PheNode base station with each component annotated." className="h-full w-full object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.18)]" />
       {BASE_STATION_PARTS.map((h) => (
         <button
           key={h.id} type="button" aria-label={h.label} aria-pressed={active === h.id}

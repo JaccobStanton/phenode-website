@@ -1,48 +1,61 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, startTransition, useEffect, useState } from 'react'
 import Page from '../components/layout/Page.jsx'
 import IntroHero from '../sections/home/IntroHero.jsx'
-import Hero from '../sections/home/Hero.jsx'
-import WhatIsPheNode from '../sections/home/WhatIsPheNode.jsx'
-import Hyperlocal from '../sections/home/Hyperlocal.jsx'
-import HowItWorks from '../sections/home/HowItWorks.jsx'
-import Perspective from '../sections/home/Perspective.jsx'
-import Applications from '../sections/home/Applications.jsx'
-import { FEATURES } from '../data/features.js'
+import { introWillShow, WANT_REST } from '../lib/intro.js'
 
-const Hardware = lazy(() => import('../sections/home/Hardware.jsx'))
-const Scale = lazy(() => import('../sections/home/Scale.jsx'))
-const BuildTeaser = lazy(() => import('../sections/home/BuildTeaser.jsx'))
-const Software = lazy(() => import('../sections/home/Software.jsx'))
-const DataOwnership = lazy(() => import('../sections/home/DataOwnership.jsx'))
-const Proof = lazy(() => import('../sections/home/Proof.jsx'))
-const CaseStudiesTeaser = lazy(() => import('../sections/home/CaseStudiesTeaser.jsx'))
-const FinalCTA = lazy(() => import('../sections/home/FinalCTA.jsx'))
+const loadAfterIntro = () => import('../sections/home/AfterIntro.jsx')
+const AfterIntro = lazy(loadAfterIntro)
 
-const Fallback = ({ theme = 'ink' }) => <div className={`theme-${theme} min-h-[40vh]`} aria-hidden="true" />
+// How long the intro has the device to itself before the rest of the page is fetched and built: its words are in by
+// then ("Hyperlocal", the page's largest paint, starts at 0.55 s).
+const REST_AFTER_MS = 1200
+// What the visitor can do that means they're on their way down (or about to be): fetch the rest at once.
+const INTENT = ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown', WANT_REST]
 
+/** A screen tall while the rest of the page isn't there yet, so the intro can scroll away and nothing jumps. */
+const Placeholder = () => <div className="min-h-[100svh]" aria-hidden="true" data-rest-placeholder="" />
+
+/**
+ * The home page: the intro ("Capture Hyperlocal Environmental Intelligence", the first screen), then the hero and
+ * sections 02–09 (sections/home/AfterIntro.jsx, a chunk of its own).
+ *
+ * The intro fills the screen, so it gets the device to itself first (Nov 17, performance pass): the rest of the page
+ * is fetched about a second after it starts, when the browser is idle, or as soon as the visitor scrolls, touches the
+ * screen, presses a key or chooses "Explore PheNode" (which waits for the hero, sections/home/IntroHero.jsx). It's then
+ * built as a transition, in small slices, so the intro's animation keeps running meanwhile. Without the intro (it was
+ * seen earlier in the visit) the hero is the first screen, and it all loads at once.
+ */
 export default function Home() {
+  const [rest, setRest] = useState(() => !introWillShow())
+
+  useEffect(() => {
+    if (rest) return undefined
+    let started = false, timer = 0, idle = 0
+    const stop = () => {
+      clearTimeout(timer)
+      if (idle) window.cancelIdleCallback?.(idle)
+      INTENT.forEach((e) => window.removeEventListener(e, go))
+    }
+    function go() {
+      if (started) return
+      started = true
+      stop()
+      const show = () => startTransition(() => setRest(true))
+      loadAfterIntro().then(show, show)
+    }
+    INTENT.forEach((e) => window.addEventListener(e, go, { passive: true }))
+    timer = setTimeout(() => {
+      if (window.requestIdleCallback) idle = window.requestIdleCallback(go, { timeout: 1000 })
+      else go()
+    }, REST_AFTER_MS)
+    return stop
+  }, [rest])
+
   return (
     <Page>
       {/* Once per visit: "Capture Hyperlocal Environmental Intelligence", then it slides away to the hero */}
       <IntroHero />
-      <Hero />
-      <WhatIsPheNode />
-      <Hyperlocal />
-      <HowItWorks />
-      <Perspective />
-      {/* "Application experiences": hidden for now (FEATURES.homeApplications) */}
-      {FEATURES.homeApplications && <Applications />}
-      {/* "Hardware": hidden for now (FEATURES.homeHardware) */}
-      {FEATURES.homeHardware && <Suspense fallback={<Fallback theme="paper" />}><Hardware /></Suspense>}
-      {/* "Build your PheNode" only advertises the configurator: hidden while that page is off */}
-      {FEATURES.designSystem && <Suspense fallback={<Fallback theme="paper" />}><BuildTeaser /></Suspense>}
-      <Suspense fallback={<Fallback />}><Software /></Suspense>
-      <Suspense fallback={<Fallback />}><Scale /></Suspense>
-      <Suspense fallback={<Fallback theme="paper" />}><DataOwnership /></Suspense>
-      <Suspense fallback={<Fallback />}><Proof /></Suspense>
-      {/* "Case studies": hidden for now (FEATURES.homeCaseStudies) */}
-      {FEATURES.homeCaseStudies && <Suspense fallback={<Fallback theme="paper" />}><CaseStudiesTeaser /></Suspense>}
-      <Suspense fallback={<Fallback />}><FinalCTA /></Suspense>
+      <Suspense fallback={<Placeholder />}>{rest ? <AfterIntro /> : <Placeholder />}</Suspense>
     </Page>
   )
 }

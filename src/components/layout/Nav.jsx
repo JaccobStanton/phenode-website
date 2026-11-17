@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
 import { NAV } from '../../data/navigation.js'
 import { PheNodeLogo } from '../ui/Logos.jsx'
 import { COMPANY } from '../../data/company.js'
-import { FEATURES } from '../../data/features.js'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
@@ -85,22 +83,23 @@ export default function Nav() {
                 {item.label}
                 {item.children && <ChevronDown size={14} className="opacity-60" aria-hidden="true" />}
               </Link>
-              <AnimatePresence>
-                {item.children && menu === item.label && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute left-0 top-full mt-2 w-[340px] rounded-lg border border-white/10 bg-ink-2/95 p-2 shadow-2xl backdrop-blur-md"
-                    onMouseEnter={() => openMenu(item.label)} onMouseLeave={scheduleClose}
-                  >
-                    {item.children.map((c) => (
-                      <Link key={c.to + c.label} to={c.to} className="block rounded-md px-3 py-2.5 hover:bg-white/5" onBlur={scheduleClose}>
-                        <div className="text-[14px] text-paper">{c.label}</div>
-                        {c.text && <div className="text-[12.5px] text-stone">{c.text}</div>}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Always in the page, shown and hidden with CSS (.nav-drop in index.css): fades and rises in, fades out.
+                  Hidden, it's visibility: hidden, so its links can't be tabbed to or read. (The header used the Motion
+                  library for this until Nov 17; CSS keeps that library off every page but home.) */}
+              {item.children && (
+                <div
+                  className="nav-drop absolute left-0 top-full mt-2 w-[340px] rounded-lg border border-white/10 bg-ink-2/95 p-2 shadow-2xl backdrop-blur-md"
+                  data-open={menu === item.label ? '' : undefined}
+                  onMouseEnter={() => openMenu(item.label)} onMouseLeave={scheduleClose}
+                >
+                  {item.children.map((c) => (
+                    <Link key={c.to + c.label} to={c.to} className="block rounded-md px-3 py-2.5 hover:bg-white/5" onBlur={scheduleClose}>
+                      <div className="text-[14px] text-paper">{c.label}</div>
+                      {c.text && <div className="text-[12.5px] text-stone">{c.text}</div>}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
@@ -115,32 +114,28 @@ export default function Nav() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="nav-sheet fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-ink px-4 pb-10 pt-4 text-paper md:top-[72px] xl:hidden" role="dialog" aria-label="Menu">
-            <div className="mx-auto w-full max-w-[880px]">
-            <nav className="flex flex-col divide-y divide-white/10" aria-label="Mobile">
-              {NAV.map((item) => (
-                <div key={item.label} className="py-3">
-                  {/* nav-sheet-link: the blue hover row (index.css); the -mx/px pair gives the row room without moving the text */}
-                  <Link to={item.to} className="nav-sheet-link -mx-3 block rounded-md px-3 py-2 text-[22px] font-medium tracking-tight">{item.label}</Link>
-                  {item.children && (
-                    <div className="mt-1 grid gap-1 pl-3">
-                      {item.children.map((c) => <Link key={c.to + c.label} to={c.to} className="nav-sheet-link -mx-3 rounded-md px-3 py-1.5 text-[15px] text-stone">{c.label}</Link>)}
-                    </div>
-                  )}
+      {/* the menu panel: always in the page, faded in and out with CSS like the dropdowns (.nav-sheet in index.css) */}
+      <div className="nav-sheet fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-ink px-4 pb-10 pt-4 text-paper md:top-[72px] xl:hidden" role="dialog" aria-label="Menu" data-open={open ? '' : undefined}>
+        <div className="mx-auto w-full max-w-[880px]">
+        <nav className="flex flex-col divide-y divide-white/10" aria-label="Mobile">
+          {NAV.map((item) => (
+            <div key={item.label} className="py-3">
+              {/* nav-sheet-link: the blue hover row (index.css); the -mx/px pair gives the row room without moving the text */}
+              <Link to={item.to} className="nav-sheet-link -mx-3 block rounded-md px-3 py-2 text-[22px] font-medium tracking-tight">{item.label}</Link>
+              {item.children && (
+                <div className="mt-1 grid gap-1 pl-3">
+                  {item.children.map((c) => <Link key={c.to + c.label} to={c.to} className="nav-sheet-link -mx-3 rounded-md px-3 py-1.5 text-[15px] text-stone">{c.label}</Link>)}
                 </div>
-              ))}
-            </nav>
-            <div className="mt-6 flex flex-col gap-3">
-              <Link to="/contact?intent=demo" className="btn-primary">Request a demo</Link>
-              <a href={COMPANY.appUrl} className="btn-ghost">Sign in</a>
-              {FEATURES.designSystem && <Link to="/design-your-system" className="btn-ghost">Design System</Link>}
+              )}
             </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          ))}
+        </nav>
+        <div className="mt-6 flex flex-col gap-3">
+          <Link to="/contact?intent=demo" className="btn-primary">Request a demo</Link>
+          <a href={COMPANY.appUrl} className="btn-ghost">Sign in</a>
+        </div>
+        </div>
+      </div>
     </header>
   )
 }
