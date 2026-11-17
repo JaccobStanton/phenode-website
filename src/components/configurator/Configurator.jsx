@@ -123,7 +123,7 @@ export default function Configurator({ initial }) {
               </StepShell>
             )}
             {step === 3 && (
-              <StepShell title="Add wireless sensor nodes." text="Each node carries ambient air and light sensors and can take up to two soil probes. Nodes talk to a PheNode up to 1 km away.">
+              <StepShell title="Add wireless sensor nodes." text="Each node carries a light sensor and takes up to two sensors in its ports, for ambient air and/or soil. Nodes talk to a PheNode up to 1 km away.">
                 <Counter label="Wireless nodes" value={config.nodes} min={1} max={100} step={config.nodes >= 20 ? 5 : 1} onChange={(v) => dispatch({ type: 'nodes', value: v })} big />
                 <div className="mt-4 flex flex-wrap gap-2">{[1, 5, 10, 20, 50, 100].map((n) => <Option key={n} on={config.nodes === n} onClick={() => dispatch({ type: 'nodes', value: n })} small>{n}</Option>)}</div>
               </StepShell>
@@ -273,7 +273,7 @@ function Counter({ label, value, min = 0, max = 100, step = 1, onChange, big = f
 function SensorPicker({ probes, onChange }) {
   const cats = [
     { id: 'soil', name: 'Soil', items: [{ id: 'soil-standard', name: 'Standard soil sensor', note: 'Moisture · temperature · EC', max: 2 }] },
-    { id: 'weather', name: 'Weather', items: [{ id: 'ws-air', name: 'Ambient air', note: 'Built in · T / RH / pressure / air quality', builtIn: true }] },
+    { id: 'weather', name: 'Weather', items: [{ id: 'ws-air', name: 'Ambient air sensor', note: 'Uses a sensor port · T / RH / pressure · ask Agrela' }] },
     { id: 'plant', name: 'Plant & light', items: [{ id: 'ws-lux', name: 'Light intensity', note: 'Built in · lux / daylength', builtIn: true }] },
     { id: 'water', name: 'Water', items: [{ id: 'water-potential', name: 'Water potential', note: 'Base station only — add in base-station add-ons', disabled: true }] },
     { id: 'custom', name: 'Custom / third-party', items: [{ id: 'custom', name: 'SDI-12 / RS-485', note: 'Base station only — add in base-station add-ons', disabled: true }] },

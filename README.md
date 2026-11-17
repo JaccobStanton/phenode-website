@@ -24,6 +24,7 @@ Node 20+. Fonts are self-hosted (`@fontsource-variable/inter`, the PheNode app's
 | `VITE_BASE` | Optional. Base path when hosting under a sub-path (e.g. `/preview/`). |
 | `VITE_ROUTER` | Optional. `hash` switches to a hash router for hosts that cannot rewrite deep links to `index.html`. |
 | `VITE_DOCS_SOURCE` | Optional. `agrelaeco` links the Support PDFs to agrelaeco.com's copies instead of `public/docs/` (used for the Claude preview, which can't hold files over 15 MB). |
+| `VITE_MODEL_SUFFIX` | Optional. `.js` makes the 3D viewers load JS module twins of the models (`models/<name>.glb.js`, made with `scripts/models/module-twin.mjs`: the GLB as base64, meshopt removed). For hosts that can't serve `.glb` files, like the Claude preview. A module loads like the site's own code; the earlier glTF-JSON twins needed a `data:` fetch and WebAssembly, which a strict content policy blocks. |
 
 ### Deploy
 
@@ -48,6 +49,7 @@ src/
     software/      DashboardMock (illustrative dashboard), DeviceFrame (monitor/laptop/tablet/phone)
     configurator/  configModel (pure), ConfigScene, Configurator (7 steps), LeadForm
   sections/home/   one file per homepage chapter, in story order
+  sections/phenode/ the PheNode page's hero and its parts (Base station, Wireless sensor node, Data platform, Software)
   pages/           routed pages
 scripts/           Playwright screenshots, interaction flows, axe audit; models/ builds the GLBs in public/models
 docs/              creative direction, asset manifest
@@ -64,6 +66,8 @@ public/assets/     WebP assets (see docs/asset-manifest.md), public/docs/ docume
 - The privacy policy (`/legal/privacy`) and terms of service (`/legal/terms`, `src/data/legalTerms.jsx`) are Agrela's updated November 2026 versions, copied word for word from the text Jake sent (Nov 16), typos included. The privacy policy's mention of the Terms of Service links to `/legal/terms` instead of printing the agrelaeco.com address.
 - Support (`/support`) is one list of documents by version, as on agrelaeco.com/support (`src/data/docs.js`). The PDFs are copies of agrelaeco.com's, in `public/docs/` (current) and `public/docs/archive/`. The Claude preview build sets `VITE_DOCS_SOURCE=agrelaeco` to link to agrelaeco.com's copies instead (the preview can't hold files over 15 MB).
 - The home page's "Application experiences" and "Hardware" sections are hidden for now (`FEATURES.homeApplications`, `FEATURES.homeHardware`); the home sections after them are renumbered (Software is 06), and the Applications and PheNode pages are unaffected. In home "Software", the screenshots, the Precipitation part, "What the software does today" and "Configurable software" are hidden too (`FEATURES.homeSoftwareDetails`); "Explore the software" sits under the recording. Home "Case studies" is hidden as well (`FEATURES.homeCaseStudies`; the Case Studies page is unaffected).
+- The PheNode tab is one long page (`/phenode`, `src/pages/PheNode.jsx`): the overview, then the Base station, Wireless sensor node, Data platform and Software parts, each at `/phenode#<part>`. `PHENODE_PARTS` in `src/data/navigation.js` sets their order for the page, the header menu and the footer. The old addresses (`/phenode/base-station` and the like) lead to their part.
+- On the PheNode page, the overview's "Technical capabilities" and "System architecture" are hidden for now (`FEATURES.phenodeTechSections`), and with them the two "Specifications" links (footer, Resources) that led there. The Data platform part keeps its own System architecture section.
 - Customer quotes (`TestimonialSlot`) are hidden for now (`FEATURES.customerQuotes`); they render as labelled placeholders until approved quotes exist. Nadia's quotes (home, Company, Support) stay.
 
 ## Personalization

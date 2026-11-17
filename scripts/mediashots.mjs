@@ -26,7 +26,8 @@ await at('#software video', 'home-video', -200)
 console.log('home video', JSON.stringify(await video('#software video')))
 await at('#software figure', 'home-cards', -150)
 
-await go('/phenode/software'); await page.waitForTimeout(800); await page.screenshot({ path: `${out}/${width}-software-hero.png` })
+// the PheNode page is one long page since Nov 16: its parts are #base-station, #wireless-node, #data-platform, #software
+await go('/phenode'); await at('#software', 'software-hero', 0)
 await at('[aria-label="Software views"]', 'software-views', -120)
 for (const [name, re] of [['diagnostics', /System diagnostics/], ['downloads', /^\s*11\s*Downloads/], ['base', /^\s*02\s*Base station/]]) {
   const b = page.getByRole('button', { name: re }).first()
@@ -34,15 +35,15 @@ for (const [name, re] of [['diagnostics', /System diagnostics/], ['downloads', /
 }
 await at('text=On a phone, too.', 'software-phone', -160)
 
-await go('/phenode/base-station'); await at('text=What the base station reports.', 'base-station-sw', -100)
+await at('text=What the base station reports.', 'base-station-sw', -100)
 await page.evaluate(() => window.scrollBy(0, 700)); await page.waitForTimeout(1500)
 await page.screenshot({ path: `${out}/${width}-base-station-sw-2.png` })
-console.log('base video', JSON.stringify(await video('main video')))
-await go('/phenode/wireless-node'); await at('text=Every node, on the map and on the chart.', 'node-sw', -100)
+console.log('base video', JSON.stringify(await video('#base-station video')))
+await at('text=Every node, on the map and on the chart.', 'node-sw', -100)
 await page.evaluate(() => window.scrollBy(0, 800)); await page.waitForTimeout(1200)
 await page.screenshot({ path: `${out}/${width}-node-sw-2.png` })
-await go('/phenode/data-platform'); await at('text=Same columns, every site, every season.', 'data-downloads', -100)
-await at('text=Because the data is standardized, it lines up.', 'data-compare', -100)
+await at('text=Same columns, every site, every season.', 'data-downloads', -100)
+await at('text=Because the data shares one schema, it lines up.', 'data-compare', -100)
 await go('/case-studies/danforth-center-research'); await at('main figure', 'case-danforth', -150)
 if (errors.length) { console.log('ERRORS:'); [...new Set(errors)].forEach((e) => console.log(' ', e)) }
 await browser.close()

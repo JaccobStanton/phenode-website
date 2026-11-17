@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, ContactShadows, Environment, Lightformer, Html, useGLTF } from '@react-three/drei'
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber'
+import { OrbitControls, ContactShadows, Environment, Lightformer, Html } from '@react-three/drei'
+import { GLTFLoader, MeshoptDecoder } from 'three-stdlib'
 import * as THREE from 'three'
 
 /**
@@ -11,11 +12,35 @@ import * as THREE from 'three'
  *   hotspot_<id>  empties where each callout sits (extras.part, extras.normal = hide when facing away,
  *                 extras.yaw = degrees to turn the model so the part faces the camera)
  * `hotspots` supplies the copy ({ id, label }); anchors with no copy are ignored, copy with no anchor gets no dot.
+ * Copy can also bring its own anchor and part for a component the GLB lacks them for: `model: { at, meshes }`.
  *
  * Idle motion is 'spin' (slow turntable) or 'sway' (rocks gently about the front view). It pauses while a part
  * is selected or the visitor drags, and is off entirely when `motion` is false (reduced motion).
  * Loaded with meshopt decoding only (no Draco), so nothing is fetched from a third-party CDN.
  */
+
+// The .glb path is what drei's useGLTF(url, false, true) did: meshopt decoding, no Draco.
+const withMeshopt = (loader) => loader.setMeshoptDecoder(typeof MeshoptDecoder === 'function' ? MeshoptDecoder() : MeshoptDecoder)
+
+/**
+ * Hosted previews that can't serve .glb (the Claude preview) get each model as a JS module twin instead:
+ * `export default '<base64 GLB>'` with the meshopt compression taken out (scripts/models/module-twin.mjs), built with
+ * VITE_MODEL_SUFFIX=.js. A module loads the way the site's own code does, where a fetch of a data: URL or compiling
+ * the meshopt WebAssembly may not be allowed (the Nov 11 glTF-JSON twins needed both and fell back to the 2D render).
+ */
+class ModuleTwinLoader extends GLTFLoader {
+  load(url, onLoad, onProgress, onError) {
+    import(/* @vite-ignore */ new URL(url, document.baseURI).href)
+      .then(({ default: base64 }) => {
+        const bin = atob(base64)
+        const bytes = new Uint8Array(bin.length)
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+        this.parse(bytes.buffer, '', onLoad, onError)
+      })
+      .catch(onError)
+  }
+}
+const isTwin = (url) => url.endsWith('.js')
 
 const SIGNAL = new THREE.Color('#E08A2E')
 const TAU = Math.PI * 2
@@ -27,7 +52,7 @@ const DOT = {
 }
 
 function Model({ url, hotspots, activeId, onSelect, exploded, idle, motion, tone, resetKey, azimuth, polar, onReady }) {
-  const { scene } = useGLTF(url, false, true)
+  const { scene } = useLoader(isTwin(url) ? ModuleTwinLoader : GLTFLoader, url, isTwin(url) ? undefined : withMeshopt)
   const camera = useThree((s) => s.camera)
   const clock = useThree((s) => s.clock)
 
@@ -36,18 +61,37 @@ function Model({ url, hotspots, activeId, onSelect, exploded, idle, motion, tone
     root.updateMatrixWorld(true)
     const parts = {}
     const anchors = {}
+    // Components the GLB grouped with another part (the base station's solar radiation sensor came in with the control
+    // box's meshes) get a part of their own from the copy's `model.meshes`: each is moved into an identity group beside
+    // where it was, so it keeps its place and lights up on its own when selected.
+    const own = {}
+    for (const h of hotspots) for (const name of h.model?.meshes || []) own[name] = h.id
+    const found = []
+    root.traverse((o) => { if (own[o.name]) found.push(o) })
+    const groups = {}
+    for (const o of found) {
+      const id = own[o.name]
+      if (!groups[id]) { groups[id] = new THREE.Group(); groups[id].name = `own_${id}`; o.parent.add(groups[id]) }
+      groups[id].add(o)
+      o.traverse((d) => { d.userData.ownPart = id })
+    }
+    const tint = (node) => {
+      const mats = []
+      node.traverse((m) => {
+        if (!m.isMesh || (m.userData.ownPart && !node.name.startsWith('own_'))) return
+        m.material = m.material.clone()
+        m.material.emissive = SIGNAL.clone()
+        m.material.emissiveIntensity = 0
+        mats.push(m.material)
+        m.castShadow = true
+        m.receiveShadow = true
+      })
+      return mats
+    }
+    for (const [id, g] of Object.entries(groups)) parts[id] = { node: g, mats: tint(g), explode: new THREE.Vector3(), glow: 0 }
     root.traverse((o) => {
       if (o.name.startsWith('part_')) {
-        const mats = []
-        o.traverse((m) => {
-          if (!m.isMesh) return
-          m.material = m.material.clone()
-          m.material.emissive = SIGNAL.clone()
-          m.material.emissiveIntensity = 0
-          mats.push(m.material)
-          m.castShadow = true
-          m.receiveShadow = true
-        })
+        const mats = tint(o)
         const e = o.userData.explode || [0, 0, 0]
         parts[o.userData.part || o.name.slice(5)] = { node: o, mats, explode: new THREE.Vector3(e[0], e[1], e[2]), glow: 0 }
       } else if (o.name.startsWith('hotspot_')) {
@@ -60,6 +104,11 @@ function Model({ url, hotspots, activeId, onSelect, exploded, idle, motion, tone
         }
       }
     })
+    // anchors the GLB doesn't have, from the copy's `model.at` (model space, like the hotspot empties); facing the front
+    for (const h of hotspots) {
+      if (anchors[h.id] || !h.model?.at) continue
+      anchors[h.id] = { pos: new THREE.Vector3(...h.model.at), part: groups[h.id] ? h.id : h.model.part ?? null, normal: null, yaw: 0 }
+    }
     const box = new THREE.Box3().setFromObject(root)
     const size = box.getSize(new THREE.Vector3())
     const centre = box.getCenter(new THREE.Vector3())
@@ -70,7 +119,7 @@ function Model({ url, hotspots, activeId, onSelect, exploded, idle, motion, tone
     const sizeEx = boxEx.isEmpty() ? size : boxEx.getSize(new THREE.Vector3())
     const kEx = Math.min(1, size.y / sizeEx.y, size.length() / sizeEx.length())
     return { root, parts, anchors, fit: { s, centre, centreEx: boxEx.isEmpty() ? centre.clone() : boxEx.getCenter(new THREE.Vector3()), kEx, floor: -(size.y * s) / 2 } }
-  }, [scene])
+  }, [scene, hotspots])
 
   const spin = useRef()
   const framing = useRef()

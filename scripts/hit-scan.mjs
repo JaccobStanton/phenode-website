@@ -3,7 +3,7 @@
 import { chromium } from 'playwright'
 const base = process.argv[2] && process.argv[2].startsWith('http') ? process.argv[2] : 'http://localhost:4173'
 const args = process.argv.slice(2).filter((a) => a.startsWith('/'))
-const routes = args.length ? args : ['/', '/phenode', '/phenode/wireless-node', '/phenode/base-station', '/phenode/data-platform', '/phenode/software', '/applications', '/applications/agriculture', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company']
+const routes = args.length ? args : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company']
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
 let issues = 0
 for (const [w, h] of [[1440, 900], [1024, 768], [820, 1180], [390, 844]]) {

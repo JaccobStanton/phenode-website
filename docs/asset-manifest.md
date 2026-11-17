@@ -8,13 +8,14 @@ All raster assets are served from `public/assets/` as WebP with width variants (
 
 | Slot | File(s) | Variants | Notes |
 |---|---|---|---|
-| Base station, front render (v4, 2026) | `hardware/base-station-v4` | 600 · 1000 · 1600 · 2400 (2400×1625) | Transparent; used in hero, base-station page, Overview card and the 2D fallback of the 3D explorer |
+| Base station, front render (v4, 2026) | `hardware/base-station-v4` | 600 · 1000 · 1600 · 2400 (2400×1625) | Transparent; used in hero, PheNode page › Base station, Overview card and the 2D fallback of the 3D explorer |
 | Full system (node + base station) | `hardware/base-station-v4` + `hardware/wireless-node-2026` (`components/hardware/SystemPair.jsx`) | as those two images | The PheNode page hero's 2026 composition, used in the home closing section and the configurator summary (Nov 16). The old `hardware/system-composite` image was deleted |
-| Wireless node, front (2026) | `hardware/wireless-node-2026` (from `Wireless Sensor Node.png`) | 320 · 600 · 880 (880×930) | Transparent; node page hero, 3D fallback |
-| Base station on the tower (2026) | `hardware/base-station-pole-2026` (from `PheNode rendering with pole 2026.png`) | 460 · 910 (910×2015) | Transparent; base-station page ("Tower configuration") and home → 02 What is PheNode |
+| Wireless node, front (2026) | `hardware/wireless-node-2026` (from `Wireless Sensor Node.png`) | 320 · 600 · 880 (880×930) | Transparent; PheNode page › Wireless sensor node, 3D fallback |
+| Base station on the tower (2026) | `hardware/base-station-pole-2026` (from `PheNode rendering with pole 2026.png`) | 460 · 910 (910×2015) | Transparent; PheNode page › Base station ("Tower configuration") and home → 02 What is PheNode |
 | Standard soil sensor | `hardware/sensor-soil-standard` | 400 · 700 · 1100 | Transparent |
-| Water potential sensor (2026) | `hardware/sensor-water-potential-2026` (from `Teros 22.png`) | 400 · 700 | Transparent; home Hardware sensor card |
-| Ambient air sensor | `hardware/sensor-atmos-14` (from `Atmos 14.png`) | 300 · 590 | Transparent; base station explorer info card when "Ambient air" is selected (`photo` in `baseStationParts.js`) |
+| Water potential sensor (2026) | `hardware/sensor-water-potential-2026` (from `Teros 22.png`) | 400 · 700 | Transparent; PheNode page › Wireless sensor node › Sensor add-ons card |
+| Ambient air sensor | `hardware/sensor-atmos-14` (from `Atmos 14.png`) | 300 · 590 | Transparent; base station explorer info card when "Ambient air" is selected (`photo` in `baseStationParts.js`); Sensor add-ons card |
+| Solar radiation sensor (Apogee SP-421) | `hardware/sensor-solar-radiation` (from Jake's `Solar Radiation.png`, Nov 17) | 150 only (the source is 150 × 179) | Transparent; Sensor add-ons card, the home hero's "Solar radiation" close-up and the PheNode page base station explorer's info card (Nov 17). A larger source would look sharper on high-density screens |
 | Soil profile probe | `hardware/sensor-profile-probe` (260) · `sensor-profile-probe-angle` (400 · 800 · 1400) | — | Transparent |
 | Node with two soil probes | `hardware/wireless-node-with-probes` | 400 · 680 | Transparent; still shows the older node (with the radiation shield) |
 
@@ -22,13 +23,13 @@ All raster assets are served from `public/assets/` as WebP with width variants (
 
 ## Data-journey illustrations (in place — home → 04 How PheNode works)
 
-SVGs in `public/assets/journey/`, one per stop of the data path. They crossfade in the stage panel beside the title as the visitor scrolls (`JourneyStage.jsx`) and appear as thumbnails in the mobile list (`JourneyList art`).
+SVGs in `public/assets/journey/`, one per stop of the data path. They crossfade in the stage panel beside the title as the visitor scrolls (`JourneyStage.jsx`) and appear as thumbnails in the mobile list (`JourneyList art`). The Download / API drawing also sits above the lede in the PheNode page's Data platform header (Nov 17).
 
 | Stop | File | Source |
 |---|---|---|
 | Sensors | `journey/sensors.svg` | PheNode app `src/assets/diagrams/Soil_Probe.svg` (svgo-minified) |
 | Wireless node | `journey/node.svg` | PheNode app `src/assets/diagrams/Wireless-Sensors.svg` (hidden layers removed by svgo: 231 → 38 KB) |
-| Base station | `journey/base.svg` | PheNode app `src/assets/diagnostics/Diagnosics_Wireframe.svg` (the System Diagnostics wireframe) |
+| Base station | `journey/base.svg` | Jake's "Diagnostics Wireframe-web.svg" (Nov 17; the app's System Diagnostics wireframe redrawn, Illustrator export, used as delivered: 202 KB, 36 KB gzipped). Until Nov 17: the app's `src/assets/diagnostics/Diagnosics_Wireframe.svg` |
 | Backend · Processing · Database · Dashboard · Download / API | `journey/{backend,processing,database,dashboard,export}.svg` | Drawn to match the app diagrams (#0d56ff outlines, navy fills, #48f7f5 lights) — regenerate with `python3 scripts/gen-journey-art.py public/assets/journey` then run svgo |
 
 To swap in a designer-made drawing, replace the file with the same name; anything with a transparent background and roughly 4:3 to 3:2 proportions sits correctly.
@@ -55,15 +56,15 @@ Captured by Claude from the live software (admin account, read-only browsing) at
 
 | Key | View (state captured) | Used in |
 |---|---|---|
-| `fleet-overview` | Your Fleet, newest readings first | Software page hero; Software views |
+| `fleet-overview` | Your Fleet, newest readings first | PheNode page › Software (top and views) |
 | `base-station` | Base Station Measurements: dials + first charts (Research Field 02, last 7 days) | Software views |
 | `base-station-charts` | Same page scrolled to the charts | (spare — the recordings cover it) |
 | `measurement-categories` | Same, category menu open | Software views |
-| `imaging` | Imaging (University Plot 04, a midday capture) | Base station page; Software views |
-| `system-diagnostics` | Diagnostics (Prairie Site 02: 27 nodes, 5 of 6 sensors active) | Home Software cards; Base station page; Software views |
-| `wireless-fleet-overview` | Wireless Fleet Overview (University Plot 03, 7 active nodes) | Wireless node page; Software views |
-| `sensor-map` | Sensor Overview, satellite map, nearby nodes + PheNode pin | Wireless node page; Software views |
-| `wireless-sensor-measurements` | One node, Soil category, two probes, last 7 days | Home Software cards; Wireless node page; Software views |
+| `imaging` | Imaging (University Plot 04, a midday capture) | PheNode page › Base station; Software views |
+| `system-diagnostics` | Diagnostics (Prairie Site 02: 27 nodes, 5 of 6 sensors active) | Home Software cards; PheNode page › Base station; Software views |
+| `wireless-fleet-overview` | Wireless Fleet Overview (University Plot 03, 7 active nodes) | PheNode page › Wireless sensor node; Software views |
+| `sensor-map` | Sensor Overview, satellite map, nearby nodes + PheNode pin | PheNode page › Wireless sensor node; Software views |
+| `wireless-sensor-measurements` | One node, Soil category, two probes, last 7 days | Home Software cards; PheNode page › Wireless sensor node; Software views |
 | `multi-sensor-overlay` | Soil moisture, four nodes, both probes, last 7 days | Home Software cards; Data platform → Compare; Software views |
 | `dual-comparison` | Air temperature vs relative humidity, Research Field 02 (= Danforth Field Research Site), last 7 days | Data platform → Compare; Danforth case study; Software views |
 | `data-downloads` | Data Downloads filled in (no download triggered) | Data platform; Software views |
@@ -77,7 +78,7 @@ Captured by Claude from the live software (admin account, read-only browsing) at
 | `precipitation-season` | Season: Season vs Normal (119% since Apr 1) + Drought Status (D0, St. Charles County) | Home Software → Precipitation; Software views |
 | `precipitation-unit-check` | Gauge Check scrolled to Unit Check: September, 78% of the middle of 3 nearby gauges, what to check | Home Software → Precipitation; Software views |
 
-Phone captures (390 × 844 browser size, 2×): `software/mobile-fleet-{390,780}.webp` and `software/mobile-base-station-{390,780}.webp`, keyed in `PHONE_SCREENS` and shown with `<PhoneScreen>` in `DeviceFrame kind="phone" aspect={PHONE_RATIO}` (Software page → "On a phone, too").
+Phone captures (390 × 844 browser size, 2×): `software/mobile-fleet-{390,780}.webp` and `software/mobile-base-station-{390,780}.webp`, keyed in `PHONE_SCREENS` and shown with `<PhoneScreen>` in `DeviceFrame kind="phone" aspect={PHONE_RATIO}` (PheNode page › Software → "On a phone, too").
 
 Still showing a real site name: the home 03 map (`software/hyperlocal-map`, Jake's capture) labels the Danforth Field Research Site PheNode. Swap it for a neutral capture if partners shouldn't be named. `DashboardMock` is no longer used by any page.
 
@@ -85,8 +86,8 @@ Still showing a real site name: the home 03 map (`software/hyperlocal-map`, Jake
 
 | File | Source | Size | Shown in |
 |---|---|---|---|
-| `public/models/wireless-node.glb` | `WS for web.glb` (node "WS for web") | ≈ 0.45 MB, 33k triangles | `NodeExplorer` (home Hardware, wireless node page) |
-| `public/models/base-station.glb` | `PheNode for web.glb` (node "PheNode Complete for web") | ≈ 0.65 MB, 51k triangles | `BaseStationExplorer` (home Hardware, base station page) |
+| `public/models/wireless-node.glb` | `WS for web.glb` (node "WS for web") | ≈ 0.45 MB, 33k triangles | `NodeExplorer` (home Hardware, PheNode page › Wireless sensor node) |
+| `public/models/base-station.glb` | `PheNode for web.glb` (node "PheNode Complete for web") | ≈ 0.65 MB, 51k triangles | `BaseStationExplorer` (home Hardware, PheNode page › Base station) |
 
 Both are drawn by `src/components/three/ProductModel3D.jsx` (lazy-loaded, mounted near the viewport, paused off-screen; meshopt decoding only, so no third-party decoder is fetched). Without WebGL the explorers fall back to `hardware/wireless-node-front` and the annotated `hardware/base-station-v4` render.
 
@@ -99,7 +100,7 @@ Both are cursor-free, seamless loops at 1920 × 1200, 30 fps, built frame by fra
 | File | Content | Length / size | Used in |
 |---|---|---|---|
 | `video/software-tour-1920.{mp4,webm}` + `software-tour-poster.webp` | Fleet → base station (scrolls to its charts) → wireless sensor map → imaging → fleet | 16.2 s · 2.3 MB / 1.7 MB | Home → Software monitor |
-| `video/base-station-scroll-1920.{mp4,webm}` + `base-station-scroll-poster.webp` | Base station page, top → bottom → top | 12.7 s · 1.4 MB / 0.7 MB | Base station page → In the software |
+| `video/base-station-scroll-1920.{mp4,webm}` + `base-station-scroll-poster.webp` | Base station page, top → bottom → top | 12.7 s · 1.4 MB / 0.7 MB | PheNode page › Base station → In the software |
 
 The earlier `video/software-scroll-1920.*` (Jake's screen recording) is no longer used.
 

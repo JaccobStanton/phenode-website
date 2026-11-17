@@ -198,7 +198,8 @@ export function BaseStationGlyph({ x, y, s = 1, active = true, label, uplink = t
 
 /**
  * SceneLegend — the key every scene diagram shares, so the symbols never have to be guessed:
- * base station, wireless node, LoRaWAN link, hourly reading (amber), data uplink (cyan).
+ * base station, wireless node, LoRaWAN link, readings sent hourly (amber), data uplink (cyan). Nodes measure every
+ * 15 minutes and send the readings hourly (Jake, Nov 17).
  */
 export function SceneLegend({ className = '', nodes = true, uplink = true }) {
   const item = 'flex items-center gap-2 whitespace-nowrap'
@@ -220,7 +221,7 @@ export function SceneLegend({ className = '', nodes = true, uplink = true }) {
           LoRaWAN link
         </span>
       )}
-      <span className={item}><span className="h-2 w-2 rounded-full bg-signal" aria-hidden="true" />Hourly reading</span>
+      <span className={item}><span className="h-2 w-2 rounded-full bg-signal" aria-hidden="true" />Readings · sent hourly</span>
       {uplink && <span className={item}><span className="h-2 w-2 rounded-full bg-data" aria-hidden="true" />Data uplink · cellular / Wi‑Fi / satellite</span>}
     </div>
   )

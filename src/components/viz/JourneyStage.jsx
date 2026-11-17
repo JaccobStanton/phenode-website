@@ -3,7 +3,8 @@ import { JOURNEY, journeyArt } from './DataJourney.jsx'
 // Visual weight per illustration inside the stage box: the probe and the node are single parts,
 // so they sit a little smaller than the full base station and the software views.
 const FIT = { sensors: 0.84, node: 0.88 }
-// The base station drawing (from the app's diagnostics view) is mostly dark navy line work: lifted so it reads on the dark blue page.
+// The base station drawing (Jake's "Diagnostics Wireframe-web.svg" since Nov 17, the app's diagnostics wireframe redrawn)
+// is mostly dark navy line work: lifted so it reads on the dark blue page. Its cyan lights stay cyan.
 const LIFT = { base: 'brightness(1.45) saturate(1.1)' }
 
 /**

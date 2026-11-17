@@ -20,6 +20,7 @@ function sensorRow(name, label = name) {
 }
 
 const SOIL = ADD_ON_SENSORS.find((s) => s.id === 'soil-standard')
+const RADIATION = ADD_ON_SENSORS.find((s) => s.id === 'solar-radiation')
 
 export const PART_DETAILS = {
   rain: {
@@ -27,8 +28,15 @@ export const PART_DETAILS = {
     lede: 'Tipping-bucket rainfall with an Agrela-designed funnel, measured right at the station.',
     body: 'In the software it becomes rainfall and storms for every PheNode, tracked against local references, and each gauge is checked every month against the official gauges nearby.',
     specs: [
-      { name: 'Rainfall', value: 'Tipping bucket, Agrela-designed funnel', note: 'Accuracy ±3 %' },
+      { name: 'Rainfall', value: 'Tipping bucket, Agrela-designed funnel', note: 'Accuracy ±4 %' },
     ],
+  },
+  radiation: {
+    kicker: 'Solar radiation',
+    lede: 'A silicon-cell pyranometer on top of the frame measures incoming shortwave radiation.',
+    body: 'Sunlight is the energy that drives evapotranspiration, so the station measures it next to the air, wind and rain readings.',
+    photo: { name: 'hardware/sensor-solar-radiation', widths: [150], alt: 'The solar radiation sensor (Apogee SP-421)', caption: 'Solar radiation sensor' },
+    specs: RADIATION.specs.map((s) => ({ name: s.name, value: s.range, note: s.accuracy !== '—' ? s.accuracy : undefined })),
   },
   solar: {
     kicker: 'Power',

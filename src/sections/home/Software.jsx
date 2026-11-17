@@ -55,8 +55,8 @@ export default function Software() {
             </div>
           </div>
           <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2"><Tag tone="data">PheNode software</Tag><span className="font-mono text-[11px] tracking-[0.1em] text-stone">Fleet · base station · wireless network · imaging</span></p>
-          {/* with the details below hidden (FEATURES.homeSoftwareDetails), the way to the Software page moves up here */}
-          {!FEATURES.homeSoftwareDetails && <div className="mt-8"><Button to="/phenode/software" variant="primary">Explore the software</Button></div>}
+          {/* with the details below hidden (FEATURES.homeSoftwareDetails), the way to the PheNode page's Software part moves up here */}
+          {!FEATURES.homeSoftwareDetails && <div className="mt-8"><Button to="/phenode#software" variant="primary">Explore the software</Button></div>}
         </div>
 
         {/* real views from the software (the recording above covers fleet, base station, map and imaging); hidden for now */}
@@ -125,7 +125,7 @@ export default function Software() {
               <span>{modules.has('api') || modules.has('backend') ? 'Advanced data access enabled' : 'Dashboard + downloads'}</span>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button to="/phenode/software" variant="primary">Explore the software</Button>
+              <Button to="/phenode#software" variant="primary">Explore the software</Button>
               {FEATURES.designSystem && <Button to="/design-your-system" variant="ghost">Build a system with these modules</Button>}
             </div>
           </div>

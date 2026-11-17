@@ -1,11 +1,11 @@
-import Page from '../../components/layout/Page.jsx'
 import { Container, Section, Eyebrow, Button, Tag } from '../../components/ui/primitives.jsx'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import DeviceFrame from '../../components/software/DeviceFrame.jsx'
 import { Screen, SCREENS, SCREEN_RATIO, PhoneScreen, PHONE_SCREENS, PHONE_RATIO } from '../../components/media/media.jsx'
 import { TestimonialSlot } from '../../sections/home/Proof.jsx'
-import { SOFTWARE } from '../../data/specs.js'
 import { SOFTWARE_MODULES } from '../../data/sensors.js'
+import { prefersReducedMotion } from '../../lib/motion.js'
 import { FEATURES } from '../../data/features.js'
 
 // Views with a real screenshot (`shot`) are selectable; the rest are listed without one.
@@ -28,17 +28,22 @@ const VIEWS = [
   { id: 'settings', name: 'Settings & remote control', text: 'Adjust deployed hardware and manage sub-accounts without a site visit.' },
 ]
 
-export default function SoftwarePage() {
+/**
+ * PheNode page, "Software" part (/phenode#software). Until Nov 16 this was its own page, /phenode/software; Jake merged
+ * the PheNode pages into one scroll page (pages/PheNode.jsx), and the old address now lands here. Like every part it
+ * opens on ink under a hairline, with its title as an h2 (so the sections inside it are h3).
+ */
+export default function SoftwarePart() {
   return (
-    <Page title="Software" description="PheNode software: fleet management, wireless sensor network views, visualization, precipitation and rain gauge checks, imaging, data downloads with cleaning preferences, remote control, API access and a dockerized backend.">
-      <section className="theme-ink pt-28 pb-12 md:pt-40">
+    <>
+      <section className="theme-ink border-t border-white/10 pt-24 pb-12 md:pt-36 lg:pt-44">
         <Container>
           <p className="eyebrow">Software</p>
           <div className="mt-4 grid gap-10 lg:grid-cols-12 lg:items-end">
-            <h1 className="display-xl lg:col-span-7">Everything the fleet knows, in one place.</h1>
-            <p className="lede lg:col-span-5">Browser-based. Fleet, wireless networks, measurements, precipitation, imaging, downloads, remote control — and an API underneath for everything else.</p>
+            <h2 className="display-xl lg:col-span-7">Everything the fleet knows, in one place.</h2>
+            <p className="lede lg:col-span-5">Browser-based. Fleet, wireless networks, sensor measurements, imaging, bespoke downloads, remote control — and an accessible API underneath to control the data flow.</p>
           </div>
-          <div className="mt-12"><DeviceFrame kind="monitor" aspect={SCREEN_RATIO}><Screen id="fleet-overview" eager sizes="(min-width:1440px) 1360px, 96vw" /></DeviceFrame></div>
+          <div className="mt-12"><DeviceFrame kind="monitor" aspect={SCREEN_RATIO}><Screen id="fleet-overview" sizes="(min-width:1440px) 1360px, 96vw" /></DeviceFrame></div>
           <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2"><Tag tone="data">PheNode software</Tag><span className="font-mono text-[11px] tracking-[0.1em] text-stone">Fleet overview</span></p>
         </Container>
       </section>
@@ -50,42 +55,69 @@ export default function SoftwarePage() {
         </Container>
       </Section>
 
-      <Section theme="ink">
+      {/* The "Capabilities" list ("What the software does today") that sat on the left here is removed (Jake, Nov 17);
+          the configurable modules take the section, title on the left as in the other sections. Hidden for now too
+          (FEATURES.softwareModules, Jake, Nov 17). */}
+      {FEATURES.softwareModules && <Section theme="ink">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <Eyebrow>Capabilities</Eyebrow>
-              <h2 className="display-md mt-4 max-w-[14ch]">What the software does today.</h2>
-              <ul className="mt-6 flex flex-col divide-y divide-white/10 border-y border-white/10">
-                {SOFTWARE.capabilities.map((c) => <li key={c.id} className="py-3.5"><p className="text-[15px] font-medium">{c.name}</p><p className="mt-0.5 text-[14px] text-paper/65">{c.text}</p></li>)}
-              </ul>
+              <Eyebrow>Configurable modules</Eyebrow>
+              <h3 className="display-md mt-4 max-w-[16ch]">The hardware is configurable. The software is too.</h3>
+              <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Choose software for your system</Button>}<Button to="/contact?intent=demo" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Request a demo</Button></div>
             </div>
             <div className="lg:col-span-7">
-              <Eyebrow>Configurable modules</Eyebrow>
-              <h3 className="display-sm mt-3">The hardware is configurable. The software is too.</h3>
-              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+              <ul className="grid gap-2 sm:grid-cols-2">
                 {SOFTWARE_MODULES.map((m) => <li key={m.id} className={`rounded-lg border p-4 ${m.default ? 'border-data/40 bg-data/5' : 'border-white/10'}`}><p className="text-[14.5px] font-medium">{m.name}</p><p className="mt-0.5 text-[13px] text-paper/65">{m.text}</p><p className={`mt-2 font-mono text-[10px] tracking-[0.12em] uppercase ${m.default ? 'text-data' : 'text-stone'}`}>{m.default ? 'Included' : 'Optional'}</p></li>)}
               </ul>
               <TestimonialSlot context="Access to data" className="mt-8" />
-              <div className="mt-8 flex flex-wrap gap-3">{FEATURES.designSystem && <Button to="/design-your-system" variant="primary">Choose software for your system</Button>}<Button to="/contact?intent=demo" variant={FEATURES.designSystem ? 'ghost' : 'primary'}>Request a demo</Button></div>
             </div>
           </div>
         </Container>
-      </Section>
-    </Page>
+      </Section>}
+    </>
   )
 }
 
-/** Views list on the left; selecting a view shows the real screen on the right. */
+const LG = '(min-width: 64rem)'
+// From lg the list follows the scroll (Jake, Nov 17): the view whose row crosses this line (share of the screen height,
+// level with the middle of the sticky screen) is highlighted and its screen shown.
+const LINE = 0.42
+
+/** Views list on the left; the highlighted view's real screen on the right (sticky). */
 function ViewExplorer() {
   const [active, setActive] = useState(VIEWS[0].id)
+  const list = useRef(null)
   const current = VIEWS.find((v) => v.id === active)
+  useEffect(() => {
+    const mq = matchMedia(LG)
+    let triggers = []
+    const build = () => {
+      triggers.forEach((t) => t.kill())
+      triggers = []
+      if (!mq.matches || !list.current) return
+      // one trigger per view with a screen; the "Settings" row has none, so the last screen stays while it passes
+      list.current.querySelectorAll('li[data-view]').forEach((li) => {
+        triggers.push(ScrollTrigger.create({ trigger: li, start: `top ${LINE * 100}%`, end: `bottom ${LINE * 100}%`, onToggle: (self) => self.isActive && setActive(li.dataset.view) }))
+      })
+    }
+    build()
+    mq.addEventListener('change', build)
+    return () => { mq.removeEventListener('change', build); triggers.forEach((t) => t.kill()) }
+  }, [])
+  // A click shows the view at once and, from lg, brings its row to the line so the scroll and the highlight agree.
+  const choose = (id, el) => {
+    setActive(id)
+    if (!matchMedia(LG).matches) return
+    const r = el.getBoundingClientRect()
+    window.scrollTo({ top: window.scrollY + r.top + r.height / 2 - window.innerHeight * LINE, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+  }
   return (
     <div className="grid gap-12 lg:grid-cols-12">
       <div className="lg:col-span-4">
         <Eyebrow>Views</Eyebrow>
-        <h2 className="display-md mt-4 max-w-[14ch]">Built around how field teams actually work.</h2>
-        <ol className="mt-8 flex flex-col divide-y divide-ink/10 border-y border-ink/10" aria-label="Software views">
+        <h3 className="display-md mt-4 max-w-[14ch]">Built around how field teams actually work.</h3>
+        <ol ref={list} className="mt-8 flex flex-col divide-y divide-ink/10 border-y border-ink/10" aria-label="Software views">
           {VIEWS.map((v, i) => {
             const on = v.id === active
             const inner = (
@@ -98,9 +130,9 @@ function ViewExplorer() {
               </>
             )
             return (
-              <li key={v.id}>
+              <li key={v.id} data-view={v.shot ? v.id : undefined}>
                 {v.shot ? (
-                  <button type="button" aria-pressed={on} onClick={() => setActive(v.id)} onPointerEnter={() => setActive(v.id)} className={`relative grid w-full grid-cols-[32px_1fr] gap-3 py-4 pl-3 text-left transition-colors ${on ? 'bg-phenode-white-2' : 'hover:bg-phenode-white-2/60'}`}>
+                  <button type="button" aria-pressed={on} onClick={(e) => choose(v.id, e.currentTarget)} className={`relative grid w-full grid-cols-[32px_1fr] gap-3 py-4 pl-3 text-left transition-colors ${on ? 'bg-phenode-white-2' : 'hover:bg-phenode-white-2/60'}`}>
                     <span aria-hidden="true" className={`absolute inset-y-0 left-0 w-[2px] transition-colors ${on ? 'bg-data' : 'bg-transparent'}`} />
                     {inner}
                   </button>
@@ -136,7 +168,7 @@ function OnAPhone() {
     <div className="mt-24 grid items-center gap-12 border-t hairline pt-16 lg:grid-cols-12">
       <div className="lg:col-span-5">
         <Eyebrow>In the field</Eyebrow>
-        <h2 className="display-md mt-4 max-w-[14ch]">On a phone, too.</h2>
+        <h3 className="display-md mt-4 max-w-[14ch]">On a phone, too.</h3>
         <p className="mt-4 max-w-[44ch] text-[15px] leading-relaxed text-ink/75">The software runs in the browser, so the fleet and a base station’s live readings are on your phone while you stand at the site. Nothing to install.</p>
       </div>
       <div className="lg:col-span-7">

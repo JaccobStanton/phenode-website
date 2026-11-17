@@ -13,9 +13,9 @@ export const JOURNEY = [
 ]
 
 /**
- * Illustration for each stop (public/assets/journey). Sensors, node and base station are the PheNode app's own
- * diagrams (soil probe, wireless sensor, PheNode wireframe); the digital stops are drawn to match them
- * (scripts/gen-journey-art.py).
+ * Illustration for each stop (public/assets/journey). Sensors and node are the PheNode app's own diagrams (soil probe,
+ * wireless sensor); the base station is Jake's "Diagnostics Wireframe-web.svg" (Nov 17), the app's diagnostics
+ * wireframe redrawn; the digital stops are drawn to match them (scripts/gen-journey-art.py).
  */
 export const journeyArt = (id) => `${import.meta.env.BASE_URL}assets/journey/${id}.svg`
 

@@ -4,7 +4,7 @@ import { ScrollTrigger, prefersReducedMotion, seg, easeOut, easeInOut } from '..
 import { FEATURES } from '../../data/features.js'
 
 // Phrases in [brackets] pick up a soft Agrela-blue glow as they light.
-const STATEMENT = 'Hardware, communications, data and software — designed as [one platform], configured around the question [you need to answer].'
+const STATEMENT = 'Hardware, communications, data and software — designed as [one solution], configured around the question [you need to answer].'
 const WORDS = (() => {
   let open = false
   return STATEMENT.split(' ').map((raw) => {

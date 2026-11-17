@@ -70,7 +70,7 @@ export default function Hyperlocal() {
         </div>
         <ButtonPair className="reveal mt-8">
           <Button to="/applications" variant="primary">See it in your environment</Button>
-          <Button to="/phenode/wireless-node" variant="ghost">The wireless node</Button>
+          <Button to="/phenode#wireless-node" variant="ghost">The wireless node</Button>
         </ButtonPair>
        </div>
       </Container>

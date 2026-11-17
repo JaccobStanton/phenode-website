@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { NAV } from '../../data/navigation.js'
@@ -10,13 +10,21 @@ import { FEATURES } from '../../data/features.js'
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-  // Mobile sheet + desktop menus are keyed to the path they were opened on, so navigation closes them without an effect.
+  // Mobile sheet + desktop menus are keyed to the location they were opened at, so navigation closes them without an
+  // effect — including a jump to a part of the same page (/phenode#software).
   const [openAt, setOpenAt] = useState(null)
   const [menuAt, setMenuAt] = useState(null)
-  const open = openAt === location.pathname
-  const menu = menuAt && menuAt.path === location.pathname ? menuAt.label : null
-  const setOpen = (v) => setOpenAt((typeof v === 'function' ? v(open) : v) ? location.pathname : null)
-  const setMenu = (label) => setMenuAt(label ? { label, path: location.pathname } : null)
+  const open = openAt === location.key
+  const menu = menuAt && menuAt.at === location.key ? menuAt.label : null
+  const setOpen = (v) => setOpenAt((typeof v === 'function' ? v(open) : v) ? location.key : null)
+  const setMenu = (label) => setMenuAt(label ? { label, at: location.key } : null)
+  // A tab is current on its page and the pages under it; a tab that leads to a part of a page ("How It Works" →
+  // /phenode#data-platform) only once the visitor has gone to that part.
+  const current = (to) => {
+    const [path, part] = to.split('#')
+    if (part) return location.pathname === path && location.hash === `#${part}` ? 'location' : undefined
+    return location.pathname === path || location.pathname.startsWith(`${path}/`) ? 'page' : undefined
+  }
   const closeTimer = useRef(0)
   const headerRef = useRef(null)
 
@@ -66,16 +74,17 @@ export default function Nav() {
         <nav className="nav-links hidden items-center gap-1 xl:flex" aria-label="Primary">
           {NAV.map((item, i) => (
             <div key={item.label} className="relative" style={{ '--k': i }} onMouseEnter={() => item.children && openMenu(item.label)} onMouseLeave={scheduleClose}>
-              <NavLink
+              <Link
                 to={item.to}
-                className={({ isActive }) => `flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 text-[14px] transition-colors 2xl:px-3 ${isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`}
+                aria-current={current(item.to)}
+                className={`flex items-center gap-1 whitespace-nowrap rounded-md px-2.5 py-2 text-[14px] transition-colors 2xl:px-3 ${current(item.to) ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`}
                 aria-haspopup={item.children ? 'true' : undefined}
                 aria-expanded={item.children ? menu === item.label : undefined}
                 onFocus={() => item.children && openMenu(item.label)}
               >
                 {item.label}
                 {item.children && <ChevronDown size={14} className="opacity-60" aria-hidden="true" />}
-              </NavLink>
+              </Link>
               <AnimatePresence>
                 {item.children && menu === item.label && (
                   <motion.div
@@ -113,10 +122,11 @@ export default function Nav() {
             <nav className="flex flex-col divide-y divide-white/10" aria-label="Mobile">
               {NAV.map((item) => (
                 <div key={item.label} className="py-3">
-                  <Link to={item.to} className="block py-2 text-[22px] font-medium tracking-tight">{item.label}</Link>
+                  {/* nav-sheet-link: the blue hover row (index.css); the -mx/px pair gives the row room without moving the text */}
+                  <Link to={item.to} className="nav-sheet-link -mx-3 block rounded-md px-3 py-2 text-[22px] font-medium tracking-tight">{item.label}</Link>
                   {item.children && (
                     <div className="mt-1 grid gap-1 pl-3">
-                      {item.children.map((c) => <Link key={c.to + c.label} to={c.to} className="py-1.5 text-[15px] text-stone">{c.label}</Link>)}
+                      {item.children.map((c) => <Link key={c.to + c.label} to={c.to} className="nav-sheet-link -mx-3 rounded-md px-3 py-1.5 text-[15px] text-stone">{c.label}</Link>)}
                     </div>
                   )}
                 </div>

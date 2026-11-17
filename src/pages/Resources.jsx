@@ -13,7 +13,8 @@ const GROUPS = [
     // hidden for now (data/features.js)
     ...(FEATURES.buyersGuide ? [{ title: 'PheNode Summer 2025 Buyer\'s Guide', text: 'System overview, specifications and expansion options.', href: '/docs/phenode-buyers-guide-summer-2025.pdf', external: true }] : []),
     { title: 'Support & documentation', text: 'PheNode quick start guides and user manuals, current and archived.', to: '/support', thumb: 'support-docs' },
-    { title: 'Specifications', text: 'Every published number for the base station, the wireless node and add-on sensors.', to: '/phenode#specifications', thumb: 'specifications' },
+    // its target (the PheNode page's Technical capabilities) is hidden for now (data/features.js)
+    ...(FEATURES.phenodeTechSections ? [{ title: 'Specifications', text: 'Every published number for the base station, the wireless node and add-on sensors.', to: '/phenode#specifications', thumb: 'specifications' }] : []),
   ] },
   { heading: 'Press', items: [
     { title: 'Agrela Ecosystems expands nationally as PheNode moves from agricultural research into transportation infrastructure', text: 'Danforth Plant Science Center, 2026', href: 'https://www.danforthcenter.org/news/agrela-ecosystems-phenode-expands-nationally-into-transportation-infrastructure/', external: true, thumb: 'press-danforth' },
@@ -21,7 +22,7 @@ const GROUPS = [
     { title: 'Meet the founder: Agrela\'s Nadia Shakoor on how to restore biodiversity to US highways', text: 'AgFunderNews', href: 'https://agfundernews.com/agrelas-nadia-shakoor-on-how-to-restore-biodiversity-to-us-highways', external: true, thumb: 'press-agfundernews' },
   ] },
   { heading: 'Learn', items: [
-    { title: 'How PheNode works', text: 'Follow one reading from the sensor to your dataset.', to: '/phenode/data-platform', thumb: 'how-it-works' },
+    { title: 'How PheNode works', text: 'Follow one reading from the sensor to your dataset.', to: '/phenode#data-platform', thumb: 'how-it-works' },
     { title: 'Applications', text: 'Transportation, agriculture, ecology, urban heat.', to: '/applications', thumb: 'applications' },
     { title: 'Case studies', text: 'Public deployments and what they measure.', to: '/case-studies', thumb: 'case-studies' },
   ] },

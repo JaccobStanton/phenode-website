@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import Page from '../../components/layout/Page.jsx'
-import { Container, Section, Eyebrow, Button, Tag, AssetPlaceholder } from '../../components/ui/primitives.jsx'
+import { Container, Section, Eyebrow, Button, Tag } from '../../components/ui/primitives.jsx'
 import { Photo } from '../../components/media/media.jsx'
 import ExplorerScene from '../../components/viz/ExplorerScene.jsx'
 import EnvironmentTransition from '../../components/viz/EnvironmentTransition.jsx'
@@ -43,9 +43,8 @@ export default function ApplicationPage() {
             <ExplorerScene kind={app.environment} count={count} heat={0.8} className="text-paper" showValues />
             <div className="absolute left-4 top-4 flex gap-2"><Tag>Demo data</Tag></div>
           </div>
-          {app.photo
-            ? <Photo name={app.photo.name} alt={app.photo.alt} position={app.photo.position} ratio="21 / 9" sizes="(min-width:1440px) 1360px, 96vw" className="mt-4 rounded-xl border border-white/10" />
-            : <AssetPlaceholder label={`Environmental photography · ${app.kicker} · 2400×1350 WebP`} ratio="21 / 9" className="mt-4 text-paper/60" />}
+          {/* Environmental photo: shown only once an application has one. The dashed placeholder is hidden for now (Jake, Nov 17). */}
+          {app.photo && <Photo name={app.photo.name} alt={app.photo.alt} position={app.photo.position} ratio="21 / 9" sizes="(min-width:1440px) 1360px, 96vw" className="mt-4 rounded-xl border border-white/10" />}
         </Container>
       </section>
 
@@ -77,7 +76,7 @@ export default function ApplicationPage() {
                   <p className="eyebrow">Example configuration · {pkg.name}</p>
                   <p className="mt-2 text-[14.5px] text-ink/75">{pkg.for}.</p>
                   <ul className="mt-3 grid gap-1.5 text-[14px] sm:grid-cols-2">
-                    <li className="flex gap-2"><span className="font-mono text-[11px] text-stone-2 pt-1">NODE</span><span>Wireless sensor node + {pkg.node.length ? pkg.node.map((s) => SENSOR_BY_ID[s].short).join(' + ') : 'built-in air & light'}</span></li>
+                    <li className="flex gap-2"><span className="font-mono text-[11px] text-stone-2 pt-1">NODE</span><span>Wireless sensor node + {pkg.node.length ? pkg.node.map((s) => SENSOR_BY_ID[s].short).join(' + ') : 'built-in light sensor'}</span></li>
                     <li className="flex gap-2"><span className="font-mono text-[11px] text-stone-2 pt-1">BASE</span><span>Base station{pkg.base.length ? ' + ' + pkg.base.map((s) => SENSOR_BY_ID[s].short).join(' + ') : ''}</span></li>
                   </ul>
                   <p className="mt-3 text-[12.5px] text-stone-2">Example packages are starting points, not fixed SKUs.</p>

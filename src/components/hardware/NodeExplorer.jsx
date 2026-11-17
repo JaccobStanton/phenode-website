@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { Layers, RotateCcw } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { RotateCcw } from 'lucide-react'
 import { HOTSPOTS, NODE_MODEL } from '../three/nodeHotspots.js'
 import { Img, Tag } from '../ui/primitives.jsx'
 import { useReducedMotion } from '../../lib/motion.js'
@@ -10,12 +11,12 @@ const ProductModel3D = lazy(() => import('../three/ProductModel3D.jsx'))
 
 /**
  * Interactive wireless node: 3D canvas (mounted only when near the viewport), hotspot list with progressive disclosure,
- * exploded view, and a rendered-image fallback when WebGL is unavailable.
+ * and a rendered-image fallback when WebGL is unavailable. The "Exploded view" button is gone (Jake, Nov 16);
+ * ProductModel3D still supports `exploded` if it comes back.
  */
 export default function NodeExplorer({ className = '' }) {
   const reduced = useReducedMotion()
   const [active, setActive] = useState(null)
-  const [exploded, setExploded] = useState(false)
   const [near, setNear] = useState(false)
   const [visible, setVisible] = useState(false)
   const [resetKey, setResetKey] = useState(0)
@@ -41,14 +42,13 @@ export default function NodeExplorer({ className = '' }) {
       <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(80%_70%_at_50%_30%,#2a3036,#0E1012_75%)] lg:col-span-8" style={{ minHeight: 420 }}>
         <div className="absolute left-4 top-4 z-10 hidden gap-2 sm:flex"><Tag>Interactive</Tag>{!gl && <Tag tone="signal">3D unavailable — showing render</Tag>}</div>
         <div className="absolute right-4 top-4 z-10 flex gap-2">
-          <button type="button" onClick={() => setExploded((v) => !v)} aria-pressed={exploded} className={`chip !py-1.5 border-white/20 text-paper/90 hover:border-white/50 ${exploded ? '!border-signal !text-signal-2' : ''}`}><Layers size={13} /> Exploded view</button>
-          <button type="button" onClick={() => { setExploded(false); setActive(null); setResetKey((k) => k + 1) }} className="chip !py-1.5 border-white/20 text-paper/90 hover:border-white/50"><RotateCcw size={13} /> Reset</button>
+          <button type="button" onClick={() => { setActive(null); setResetKey((k) => k + 1) }} className="chip !py-1.5 border-white/20 text-paper/90 hover:border-white/50"><RotateCcw size={13} /> Reset</button>
         </div>
         <div className="aspect-square w-full sm:aspect-[4/3] lg:aspect-auto lg:h-[560px]">
           {gl && near ? (
             <ModelBoundary onError={() => setGl(false)}>
               <Suspense fallback={<div className="flex h-full items-center justify-center font-mono text-[11px] tracking-[0.2em] uppercase text-stone">Loading model</div>}>
-                <ProductModel3D url={modelUrl(NODE_MODEL)} hotspots={HOTSPOTS} activeId={active} onSelect={setActive} exploded={exploded} idle="spin" motion={!reduced && !exploded} active={visible} resetKey={resetKey} camera={[1.6, 0.92, 2.5]} polar={[Math.PI / 4.2, Math.PI / 1.85]} />
+                <ProductModel3D url={modelUrl(NODE_MODEL)} hotspots={HOTSPOTS} activeId={active} onSelect={setActive} idle="spin" motion={!reduced} active={visible} resetKey={resetKey} camera={[1.6, 0.92, 2.5]} polar={[Math.PI / 4.2, Math.PI / 1.85]} />
               </Suspense>
             </ModelBoundary>
           ) : (
@@ -76,7 +76,7 @@ export default function NodeExplorer({ className = '' }) {
           ))}
         </ul>
         {/* with a component selected, the note credits the Buyer's Guide, which is hidden for now (data/features.js) */}
-        {(!current || FEATURES.buyersGuide) && <p className="mt-4 text-[13px] leading-relaxed text-stone">{current ? 'Specifications from the PheNode Summer 2025 Buyer\'s Guide.' : 'Select a component for a short technical note. Full specifications are on the wireless node page.'}</p>}
+        {(!current || FEATURES.buyersGuide) && <p className="mt-4 text-[13px] leading-relaxed text-stone">{current ? 'Specifications from the PheNode Summer 2025 Buyer\'s Guide.' : <>Select a component for a short technical note. <Link to="/phenode#wireless-node-specs" className="underline underline-offset-4 hover:text-paper">Full specifications</Link></>}</p>}
       </div>
     </div>
   )

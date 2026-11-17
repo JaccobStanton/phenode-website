@@ -9,7 +9,7 @@ import { seg, easeOut, useReducedMotion } from '../../lib/motion.js'
  * regional, not hyperlocal. This is an illustration in the style of the software's dark map, zoomed in to one farm:
  * the PheNode in the middle with its info card coming up the way it does in the software, a 1 km LoRaWAN range ring,
  * and 12 wireless nodes in different micro-environments (creek bottom, tree line, ridge, center pivot, farmstead,
- * roadside…) pulsing and sending their hourly readings in. Pointing at a node (or tapping it) shows that node's latest
+ * roadside…) pulsing and sending their readings in (nodes measure every 15 minutes and send hourly). Pointing at a node (or tapping it) shows that node's latest
  * reading in the card, so the variation across one site is right there. Readings are illustrative: tagged Demo data.
  *
  * Geometry is in viewBox units (1400 × 1018, the old capture's shape, so the layout around it doesn't move); 1 km = 400.
@@ -98,7 +98,7 @@ export default function HyperlocalMap({ progress = 1 }) {
             return <path key={n.id} d={`M${n.x} ${n.y} L${P.x} ${P.y}`} stroke={on ? 'var(--color-signal-2)' : 'var(--color-signal)'} strokeWidth={on ? 2.4 : 1.6} strokeDasharray="7 9" fill="none" vectorEffect="non-scaling-stroke" style={{ opacity: reveal(i) * (active == null ? 0.7 : on ? 1 : 0.3), transition: 'opacity 0.3s' }} />
           })}
 
-          {/* hourly readings travelling in, under the card */}
+          {/* readings travelling in (sent hourly), under the card */}
           {live && NODES.map((n, i) => reveal(i) > 0.9 && (
             <g key={n.id} className="hl-spacket" style={{ '--dx': `${P.x - n.x}px`, '--dy': `${P.y - n.y}px`, animationDelay: `${(i * 0.43) % 2.6}s` }}>
               <circle cx={n.x} cy={n.y} r="12" fill="var(--color-signal)" opacity="0.22" />
@@ -269,7 +269,7 @@ function MapKey() {
     [<span key="i" className="relative block h-3 w-3 rounded-full border-2 border-data-2 bg-phenode-blue" />, 'PheNode'],
     [<span key="i" className="block h-2.5 w-2.5 rounded-full bg-data-2" />, 'Wireless sensor'],
     [<svg key="i" viewBox="0 0 28 8" className="h-2 w-7"><path d="M1 4 H27" stroke="var(--color-signal)" strokeOpacity="0.8" strokeWidth="1.4" strokeDasharray="3 3" /></svg>, 'LoRaWAN link'],
-    [<span key="i" className="block h-2 w-2 rounded-full bg-signal" />, 'Hourly reading'],
+    [<span key="i" className="block h-2 w-2 rounded-full bg-signal" />, 'Readings · sent hourly'],
     [<span key="i" className="block h-2.5 w-2.5 rounded-full border-2 border-data" />, 'Data uplink · cellular / Wi‑Fi / satellite'],
   ]
   return (

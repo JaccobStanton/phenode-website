@@ -28,8 +28,8 @@ export default function HowItWorks() {
                   <h2 className="display-lg reveal mt-5 max-w-[16ch]" style={{ fontSize: 'clamp(2.25rem, min(5vw, 9.5vh), 4.5rem)' }}>From measurement to meaningful data.</h2>
                   <p className="lede reveal mt-[clamp(1rem,2.6vh,1.5rem)] max-w-[44ch]">Environmental readings leave the hardware as a signal and arrive in your workflow as structured datasets, and you maintain control at every step.</p>
                   <ButtonPair className="reveal mt-[clamp(1.5rem,3.5vh,2.25rem)]">
-                    <Button to="/phenode/data-platform" variant="primary">The data platform</Button>
-                    <Button to="/phenode/software" variant="ghost">The software</Button>
+                    <Button to="/phenode#data-platform" variant="primary">The data platform</Button>
+                    <Button to="/phenode#software" variant="ghost">The software</Button>
                   </ButtonPair>
                 </div>
                 <JourneyStage active={active} className="reveal hidden md:col-span-5 md:block" />

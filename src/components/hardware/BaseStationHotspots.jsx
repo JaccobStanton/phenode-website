@@ -2,12 +2,13 @@ import { Img } from '../ui/primitives.jsx'
 import { BASE_STATION_PARTS } from '../../data/baseStationParts.js'
 
 /**
- * The annotated 2D base-station render (hardware/base-station-v4) — what BaseStationExplorer shows when WebGL
- * is unavailable. Positions and copy are shared with the hero's PartExplorer.
+ * The annotated 2D base-station render (hardware/base-station-v4): the base station explorer's "Annotated" view, and
+ * what it shows when WebGL is unavailable. Positions and copy are shared with the hero's PartExplorer. `className`
+ * sets the width (full width by default); the height follows the render's 2400 × 1625 ratio, so the points stay put.
  */
-export default function BaseStationHotspots({ active = null, onSelect = () => {}, className = '' }) {
+export default function BaseStationHotspots({ active = null, onSelect = () => {}, className = 'w-full' }) {
   return (
-    <div className={`relative aspect-[2400/1625] w-full ${className}`}>
+    <div className={`relative aspect-[2400/1625] ${className}`}>
       <Img name="hardware/base-station-v4" widths={[600, 1000, 1600, 2400]} sizes="(min-width:1024px) 60vw, 92vw" alt="PheNode base station with each component annotated." className="h-full w-full object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.18)]" />
       {BASE_STATION_PARTS.map((h) => (
         <button

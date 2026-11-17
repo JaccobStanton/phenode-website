@@ -13,9 +13,10 @@ export const SENSOR_CATEGORIES = [
 
 export const SENSORS = [
   // Included on the wireless node
-  { id: 'ws-air', category: 'weather', name: 'Ambient air (built in)', short: 'Air T / RH / pressure', measures: ['Air temperature', 'Relative humidity', 'Air pressure', 'Air quality'], builtIn: true, host: ['node'] },
   { id: 'ws-lux', category: 'plant', name: 'Light intensity (built in)', short: 'Lux', measures: ['Lux / daylength'], builtIn: true, host: ['node'] },
-  // Add-ons
+  // Add-ons. Ambient air plugs into one of the node's two sensor ports (Jake, Nov 17: the node no longer has its own
+  // air sensors; no air quality either).
+  { id: 'ws-air', category: 'weather', name: 'Ambient air sensor', short: 'Air T / RH / pressure', measures: ['Air temperature', 'Relative humidity', 'Air pressure'], host: ['node'] },
   { id: 'soil-standard', category: 'soil', name: 'Standard soil sensor', short: 'Soil probe', measures: ['Soil moisture (VWC)', 'Soil temperature', 'Soil EC (salinity)'], host: ['node', 'base'], perNodeMax: 2, image: 'sensor-soil-standard', requires: 'Cable + probe', configurable: true },
   { id: 'water-potential', category: 'water', name: 'Water potential sensor', short: 'Water potential', measures: ['Soil water potential'], host: ['base'], image: 'sensor-water-potential-2026', requires: 'Cable', configurable: true },
   { id: 'profile-probe', category: 'soil', name: 'Soil profile probe', short: 'Profile probe', measures: ['Soil moisture at 15/30/45/60 cm', 'Soil temperature at 15/30/45/60 cm'], host: ['base'], image: 'sensor-profile-probe-angle', requires: 'Installation tool recommended', configurable: true },
@@ -33,8 +34,8 @@ export const SENSOR_BY_ID = Object.fromEntries(SENSORS.map((s) => [s.id, s]))
 /** Example packages — presented as starting points, not SKUs. */
 export const PACKAGES = [
   { id: 'soil', name: 'Soil package', for: 'Soil moisture, temperature and salinity at plot scale', node: ['soil-standard', 'soil-standard'], base: [] },
-  { id: 'fire-weather', name: 'Fire-weather package', for: 'Temperature, humidity, wind and rainfall where conditions change', node: [], base: ['bs-wind', 'bs-rain'] },
-  { id: 'restoration', name: 'Restoration package', for: 'Soil moisture and microclimate across a restoration site', node: ['soil-standard'], base: ['bs-rain'] },
+  { id: 'fire-weather', name: 'Fire-weather package', for: 'Temperature, humidity, wind and rainfall where conditions change', node: ['ws-air'], base: ['bs-wind', 'bs-rain'] },
+  { id: 'restoration', name: 'Restoration package', for: 'Soil moisture and microclimate across a restoration site', node: ['soil-standard', 'ws-air'], base: ['bs-rain'] },
   { id: 'research', name: 'Research package', for: 'Consistent plot-level monitoring across trials', node: ['soil-standard'], base: ['bs-solar', 'bs-imager'] },
 ]
 

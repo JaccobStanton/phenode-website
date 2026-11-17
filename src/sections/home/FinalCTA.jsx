@@ -14,7 +14,7 @@ export default function FinalCTA() {
       <Container>
         <div ref={reveal} className="relative flex flex-col items-center text-center">
           <p className="eyebrow reveal">The complete system</p>
-          {/* Jake, Nov 16: this title, no line under it, and one way on: to the PheNode pages */}
+          {/* Jake, Nov 16: this title, no line under it, and one way on: to the PheNode page */}
           <h2 className="display-xl reveal mt-5 max-w-[14ch]">Built for the environment you need to understand.</h2>
           <div className="reveal mt-9 flex flex-wrap justify-center gap-3">
             {FEATURES.designSystem && <Button to="/design-your-system" variant="primary">{primaryCta === 'Design your system' ? 'Design your system' : primaryCta}</Button>}

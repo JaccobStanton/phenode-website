@@ -169,15 +169,31 @@ body {
   background-color: var(--color-phenode-blue-deep); border-color: rgba(122, 176, 240, 0.55); color: #fff;
   box-shadow: var(--btn-glow);
 }
+/* The menu button and the menu panel it opens (Jake, Nov 17: no blue highlight on hover): the button fills Agrela blue
+   like the filled buttons; the panel's links pick up a blue row and blue text (the lighter blue, 5.3:1 on ink). */
+.nav-sheet-link { transition: background-color 0.2s, color 0.2s; }
+@media (hover: hover) {
+  .nav-burger:hover { background-color: var(--color-phenode-blue-deep); color: #fff; box-shadow: 0 6px 18px -8px rgba(26, 117, 224, 0.85), 0 0 16px -6px rgba(26, 117, 224, 0.55); }
+  .nav-sheet-link:hover { background-color: rgba(26, 117, 224, 0.16); color: var(--color-phenode-blue-light); }
+}
+.nav-burger:focus-visible { background-color: var(--color-phenode-blue-deep); color: #fff; }
+.nav-sheet-link:focus-visible { background-color: rgba(26, 117, 224, 0.16); color: var(--color-phenode-blue-light); }
 @media (prefers-reduced-motion: reduce) {
   .btn-primary svg, .btn-primary-ink svg { transition: none; transform: none !important; }
 }
 
+/* App captures shown full width (PheNode page, Data platform: Downloads and Compare; Jake, Nov 17: "full width
+   across", "not too big"): as wide as the content column, unless that would make the 8:5 frame taller than the screen
+   below the header, in which case it narrows (centred) so the whole capture is in view at once. */
+.screen-fit { width: 100%; max-width: min(100%, calc((100svh - 150px) * 1.6)); margin-inline: auto; }
+
 /* Home 04: the data journey's stage panel ------------------------------ */
 /* The illustration box gives way first on short screens, so the pinned stage always fits the viewport. */
 .journey-stage { height: clamp(150px, calc(100vh - 470px), 300px); isolation: isolate; }
-/* a soft blue backlight behind the drawing, so its dark navy parts read against the dark blue page */
-.journey-stage::before {
+/* a soft blue backlight behind the drawing, so its dark navy parts read against the dark blue page. .journey-glow puts
+   the same light behind a single drawing (the Download / API drawing in the PheNode page's Data platform header). */
+.journey-glow { position: relative; isolation: isolate; }
+.journey-stage::before, .journey-glow::before {
   content: ''; position: absolute; inset: -18% -12%; z-index: -1; pointer-events: none; filter: blur(6px);
   background: radial-gradient(50% 50% at 50% 54%, rgba(13, 86, 255, 0.3), rgba(13, 86, 255, 0.1) 55%, transparent 75%);
 }
@@ -356,7 +372,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 /* Statement: words brighten in reading order as it scrolls through (--w 0 → 1, word index --i of --n) and stay lit when
    scrolling back up. Unread words sit at 0.4 so they still clear 3:1 (large-text AA) against the stage. */
 .stage-word { opacity: clamp(0.4, calc(var(--w, 1) * (var(--n) + 3) - var(--i)), 1); transition: opacity 0.12s linear; }
-/* The key phrases ("one platform", "you need to answer") turn Agrela blue as each word lights (--lit), then bloom into
+/* The key phrases ("one solution", "you need to answer") turn Agrela blue as each word lights (--lit), then bloom into
    a soft blue glow over the next few words of scroll (--g). The glow is kept light (halved on Jake's request, Nov 13). */
 .stage-glow {
   --lit: clamp(0, calc(var(--w, 1) * (var(--n) + 3) - var(--i)), 1);

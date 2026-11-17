@@ -12,9 +12,9 @@ import { homeNo } from '../../data/homeSections.js'
 // safe, even if your subscription expires." (no two-year figure), "track rainfall against local references".
 const PARTS = [
   { title: 'Hardware', to: '/phenode', text: 'Solar-charged nodes with two agnostic sensor ports, and an aluminum-framed base station that mounts on a post, pole, tripod or tower.' },
-  { title: 'Communications', to: '/phenode/base-station', text: 'Nodes report hourly to the nearest PheNode over LoRaWAN. Cellular and cloud fees are covered by the subscription.' },
-  { title: 'Data', to: '/phenode/data-platform', text: 'Download .csv datasets or connect your own tools. We keep your data safe, even if your subscription expires.' },
-  { title: 'Software', to: '/phenode/software', text: 'See every node on a map and the site in daily images, track rainfall against local references, and add sub-accounts for your team.' },
+  { title: 'Communications', to: '/phenode#base-station', text: 'Nodes report hourly to the nearest PheNode over LoRaWAN. Cellular and cloud fees are covered by the subscription.' },
+  { title: 'Data', to: '/phenode#data-platform', text: 'Download .csv datasets or connect your own tools. We keep your data safe, even if your subscription expires.' },
+  { title: 'Software', to: '/phenode#software', text: 'See every node on a map and the site in daily images, track rainfall against local references, and add sub-accounts for your team.' },
 ]
 
 /**
@@ -43,7 +43,7 @@ export default function WhatIsPheNode() {
                 </ul>
                 <ButtonPair className="reveal mt-10">
                   <Button to="/phenode" variant="primary-ink">Explore the system</Button>
-                  <Button to="/phenode/data-platform" variant="ghost-ink">How it works</Button>
+                  <Button to="/phenode#data-platform" variant="ghost-ink">How it works</Button>
                 </ButtonPair>
               </div>
             </div>

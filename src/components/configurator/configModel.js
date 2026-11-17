@@ -101,7 +101,7 @@ export function summarize(config) {
     backendEnabled: config.software.includes('backend'),
     measurements: [...new Set([
       ...(config.base.count ? ['Air temperature', 'Relative humidity', 'Air pressure', 'Rainfall', 'Wind speed / direction / gust', 'Solar radiation', 'Imaging'] : []),
-      ...(nodes ? ['Lux / daylength', 'Air quality'] : []),
+      ...(nodes ? ['Lux / daylength'] : []),
       ...(soilOnNodes + baseSoil ? ['Soil moisture (VWC)', 'Soil temperature', 'Soil EC'] : []),
       ...(waterPotential ? ['Soil water potential'] : []),
       ...(profile ? ['Soil profile 15/30/45/60 cm'] : []),
@@ -151,7 +151,7 @@ export function configFromAnswers({ monitor, area, frequency, existingSensors })
   cfg.nodeTemplate = { soilProbes: monitor === 'soil' || monitor === 'plots' || monitor === 'restoration' ? 2 : monitor === 'vegetation' ? 1 : 0 }
   cfg.baseAddons = { ...cfg.baseAddons, 'custom-sdi12': existingSensors === 'yes' ? 1 : 0, 'water-potential': monitor === 'soil' ? 1 : 0 }
   cfg.software = [...new Set([...cfg.software, ...(frequency === 'sub-hourly' || existingSensors === 'yes' ? ['api'] : [])])]
-  cfg.notes = frequency === 'sub-hourly' ? 'Wireless nodes transmit hourly; sub-hourly cadence applies to base-station sensors — review with Agrela.' : null
+  cfg.notes = frequency === 'sub-hourly' ? 'Wireless nodes measure every 15 minutes and transmit hourly — review your cadence with Agrela.' : null
   return cfg
 }
 

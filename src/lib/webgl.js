@@ -7,8 +7,9 @@ export function webglOk() {
 }
 
 /**
- * Public URL of a model in public/models/. VITE_MODEL_SUFFIX is for hosted previews that can't serve .glb:
- * they ship a glTF-JSON twin (e.g. wireless-node.glb.json) and build with VITE_MODEL_SUFFIX=.json.
+ * Public URL of a model in public/models/. VITE_MODEL_SUFFIX is for hosted previews that can't serve .glb (the Claude
+ * preview): they ship a JS module twin of each model (e.g. models/wireless-node.glb.js, made with
+ * scripts/models/module-twin.mjs) and build with VITE_MODEL_SUFFIX=.js; ProductModel3D loads those with import().
  */
 export const modelUrl = (file) => `${import.meta.env.BASE_URL}models/${file}${import.meta.env.VITE_MODEL_SUFFIX || ''}`
 

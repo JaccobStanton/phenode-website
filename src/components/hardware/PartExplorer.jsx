@@ -117,7 +117,8 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
 
       {/* index strip: lights up with the component under the pointer; choosing one opens its close-up */}
       <div className="mt-5">
-        <ul className="mx-auto grid w-fit grid-cols-2 justify-items-start gap-x-6 gap-y-1 border-t border-white/10 pt-4 sm:grid-cols-4" aria-label="Base station components">
+        {/* nine components since the solar radiation sensor joined (Nov 17): 3 × 3 from sm, 2 columns on phones */}
+        <ul className="mx-auto grid w-fit grid-cols-2 justify-items-start gap-x-6 gap-y-1 border-t border-white/10 pt-4 sm:grid-cols-3" aria-label="Base station components">
           {BASE_STATION_PARTS.map((p) => {
             const on = current?.id === p.id
             return (

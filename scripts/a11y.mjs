@@ -2,7 +2,7 @@
 import { chromium } from 'playwright'
 import fs from 'node:fs'
 const axe = fs.readFileSync('node_modules/axe-core/axe.min.js', 'utf8')
-const routes = process.argv.slice(2).length ? process.argv.slice(2) : ['/', '/phenode', '/phenode/wireless-node', '/phenode/base-station', '/phenode/data-platform', '/phenode/software', '/applications', '/applications/agriculture', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company', '/legal/privacy']
+const routes = process.argv.slice(2).length ? process.argv.slice(2) : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/case-studies/the-ray-i85', '/design-your-system', '/resources', '/support', '/contact', '/company', '/legal/privacy']
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
 let total = 0
 for (const [w, h] of [[1440, 900], [390, 844]]) {
