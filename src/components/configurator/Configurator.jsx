@@ -6,7 +6,8 @@ import ConfigScene from './ConfigScene.jsx'
 import LeadForm from './LeadForm.jsx'
 import { reducer, DEFAULT_CONFIG, APPLICATION_OPTIONS, SCALE_OPTIONS, BASE_ADDON_OPTIONS, summarize, referenceId, encodeConfig, decodeConfig, configFromNeed, nodeProbes } from './configModel.js'
 import { SOFTWARE_MODULES, SENSOR_BY_ID, SENSOR_CATEGORIES } from '../../data/sensors.js'
-import { Img, Tag } from '../ui/primitives.jsx'
+import { Tag } from '../ui/primitives.jsx'
+import SystemPair from '../hardware/SystemPair.jsx'
 
 const STEPS = ['Application', 'Scale', 'Base station', 'Wireless nodes', 'Configure nodes', 'Software', 'Your system']
 const KEY = 'agrela.config.v1'
@@ -66,7 +67,7 @@ export default function Configurator({ initial }) {
           <div className="relative overflow-hidden rounded-xl border border-white/10 bg-ink-2">
             {step === 6 ? (
               <div className="relative p-6 md:p-10">
-                <Img name="hardware/system-composite" widths={[600, 1000, 1600]} sizes="(min-width:1024px) 56vw, 92vw" alt="PheNode base station and wireless node" className="mx-auto h-auto w-full max-w-[720px] object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.5)]" />
+                <SystemPair className="mx-auto w-full max-w-[720px]" baseSizes="(min-width:1024px) 56vw, 92vw" nodeSizes="(min-width:1024px) 13vw, 24vw" />
                 <div className="absolute left-4 top-4 flex gap-2"><Tag tone="data">{ref}</Tag></div>
               </div>
             ) : (

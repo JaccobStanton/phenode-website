@@ -9,7 +9,7 @@ import { FEATURES } from '../../data/features.js'
 export default function WirelessNodePage() {
   const soil = ADD_ON_SENSORS.find((s) => s.id === 'soil-standard')
   return (
-    <Page title="Wireless sensor node" description="Agrela wireless sensor: solar-powered, LoRaWAN, up to 1 km from a PheNode base station, with ports for two soil probes.">
+    <Page title="Wireless sensor node" description="Agrela wireless sensor: solar-powered, LoRaWAN, up to 1 km from a PheNode base station, with two agnostic sensor ports.">
       <section className="theme-ink grain relative overflow-hidden pt-28 pb-16 md:pt-40 md:pb-24">
         <Container className="relative grid items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-6">
@@ -35,7 +35,7 @@ export default function WirelessNodePage() {
         <Container>
           <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             <Stat value="1 km" label="Range" note="Line of sight to a PheNode" />
-            <Stat value="2" label="Soil probe ports" note="Multiple depths per node" />
+            <Stat value="2" label="Agnostic sensor ports" note="Soil probes or other sensors" />
             <Stat value="1 h" label="Transmit cadence" note="LoRaWAN to the nearest PheNode" />
             <Stat value="−40 °C" label="Temperature range" note="to 85 °C, ±0.5–1.0 °C" />
           </div>
@@ -66,7 +66,7 @@ export default function WirelessNodePage() {
             </div>
             <div className="relative lg:col-span-7">
               <Img name="hardware/wireless-node-with-probes" widths={[400, 680]} sizes="(min-width:1024px) 50vw, 90vw" alt="Wireless node with two soil probes attached" className="mx-auto h-auto w-full max-w-[640px] object-contain" />
-              <div className="absolute left-0 top-0"><Tag>Up to two soil probes per node</Tag></div>
+              <div className="absolute left-0 top-0"><Tag>Two agnostic sensor ports · shown with soil probes</Tag></div>
             </div>
           </div>
           <div className="mt-24 border-t border-white/10 pt-12">

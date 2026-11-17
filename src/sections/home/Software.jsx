@@ -55,17 +55,19 @@ export default function Software() {
             </div>
           </div>
           <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2"><Tag tone="data">PheNode software</Tag><span className="font-mono text-[11px] tracking-[0.1em] text-stone">Fleet · base station · wireless network · imaging</span></p>
+          {/* with the details below hidden (FEATURES.homeSoftwareDetails), the way to the Software page moves up here */}
+          {!FEATURES.homeSoftwareDetails && <div className="mt-8"><Button to="/phenode/software" variant="primary">Explore the software</Button></div>}
         </div>
 
-        {/* real views from the software (the recording above covers fleet, base station, map and imaging) */}
-        <div className="mt-20 grid gap-8 md:grid-cols-3">
+        {/* real views from the software (the recording above covers fleet, base station, map and imaging); hidden for now */}
+        {FEATURES.homeSoftwareDetails && <div className="mt-20 grid gap-8 md:grid-cols-3">
           <ScreenCard id="system-diagnostics" caption="Diagnostics — signal, battery, every sensor’s status" sizes="(min-width:768px) 31vw, 92vw" />
           <ScreenCard id="wireless-sensor-measurements" caption="Wireless node — two soil probes, seven days" sizes="(min-width:768px) 31vw, 92vw" />
           <ScreenCard id="multi-sensor-overlay" caption="Compare — one measurement across nodes" sizes="(min-width:768px) 31vw, 92vw" />
-        </div>
+        </div>}
 
-        {/* Precipitation: rainfall, season and the monthly rain gauge check */}
-        <div className="mt-24">
+        {/* Precipitation: rainfall, season and the monthly rain gauge check; hidden for now */}
+        {FEATURES.homeSoftwareDetails && <div className="mt-24">
           <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
               <p className="flex flex-wrap items-center gap-3"><span className="eyebrow">Precipitation</span><Tag tone="signal">New</Tag></p>
@@ -75,7 +77,7 @@ export default function Software() {
           </div>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             <ScreenCard id="precipitation-overview" caption="Today’s rain and the next seven days" sizes="(min-width:768px) 31vw, 92vw" />
-            <ScreenCard id="precipitation-season" caption="The season against normal, and drought" sizes="(min-width:768px) 31vw, 92vw" />
+            <ScreenCard id="precipitation-season" caption="The season against local references, and drought" sizes="(min-width:768px) 31vw, 92vw" />
             <ScreenCard id="precipitation-unit-check" caption="Monthly rain gauge check" sizes="(min-width:768px) 31vw, 92vw" />
           </div>
           <ul className="mt-10 grid gap-x-10 gap-y-6 border-t border-white/10 pt-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -86,10 +88,10 @@ export default function Software() {
               </li>
             ))}
           </ul>
-        </div>
+        </div>}
 
-        {/* capabilities + modules */}
-        <div className="mt-24 grid gap-14 lg:grid-cols-12">
+        {/* capabilities + modules; hidden for now */}
+        {FEATURES.homeSoftwareDetails && <div className="mt-24 grid gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <p className="eyebrow">What the software does today</p>
             <ul className="mt-6 flex flex-col divide-y divide-white/10 border-y border-white/10">
@@ -127,7 +129,7 @@ export default function Software() {
               {FEATURES.designSystem && <Button to="/design-your-system" variant="ghost">Build a system with these modules</Button>}
             </div>
           </div>
-        </div>
+        </div>}
       </Container>
     </Section>
   )

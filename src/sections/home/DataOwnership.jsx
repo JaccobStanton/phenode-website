@@ -14,7 +14,7 @@ const LANES = [
   },
   {
     id: 'advanced', title: 'For power users', tone: 'text-data', items: [
-      ['API', 'Structured data into Grafana, notebooks and pipelines'],
+      ['API', 'Structured data into your notebooks, pipelines and tools'],
       ['Structured data', 'Consistent columns across devices, nodes and sites'],
       ['Dockerized backend', 'A portable backend where self-managed data flow is required'],
       ['Custom workflows', 'Scoped with Agrela around your analysis'],

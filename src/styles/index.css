@@ -378,7 +378,7 @@ input[type=number] { -moz-appearance: textfield; appearance: textfield; }
   .stage-glow { transition: none; }
 }
 
-/* Home intro: "Welcome to Hyperlocal Environmental Intelligence" over the living sensor field --------------- */
+/* Home intro: "Capture Hyperlocal Environmental Intelligence" over the living sensor field --------------- */
 /* IntroHero.jsx sets --x (0 → 1) as the intro scrolls away: the copy recedes while the field fades and dives.
    --horizon matches HORIZON / HORIZON_PHONE in components/viz/sensorField.js. */
 .intro { --x: 0; --horizon: 60%; background-color: #05070A; }

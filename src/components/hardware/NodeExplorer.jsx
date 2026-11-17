@@ -53,7 +53,7 @@ export default function NodeExplorer({ className = '' }) {
             </ModelBoundary>
           ) : (
             <div className="flex h-full items-center justify-center p-10">
-              <Img name="hardware/wireless-node-2026" widths={[320, 600, 880]} sizes="(min-width:1024px) 40vw, 80vw" alt="Agrela wireless sensor node: white enclosure with a solar panel on top, a light sensor window on the front, an antenna, and a mounting bracket with two soil probe ports below." className="max-h-[420px] w-auto object-contain" />
+              <Img name="hardware/wireless-node-2026" widths={[320, 600, 880]} sizes="(min-width:1024px) 40vw, 80vw" alt="Agrela wireless sensor node: white enclosure with a solar panel on top, a light sensor window on the front, an antenna, and a mounting bracket with two agnostic sensor ports below." className="max-h-[420px] w-auto object-contain" />
             </div>
           )}
         </div>

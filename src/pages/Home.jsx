@@ -23,22 +23,25 @@ const Fallback = ({ theme = 'ink' }) => <div className={`theme-${theme} min-h-[4
 export default function Home() {
   return (
     <Page>
-      {/* Once per visit: "Welcome to Hyperlocal Environmental Intelligence", then it slides away to the hero */}
+      {/* Once per visit: "Capture Hyperlocal Environmental Intelligence", then it slides away to the hero */}
       <IntroHero />
       <Hero />
       <WhatIsPheNode />
       <Hyperlocal />
       <HowItWorks />
       <Perspective />
-      <Applications />
-      <Suspense fallback={<Fallback theme="paper" />}><Hardware /></Suspense>
+      {/* "Application experiences": hidden for now (FEATURES.homeApplications) */}
+      {FEATURES.homeApplications && <Applications />}
+      {/* "Hardware": hidden for now (FEATURES.homeHardware) */}
+      {FEATURES.homeHardware && <Suspense fallback={<Fallback theme="paper" />}><Hardware /></Suspense>}
       {/* "Build your PheNode" only advertises the configurator: hidden while that page is off */}
       {FEATURES.designSystem && <Suspense fallback={<Fallback theme="paper" />}><BuildTeaser /></Suspense>}
       <Suspense fallback={<Fallback />}><Software /></Suspense>
       <Suspense fallback={<Fallback />}><Scale /></Suspense>
       <Suspense fallback={<Fallback theme="paper" />}><DataOwnership /></Suspense>
       <Suspense fallback={<Fallback />}><Proof /></Suspense>
-      <Suspense fallback={<Fallback theme="paper" />}><CaseStudiesTeaser /></Suspense>
+      {/* "Case studies": hidden for now (FEATURES.homeCaseStudies) */}
+      {FEATURES.homeCaseStudies && <Suspense fallback={<Fallback theme="paper" />}><CaseStudiesTeaser /></Suspense>}
       <Suspense fallback={<Fallback />}><FinalCTA /></Suspense>
     </Page>
   )

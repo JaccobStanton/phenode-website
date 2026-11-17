@@ -9,7 +9,7 @@ export default function Contact() {
   const [params] = useSearchParams()
   const demo = params.get('intent') === 'demo'
   return (
-    <Page title={demo ? 'Request a demo' : 'Talk to Agrela'} description="Contact Agrela Ecosystems about PheNode: demos, configurations, pricing and deployments.">
+    <Page title={demo ? 'Request a demo' : 'Talk to Agrela'} description="Contact Agrela Ecosystems about PheNode: demos, pricing and deployments.">
       <section className="theme-ink pt-28 pb-10 md:pt-40">
         <Container>
           <p className="eyebrow">{demo ? 'Request a demo' : 'Contact'}</p>

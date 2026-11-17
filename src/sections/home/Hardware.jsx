@@ -16,7 +16,7 @@ export default function Hardware() {
             <Eyebrow index={homeNo('hardware')} className="reveal">Hardware</Eyebrow>
             <div className="mt-5 grid gap-6 lg:grid-cols-12 lg:items-end">
               <h2 className="display-lg reveal max-w-[16ch] lg:col-span-7">The system adapts to the experiment — not the other way around.</h2>
-              <p className="lede reveal max-w-[44ch] lg:col-span-5">Two pieces of hardware, one open sensor interface. Configure what each node carries, where it sits, and how many you need.</p>
+              <p className="lede reveal max-w-[44ch] lg:col-span-5">Two pieces of hardware, one open sensor interface. You decide what each node carries, where it sits, and how many you need.</p>
             </div>
             <div className="reveal mt-14">
               <NodeExplorer />

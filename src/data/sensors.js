@@ -44,7 +44,7 @@ export const SOFTWARE_MODULES = [
   { id: 'downloads', name: 'Data downloads', text: 'CSV exports with your cleaning preferences', default: true },
   { id: 'cleaning', name: 'Data cleaning', text: 'Gap and outlier preferences applied on export', default: true },
   { id: 'wireless', name: 'Wireless network management', text: 'Every node, every PheNode', default: true },
-  { id: 'api', name: 'API access', text: 'Structured data into your own tools (Grafana and more)', default: false },
+  { id: 'api', name: 'API access', text: 'Structured data into your own tools', default: false },
   { id: 'backend', name: 'Dockerized backend', text: 'Portable backend for advanced, self-managed data flow', default: false },
   { id: 'integration', name: 'Custom integration', text: 'Scoped with Agrela for your workflow', default: false },
 ]

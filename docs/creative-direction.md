@@ -76,7 +76,7 @@ Beat by beat:
 | 09 | Build teaser | Paper | Mini configurator preview | Node count ticks; scene instruments itself |
 | 10 | Software | Ink (dashboard-continuous) | Device frames (desktop, laptop, tablet, phone) with illustrative dashboard UI; a packet flies from the field into the screen; screen expands to fill viewport; software module picker | Pinned expand; charts draw |
 | 11 | Your data | Paper | Two-lane diagram: typical users / advanced users | Static with staged reveal |
-| 12 | Proof | Ink | Verified numbers only (founded 2016 at the Danforth Center; commercial since 2023; deployments with The Ray / GDOT (18-mile I-85 pilot), WSDOT, Danforth). Retention stat rendered only when `VERIFIED_CLAIMS.pilotRetention` is true | Count-up on enter |
+| 12 | Proof | Ink | Verified numbers only (founded 2016 at the Danforth Center; commercial since 2023; deployments with The Ray / GDOT (18-mile I-85 pilot), WSDOT, Danforth). No customer-retention stat (not public, Nov 16) | Count-up on enter |
 | 13 | Case studies | Paper | Editorial teasers | Image parallax |
 | 14 | Final CTA | Ink | Full system composite | Slow assembly |
 
@@ -129,7 +129,7 @@ Sensors (onboard + add-on, SDI-12 / RS-485)
 → Backend (ingest API, dockerized)
 → Storage / processing (time-series database, cleaning preferences)
 → PheNode software (dashboard, fleet, wireless network, imaging, downloads)
-→ API / CSV downloads / external tools (Grafana)
+→ API / CSV downloads / external tools
 ```
 
 "View technical architecture" expands the same diagram with the second layer of detail (connectivity options, data plan, portable backend) without leaving the page.

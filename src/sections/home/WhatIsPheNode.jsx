@@ -8,11 +8,13 @@ import { homeNo } from '../../data/homeSections.js'
 // The four parts are the way into the product pages; the system chain below tells the story in order. So each card
 // says something the chain doesn't (how it's built, what it costs to run, what you take away, what you see), every
 // fact from specs.js, and links to the page that goes deeper. (Jake + PM, Nov 13: keep the cards, don't repeat the chain.)
+// Wording from Jake's boss (Nov 16): "two agnostic sensor ports", "aluminum-framed base station", "We keep your data
+// safe, even if your subscription expires." (no two-year figure), "track rainfall against local references".
 const PARTS = [
-  { title: 'Hardware', to: '/phenode', text: 'Solar-charged nodes with two soil probe ports, and an aluminum base station that mounts on a post, pole, tripod or tower.' },
+  { title: 'Hardware', to: '/phenode', text: 'Solar-charged nodes with two agnostic sensor ports, and an aluminum-framed base station that mounts on a post, pole, tripod or tower.' },
   { title: 'Communications', to: '/phenode/base-station', text: 'Nodes report hourly to the nearest PheNode over LoRaWAN. Cellular and cloud fees are covered by the subscription.' },
-  { title: 'Data', to: '/phenode/data-platform', text: 'Download .csv datasets or connect your own tools. Your data is kept in Agrela’s cloud for two years, even if a subscription expires.' },
-  { title: 'Software', to: '/phenode/software', text: 'See every node on a map and the site in daily images, track rainfall against normal, and add sub-accounts for your team.' },
+  { title: 'Data', to: '/phenode/data-platform', text: 'Download .csv datasets or connect your own tools. We keep your data safe, even if your subscription expires.' },
+  { title: 'Software', to: '/phenode/software', text: 'See every node on a map and the site in daily images, track rainfall against local references, and add sub-accounts for your team.' },
 ]
 
 /**
@@ -34,7 +36,8 @@ export default function WhatIsPheNode() {
               <div className="lg:sticky lg:top-28">
                 <Eyebrow index={homeNo('what-is')} className="reveal">What is PheNode?</Eyebrow>
                 <h2 className="display-lg reveal mt-5 max-w-[14ch]"><span className="block whitespace-nowrap">One system.</span> Built around your environment.</h2>
-                <p className="lede reveal mt-6 max-w-[46ch]">PheNode is a flexible, scalable environmental monitoring platform that can be tailored to the needs of the user. It is not a sensor, a weather station or a data logger. It is the whole path from a physical measurement to a dataset you can act on.</p>
+                {/* Jake's PM (Nov 16): the old text repeated the hero's lede (01). Jake chose this one ("low upkeep") */}
+                <p className="lede reveal mt-6 max-w-[46ch]">Once it’s installed, PheNode keeps working on its own: solar power, automatic uploads and remote diagnostics mean fewer trips to the field and more time with your data.</p>
                 <ul className="reveal mt-10 -mx-3 grid border-t hairline pt-3 sm:grid-cols-2" aria-label="What PheNode includes">
                   {PARTS.map((p) => <li key={p.title} className="flex"><PartCard {...p} /></li>)}
                 </ul>

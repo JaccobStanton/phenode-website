@@ -42,7 +42,7 @@ export const WIRELESS_NODE = {
     'LoRaWAN communication — low power, long range',
     'Communicates with a PheNode up to 1 km away (line of sight)',
     'Mounting bracket',
-    'Ports for up to two soil probes',
+    'Two agnostic sensor ports',
     'Radiation shield for ambient-air measurements',
   ],
   coreMeasurements: ['Air temperature', 'Relative humidity', 'Air pressure', 'Lux (light intensity / daylength)', 'Air quality / gas resistance'],
@@ -96,8 +96,8 @@ export const SOFTWARE = {
   capabilities: [
     { id: 'fleet', name: 'Fleet management', text: 'Manage, view and download data for an entire PheNode fleet from one place.' },
     { id: 'wireless', name: 'Wireless sensor network', text: 'View the wireless sensor network data for every PheNode in your fleet.' },
-    { id: 'viz', name: 'Data visualization', text: 'Flexible, robust time-series visualization, with Grafana available through the API.' },
-    { id: 'precipitation', name: 'Precipitation', text: 'Rainfall, storms, forecast, season against normal and drought for every PheNode, and a monthly check of each rain gauge against the official gauges nearby.' },
+    { id: 'viz', name: 'Data visualization', text: 'Flexible, robust time-series visualization.' },
+    { id: 'precipitation', name: 'Precipitation', text: 'Rainfall, storms, forecast and drought for every PheNode, tracked against local references, with a monthly check of each rain gauge against the official gauges nearby.' },
     { id: 'cleaning', name: 'Data cleaning preferences', text: 'Set cleaning preferences for .csv downloads so datasets arrive the way your analysis expects.' },
     { id: 'imaging', name: 'Imaging', text: 'View your operations remotely with images captured by PheNode (1–4 per day per PheNode over cellular).' },
     { id: 'control', name: 'Remote PheNode control', text: 'Adjust settings on deployed hardware without a site visit.' },
@@ -107,8 +107,8 @@ export const SOFTWARE = {
   ],
   dataPlan: [
     'All cellular and cloud infrastructure fees are covered by the service subscription',
-    'Your data is stored and kept safe in Agrela\'s cloud for two years even if a subscription expires',
-    'Hardware warranty while the subscription is active; replacements for failed components and sensors',
+    'Your data is stored and kept safe even if a subscription expires',
+    'The hardware warranty covers failed components and sensors while the subscription is active',
     'Tech support, software demos and real-time remote installation support',
   ],
 }
@@ -122,7 +122,7 @@ export const CONNECTIVITY = {
 export const HEADLINE_NUMBERS = [
   { value: '1 km', label: 'Wireless node range', note: 'Line of sight, node to base station' },
   { value: '500+', label: 'Acres from one PheNode', note: 'With a fleet of wireless sensors (agrelaeco.com)' },
-  { value: '2', label: 'Soil probes per node', note: 'Soil moisture, temperature and EC at multiple depths' },
+  { value: '2', label: 'Agnostic sensor ports per node', note: 'Soil probes or other sensors' },
   { value: '5 MP', label: 'On-board imager', note: 'RGB, 1–4 images per day per PheNode' },
   { value: '−40 °C', label: 'Operating range low end', note: 'Temperature sensing to 85 °C' },
   { value: '4', label: 'Profile-probe depths', note: '15, 30, 45 and 60 cm' },
@@ -133,7 +133,7 @@ export const HEADLINE_NUMBERS = [
  * Flip to true only once Agrela has confirmed the definition, date range and substantiation.
  */
 export const VERIFIED_CLAIMS = {
-  pilotRetention: false, // "100 % pilot-customer retention since 2023"
+  pilotRetention: false, // "100 % pilot-customer retention since 2023" — not to be shown publicly (Jake's PM, Nov 16); nothing reads this any more
   deploymentCount: false,
   measurementsCollected: false,
 }

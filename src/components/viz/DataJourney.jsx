@@ -2,14 +2,14 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { seg, easeInOut, lerp } from '../../lib/motion.js'
 
 export const JOURNEY = [
-  { id: 'sensors', label: 'Sensors', state: '23.4 °C · 54 % RH', tone: 'signal', note: 'Air, soil, light, rain, wind — onboard and add-on sensors, SDI-12 / RS-485 for third-party.' },
+  { id: 'sensors', label: 'Sensors', state: '23.4 °C · 54 % RH', tone: 'signal', note: 'Air, soil, light, rain, wind — onboard and add-on sensors, SDI-12 / RS-485 communication for third-party integrations.' },
   { id: 'node', label: 'Wireless node', state: 'LoRaWAN · hourly', tone: 'signal', note: 'Battery + solar. Transmits to the nearest PheNode up to 1 km away.' },
   { id: 'base', label: 'Base station', state: 'Cellular / Wi-Fi / satellite uplink', tone: 'paper', note: 'Collects every node, adds its own sensor suite and imager, coordinates the network.' },
   { id: 'backend', label: 'Backend', state: 'Ingest API', tone: 'data', note: 'Centralized data collection. Dockerized, so advanced users can run their own.' },
   { id: 'processing', label: 'Processing', state: 'Cleaning preferences', tone: 'data', note: 'Your rules for gaps and outliers, applied consistently on export.' },
   { id: 'database', label: 'Database', state: '{ ts, device, temp… }', tone: 'data', note: 'Structured, time-stamped rows for every device and node in the fleet.' },
   { id: 'dashboard', label: 'Dashboard', state: 'Time series · map · images', tone: 'data', note: 'Fleet status, wireless network, visualization, imaging, remote control.' },
-  { id: 'export', label: 'Download / API', state: '.csv · JSON', tone: 'data', note: 'Datasets you own. Structured access for your own tools, including Grafana.' },
+  { id: 'export', label: 'Download / API', state: '.csv · JSON', tone: 'data', note: 'Datasets you own. Structured access for your own tools.' },
 ]
 
 /**

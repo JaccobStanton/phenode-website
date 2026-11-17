@@ -6,7 +6,7 @@ export const NAV = [
     label: 'PheNode', to: '/phenode',
     children: [
       { label: 'Overview', to: '/phenode', text: 'The whole system in one view' },
-      { label: 'Wireless Sensor Node', to: '/phenode/wireless-node', text: 'Battery, solar, LoRaWAN, two soil ports' },
+      { label: 'Wireless Sensor Node', to: '/phenode/wireless-node', text: 'Solar, LoRaWAN, two agnostic sensor ports' },
       { label: 'Base Station', to: '/phenode/base-station', text: 'Control box, sensor frame, imager' },
       { label: 'Data Platform', to: '/phenode/data-platform', text: 'From measurement to dataset' },
       { label: 'Software', to: '/phenode/software', text: 'Dashboard, downloads, API' },
@@ -38,5 +38,5 @@ export const FOOTER = [
   { heading: 'PheNode', links: [['Overview', '/phenode'], ['Wireless Sensor Node', '/phenode/wireless-node'], ['Base Station', '/phenode/base-station'], ['Data Platform', '/phenode/data-platform'], ['Software', '/phenode/software'], ['Specifications', '/phenode#specifications']] },
   { heading: 'Applications', links: [['Transportation & Infrastructure', '/applications/transportation'], ['Agricultural Research', '/applications/agriculture'], ['Ecological Research', '/applications/ecology'], ['Urban Environmental Intelligence', '/applications/urban'], ['Case Studies', '/case-studies']] },
   { heading: 'Agrela', links: [...(FEATURES.designSystem ? [['Design System', '/design-your-system']] : []), ['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
-  { heading: 'Legal', links: [['Privacy Policy', '/legal/privacy'], ['Terms of service', '/legal/terms']] },
+  { heading: 'Legal', links: [['Privacy Policy', '/legal/privacy'], ['Terms of Service', '/legal/terms']] },
 ]

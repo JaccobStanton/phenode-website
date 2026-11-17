@@ -25,7 +25,7 @@ export const PART_DETAILS = {
   rain: {
     kicker: 'Precipitation',
     lede: 'Tipping-bucket rainfall with an Agrela-designed funnel, measured right at the station.',
-    body: 'In the software it becomes rainfall, storms and the season against normal for every PheNode, and each gauge is checked every month against the official gauges nearby.',
+    body: 'In the software it becomes rainfall and storms for every PheNode, tracked against local references, and each gauge is checked every month against the official gauges nearby.',
     specs: [
       { name: 'Rainfall', value: 'Tipping bucket, Agrela-designed funnel', note: 'Accuracy ±3 %' },
     ],

@@ -9,7 +9,7 @@ All raster assets are served from `public/assets/` as WebP with width variants (
 | Slot | File(s) | Variants | Notes |
 |---|---|---|---|
 | Base station, front render (v4, 2026) | `hardware/base-station-v4` | 600 · 1000 · 1600 · 2400 (2400×1625) | Transparent; used in hero, base-station page, Overview card and the 2D fallback of the 3D explorer |
-| Full system (node + base station) | `hardware/system-composite` | 600 · 1000 · 1600 · 2400 (2400×1449) | Transparent; final CTA, overview, configurator summary. Still shows the older node and base station |
+| Full system (node + base station) | `hardware/base-station-v4` + `hardware/wireless-node-2026` (`components/hardware/SystemPair.jsx`) | as those two images | The PheNode page hero's 2026 composition, used in the home closing section and the configurator summary (Nov 16). The old `hardware/system-composite` image was deleted |
 | Wireless node, front (2026) | `hardware/wireless-node-2026` (from `Wireless Sensor Node.png`) | 320 · 600 · 880 (880×930) | Transparent; node page hero, 3D fallback |
 | Base station on the tower (2026) | `hardware/base-station-pole-2026` (from `PheNode rendering with pole 2026.png`) | 460 · 910 (910×2015) | Transparent; base-station page ("Tower configuration") and home → 02 What is PheNode |
 | Standard soil sensor | `hardware/sensor-soil-standard` | 400 · 700 · 1100 | Transparent |

@@ -9,8 +9,9 @@ import { ALWAYS_SHOW, INTRO_LANDED, hasSeen, markSeen } from '../../lib/intro.js
 const IDLE_MS = 180 // a pause this long (no scrolling, no finger down) is a safe moment to remove the intro
 
 /**
- * The home page's opening screen: "Welcome to Hyperlocal Environmental Intelligence" over the living sensor field
- * (components/viz/sensorField.js), with one button, "Explore PheNode", that slides the visitor down to the hero.
+ * The home page's opening screen: "Capture Hyperlocal Environmental Intelligence" (Jake, Nov 16; was "Welcome to …")
+ * over the living sensor field (components/viz/sensorField.js), with one button, "Explore PheNode", that slides the
+ * visitor down to the hero.
  *
  * It belongs to the first moments of a visit only. Once the visitor reaches the hero — by the button or by scrolling —
  * the intro is removed and the scroll position moved by its height in the same frame, so nothing on screen shifts and
@@ -186,7 +187,7 @@ export default function IntroHero() {
 
       <div className="intro-stage relative z-10 flex h-full items-center justify-center px-5">
         <div ref={copy} className="intro-copy flex flex-col items-center text-center">
-          <p className="intro-word intro-welcome" style={{ '--d': '0.35s' }}>Welcome to</p>
+          <p className="intro-word intro-welcome" style={{ '--d': '0.35s' }}>Capture</p>
           <p className="intro-title">
             <span className="block"><span className="intro-word" style={{ '--d': '0.55s' }}><span className="intro-grad">Hyperlocal</span></span></span>
             <span className="intro-word" style={{ '--d': '0.75s' }}>Environmental</span>{' '}

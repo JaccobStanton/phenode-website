@@ -1,4 +1,4 @@
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate, Link } from 'react-router-dom'
 import Page from '../components/layout/Page.jsx'
 import { Container, Section, Tag } from '../components/ui/primitives.jsx'
 import { TERMS_BLOCKS, TERMS_UPDATED } from '../data/legalTerms.jsx'
@@ -7,16 +7,17 @@ const link = 'text-ink underline decoration-ink/30 underline-offset-4 transition
 
 /**
  * Legal documents. Each is a list of blocks: ['h', heading], ['p', paragraph], ['ul', [items]],
- * ['p1'] / ['p2'] indented items. Both are Agrela's published documents, copied word for word (Jake, Nov 15, 2026):
- * - The privacy policy is from https://www.agrelaeco.com/privacy-policy, with its headings, list and links.
- *   Only the link to the Terms of Service is repaired: on agrelaeco.com its address ends in ")", which doesn't
- *   open the page. The text reads the same.
- * - The terms are from https://www.agrelaeco.com/terms-of-service (data/legalTerms.jsx).
+ * ['p1'] / ['p2'] indented items. Both are Agrela's updated documents (November 2026), copied word for word
+ * from the versions Jake sent on Nov 16, 2026:
+ * - The privacy policy keeps the headings, list and links of https://www.agrelaeco.com/privacy-policy, which the
+ *   update follows. One change (Jake, Nov 16): "Terms of Service" links to this site's own Terms page, and the
+ *   agrelaeco.com address that followed it in parentheses is left out, so the text doesn't name another page.
+ * - The terms are in data/legalTerms.jsx.
  */
 const DOCS = {
   privacy: {
     title: 'Privacy Policy',
-    updated: 'Last updated April, 2023',
+    updated: 'Last updated November, 2026',
     blocks: [
       ['p', 'Agrela Ecosystems, Inc. (“Agrela”) has created this privacy statement in order to demonstrate our firm commitment to privacy. Due to the potentially sensitive nature of the information we collect from our users, we believe it is important to satisfy strict privacy requirements. The following discloses our information gathering and dissemination practices for this Web site:'],
       ['h', 'Collected Information:'],
@@ -30,12 +31,12 @@ const DOCS = {
       ['p', 'This site may contain links to other sites. Agrela is not responsible for the privacy practices or the content of such websites.'],
       ['h', 'Security:'],
       ['p', 'This Web site has security measures in place to protect the loss, misuse and alteration of the information under our control. All user data is stored on our servers.'],
-      ['p', 'The user may request, via email or telephone, additional information about Agrela’s security practices. The requested security information will be made available to the user via email, fax or postal mail, in our discretion.'],
+      ['p', 'The user may request, via email, additional information about Agrela’s security practices. The requested security information will be made available to the user via email, fax or postal mail, at our discretion.'],
       ['h', 'Amendments:'],
       ['p', 'From time-to-time, we may amend our information practices as described in this privacy statement.'],
       ['h', 'Contacting the Web Site:'],
-      ['p', <>If you have any questions about this privacy statement, the practices of this site, or your dealings with this Web site, you can contact: <a href="mailto:info@agrelaeco.com" className={link}>info@agrelaeco.com</a>, or call (314) 485-9850.</>],
-      ['p', <>For information regarding user data and privacy related to the use of the PheNode or Agrela’s Services, see Agrela’s Terms of Service (<a href="https://www.agrelaeco.com/terms-of-service" target="_blank" rel="noreferrer" className={link}>https://www.agrelaeco.com/terms-of-service</a>), which are adopted and incorporated herein. Any capitalized terms used in this Privacy Policy not otherwise defined herein shall have their meaning set forth in the Terms of Service.</>],
+      ['p', <>If you have any questions about this privacy statement, the practices of this site, or your dealings with this Web site, you can contact: <a href="mailto:info@agrelaeco.com" className={link}>info@agrelaeco.com</a>.</>],
+      ['p', <>For information regarding user data and privacy related to the use of the PheNode or Agrela’s Services, see Agrela’s <Link to="/legal/terms" className={link}>Terms of Service</Link>, which are adopted and incorporated herein. Any capitalized terms used in this Privacy Policy not otherwise defined herein shall have their meaning set forth in the Terms of Service.</>],
     ],
   },
   terms: {
@@ -72,7 +73,8 @@ export default function Legal() {
       </section>
       <Section theme="paper" className="!pt-8">
         <Container>
-          <div className="max-w-[72ch] border-t border-ink/10 pt-8">
+          {/* full container width, like the title above (Jake, Nov 16) */}
+          <div className="border-t border-ink/10 pt-8">
             {d.blocks.map(([kind, content], i) => <Block key={i} kind={kind} content={content} />)}
             {d.placeholder && <p className="mt-10 text-[13px] text-stone-2">Replace this placeholder with Agrela’s reviewed {d.title.toLowerCase()}.</p>}
           </div>

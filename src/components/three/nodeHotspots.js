@@ -10,6 +10,6 @@ export const HOTSPOTS = [
   { id: 'radio', label: 'LoRaWAN radio', text: 'Low-power, long-range link to the base station: up to 1 km line of sight. Transmits hourly.' },
   { id: 'battery', label: 'Battery + USB-C', text: 'Internal rechargeable battery. Plug into USB-C to recharge for up to a growing season of full use without sunlight.' },
   { id: 'air', label: 'Ambient air sensors', text: 'Air temperature (±0.5–1.0 °C), humidity (±3 %), pressure and air quality.' },
-  { id: 'soil', label: 'Soil probe ports', text: 'Plug in up to two soil probes — moisture (VWC), temperature and electrical conductivity at multiple depths.' },
+  { id: 'soil', label: 'Agnostic sensor ports', text: 'Two ports for soil probes — moisture (VWC), temperature and electrical conductivity at multiple depths — or other sensors.' },
   { id: 'mount', label: 'Mounting bracket', text: 'Black anodized aluminum bracket spans the base of the enclosure; mounts to posts and poles.' },
 ]

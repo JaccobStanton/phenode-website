@@ -1,5 +1,5 @@
 # Netlify settings for the Agrela / PheNode marketing site.
-# Deep links (/phenode, /design-your-system, …) are handled by public/_redirects,
+# Deep links (/phenode, /case-studies, …) are handled by public/_redirects,
 # which Vite copies into dist/.
 
 [build]

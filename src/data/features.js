@@ -40,4 +40,35 @@ export const FEATURES = {
    * pages' addresses go to /case-studies. Set to true to link the case study pages again.
    */
   caseStudyPages: false,
+
+  /**
+   * The home page's "Application experiences" section (#applications): its header and the four application chapters
+   * (agriculture, ecology, urban, transportation). Hidden for now (Jake, Nov 16). While off, the home sections after it
+   * are renumbered (Hardware becomes 06; data/homeSections.js), and "Choose your perspective" no longer says the page
+   * below reorders: once a role is picked it points to the Applications page, which is still ordered for that role.
+   * The Applications page and the four application pages are unaffected. Set to true to bring the section back.
+   */
+  homeApplications: false,
+
+  /**
+   * The home page's "Hardware" section (#hardware): the wireless node and base station explorers and the sensor cards.
+   * Hidden for now (Jake, Nov 16). While off, the home sections after it are renumbered (Software becomes 06;
+   * data/homeSections.js) and its 3D viewers aren't loaded on the home page. The PheNode pages are unaffected.
+   * Set to true to bring the section back.
+   */
+  homeHardware: false,
+
+  /**
+   * In the home "Software" section: the three software screenshots, the Precipitation part (with its three screenshots),
+   * "What the software does today" and "Configurable software". Hidden for now (Jake and his PM, Nov 16). While off,
+   * the section keeps its title, the software recording and "Explore the software", right under the recording. The
+   * Software page is unaffected. Set to true to bring them back.
+   */
+  homeSoftwareDetails: false,
+
+  /**
+   * The home page's "Case studies" section (the three deployments with their press releases). Hidden for now
+   * (Jake, Nov 16); the Case Studies page is unaffected. Set to true to bring the section back (it takes the next number).
+   */
+  homeCaseStudies: false,
 }

@@ -1,6 +1,9 @@
 /**
  * Application chapters, roles and "what do you need to understand" needs.
  * Chapter order is re-ranked by the visitor's selected role (see PersonalizationContext).
+ * Titles, summaries, measurements and the agriculture CTA follow Jake's PM's notes (Nov 16, 2026), lightly copyedited
+ * (Jake): plot-level / site-level hyphenated, "year over year" for YOY, sentence case. The hidden configurator's
+ * role CTAs below (e.g. 'Instrument a trial') were not part of those notes.
  */
 export const APPLICATIONS = [
   {
@@ -8,9 +11,9 @@ export const APPLICATIONS = [
     kicker: 'Transportation & smart infrastructure',
     title: 'Measure whether restoration is actually working.',
     headline: 'Roadside intelligence',
-    summary: 'Meadow restoration, re-naturalization and slope remediation along transportation corridors — monitored where the vegetation is, at intervals along the route.',
+    summary: 'Meadow restoration, re-naturalization, and slope remediation projects monitored along transportation corridors.',
     environment: 'corridor',
-    measurements: ['Soil moisture retention', 'Microclimate conditions', 'Rainfall and wind', 'Vegetation development (imaging)', 'Slope-remediation performance over time'],
+    measurements: ['Soil moisture retention change over time', 'Microclimate conditions', 'Rainfall and wind', 'Visual record of plant performance year over year', 'Rainfall vs. moisture infiltration depth'],
     benefits: ['Environmental conditions', 'Natural habitat', 'Infrastructure resilience', 'Safety'],
     sub: {
       id: 'fire-weather',
@@ -29,23 +32,23 @@ export const APPLICATIONS = [
     headline: 'Plot-level monitoring',
     summary: 'Each plot can carry its own node. Environmental variability becomes part of the dataset instead of noise around it — replicated, normalized to your preferences, and comparable across trials.',
     environment: 'field',
-    measurements: ['Soil moisture, temperature and EC per plot', 'Canopy microclimate', 'Solar radiation and light', 'Rainfall', 'Growing degree days', 'Imaging'],
+    measurements: ['Plot-level measurements', 'Canopy microclimate', 'Solar radiation and ET', 'Rainfall', 'Growing degree days', 'Imaging', 'Granular and site-level derived measurements'],
     pipeline: {
       title: 'One data system from controlled environment to field.',
       stages: ['Growth chamber', 'Greenhouse', 'Field experiment'],
       text: 'The hardware is physically reconfigurable for indoor and outdoor operation, so the same monitoring approach — and your own standardization of the data — follows a program from chamber to greenhouse to field trial.',
     },
-    cta: 'Instrument a trial',
+    cta: 'Monitor your field trials at plot level',
     route: '/applications/agriculture',
   },
   {
     id: 'ecology',
     kicker: 'Ecological research & restoration',
-    title: 'Measure the environment around living systems.',
+    title: 'Measure complex, ever-changing environments.',
     headline: 'Watch ecosystems change',
-    summary: 'Phenology, microclimate and environmental change in grasslands, prairies, forests, wetlands and restoration sites — measured continuously, where the organisms are.',
+    summary: 'Phenology, microclimate and environmental change in grasslands, prairies, forests, wetlands and restoration sites — measured continuously.',
     environment: 'ecosystem',
-    measurements: ['Microclimate (air T / RH / pressure)', 'Light and daylength', 'Soil moisture and temperature', 'Rainfall', 'Imaging for phenology', 'Restoration outcomes over seasons'],
+    measurements: ['Microclimate (air T / RH / pressure)', 'Light and daylength', 'Soil moisture and temperature', 'Soil moisture retention change over time', 'Rainfall', 'Imaging for phenology', 'Restoration outcomes over seasons'],
     cta: 'Monitor a site',
     route: '/applications/ecology',
   },
@@ -56,7 +59,7 @@ export const APPLICATIONS = [
     headline: 'Extreme heat, block by block',
     summary: 'Built surfaces, shade, vegetation and land cover create substantial differences in local conditions. Distributed monitoring shows where and when heat develops across neighborhoods, parks, corridors and campuses.',
     environment: 'city',
-    measurements: ['Air temperature', 'Relative humidity', 'Solar radiation', 'Wind', 'Surface-adjacent soil moisture in green infrastructure'],
+    measurements: ['Air temperature', 'Relative humidity', 'Solar radiation', 'Wind', 'Rainfall', 'Surface-adjacent soil moisture in green infrastructure', 'Granular derived heat stress and heat index measurements', 'Wind chill and frost point for winter months'],
     supports: ['Heat monitoring', 'Research', 'Planning', 'Infrastructure decisions', 'Mitigation strategies', 'Public-safety programs', 'Model development'],
     caveat: 'Better hyperlocal environmental information can support decisions intended to reduce heat-related risk. PheNode measures conditions; it does not predict outcomes.',
     cta: 'Plan an urban network',

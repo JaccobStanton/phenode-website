@@ -1,6 +1,7 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react'
+import { Link } from 'react-router-dom'
 import {
-  ArrowDown, Bird, Building2, Cable, ChartSpline, Check, ClipboardList, CloudSun, Cpu, Database, Droplets, Ellipsis,
+  ArrowDown, ArrowRight, Bird, Building2, Cable, ChartSpline, Check, ClipboardList, CloudSun, Cpu, Database, Droplets, Ellipsis,
   FlaskConical, Flame, Gauge, LayoutDashboard, Leaf, Lightbulb, MapPin, Microscope, Mountain, Radar, RotateCcw, Route,
   Shovel, Sprout, ThermometerSun, TreePine, Wheat,
 } from 'lucide-react'
@@ -153,15 +154,16 @@ export default function Perspective() {
               {first ? (
                 <>
                   <Check size={16} strokeWidth={2.4} aria-hidden="true" className="mt-0.5 shrink-0 text-phenode-green" />
-                  <span>Applications below now start with <span className="text-paper">{first.kicker}</span>.</span>
+                  {/* with the home Applications section hidden, the role still orders the Applications page */}
+                  <span>{FEATURES.homeApplications ? 'Applications below now start with ' : 'Applications now start with '}<span className="text-paper">{first.kicker}</span>.</span>
                 </>
-              ) : (
-                <span>An example to start. Pick your role and the rest of this page reorders around the work you do.</span>
-              )}
+              ) : null /* no line before a role is picked (Jake, Nov 16); the live region stays so the change is announced */}
             </p>
             {first && (
               <span className="flex items-center gap-5">
-                <button type="button" onClick={seeApplications} className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowDown size={14} aria-hidden="true" /></button>
+                {FEATURES.homeApplications
+                  ? <button type="button" onClick={seeApplications} className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowDown size={14} aria-hidden="true" /></button>
+                  : <Link to="/applications" className="inline-flex items-center gap-1.5 text-phenode-blue-light underline-offset-4 hover:underline">See them<ArrowRight size={14} aria-hidden="true" /></Link>}
                 <button type="button" onClick={reset} aria-label="Reset your role and question" className="inline-flex items-center gap-1.5 transition-colors hover:text-paper"><RotateCcw size={13} aria-hidden="true" />Reset</button>
               </span>
             )}
@@ -221,7 +223,7 @@ function StartingPoint({ need }) {
   const sensors = [...new Map(need.sensors.map((id) => SENSOR_BY_ID[id]).filter(Boolean).map((s) => [s.id, s])).values()]
   const steps = [
     [Mountain, 'Environment', app.kicker],
-    [MapPin, 'Deployment', `1 PheNode base station · ${NODES[need.scene] ?? 8} wireless nodes ${SPREAD[need.scene]}`],
+    [MapPin, 'Example deployment', `1 PheNode base station · ${NODES[need.scene] ?? 8} wireless nodes ${SPREAD[need.scene]}`],
     [Gauge, 'Sensors', (
       <ul className="flex flex-wrap gap-1.5" aria-label="Sensors">
         {sensors.map((s) => <li key={s.id} className="rounded-full border border-white/15 px-2.5 py-0.5 text-[13px] text-paper/85">{s.short}</li>)}
