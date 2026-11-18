@@ -66,10 +66,11 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
   const fx = sel ? (sel.fx ?? sel.x) : 50
   const fy = sel ? (sel.fy ?? sel.y) : 50
   const glide = (props) => (reduced ? 'none' : props.map((p) => `${p} 1.05s ${GLIDE}`).join(', '))
-  // The card closes around the station quickly on the way in (so the zoom never spills over the details), and opens
-  // only once the camera has pulled back on the way out (from 0.8 s; at 0.5 s the station was still twice its size
-  // and spilled over the returning headline, Nov 18).
-  const frame = reduced ? 'none' : sel ? `clip-path 0.55s ${GLIDE}` : `clip-path 0.4s ${GLIDE} 0.8s`
+  // The card's clip switches rather than animates (Nov 18: Safari repaints an animated clip-path on every frame). It
+  // closes the moment a close-up starts, while the render is still full size inside the frame, and opens once the
+  // camera is all the way back (after the 1.05 s glide; a 0 s transition with a delay holds the old clip until then).
+  // Both times nothing is cut, so the switch can't be seen, and the zoom never spills over the details or the headline.
+  const frame = reduced || sel ? 'none' : 'clip-path 0s linear 1.1s'
 
   return (
     <div className={className} style={style}>

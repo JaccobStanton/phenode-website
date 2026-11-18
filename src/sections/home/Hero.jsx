@@ -129,15 +129,20 @@ export default function Hero() {
 
   const rv = (t, d = 1) => (ready ? { opacity: 1, transform: 'none', transition: `opacity ${d}s ${t}s var(--ease-out-quint), transform ${d}s ${t}s var(--ease-out-quint)` } : { opacity: 0, transform: 'translateY(18px)' })
 
+  // No grain overlay on this section (the other dark sections have one; Nov 18): on this background it changed no pixel
+  // by more than 2 of 255, and Safari repainted it, blended over the whole hero, every time a close-up opened or closed.
   return (
-    <section ref={section} className="theme-ink grain relative flex min-h-[100svh] flex-col overflow-hidden [overflow-anchor:none]" aria-label="Understand your environment">
-      {/* Atmosphere: horizon glow + faint contour lines */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+    <section ref={section} className="theme-ink relative flex min-h-[100svh] flex-col overflow-hidden [overflow-anchor:none]" aria-label="Understand your environment">
+      {/* Atmosphere: horizon glow + faint contour lines. A layer of its own (will-change), painted once: in Safari it was
+          repainted with each close-up's start and end, about 0.1 s each time (measured in Jake's Safari, Nov 18). The
+          lines fade in through their stroke's gradient (0 at the top to 0.22 × 0.28 at the bottom), which looks the
+          same as the SVG mask and group opacity they had, and is far cheaper to draw. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 will-change-transform">
         <div className="absolute inset-x-0 bottom-0 h-[70%] bg-[radial-gradient(80%_60%_at_60%_100%,rgba(176,137,104,0.22),transparent_60%)]" />
         <div className="absolute inset-x-0 bottom-0 h-[55%] bg-[radial-gradient(60%_50%_at_30%_100%,rgba(95,183,201,0.10),transparent_60%)]" />
-        <svg className="absolute inset-0 h-full w-full opacity-[0.28]" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice">
-          <defs><linearGradient id="fade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="white" stopOpacity="0" /><stop offset="1" stopColor="white" stopOpacity="1" /></linearGradient><mask id="m"><rect width="1440" height="900" fill="url(#fade)" /></mask></defs>
-          <g mask="url(#m)" fill="none" stroke="rgba(244,242,236,0.22)" strokeWidth="1">
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice">
+          <defs><linearGradient id="hero-lines-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="900"><stop offset="0" stopColor="#F4F2EC" stopOpacity="0" /><stop offset="1" stopColor="#F4F2EC" stopOpacity="0.0616" /></linearGradient></defs>
+          <g fill="none" stroke="url(#hero-lines-fade)" strokeWidth="1">
             {Array.from({ length: 9 }).map((_, i) => (
               <path key={i} d={`M-50 ${620 + i * 34} C 300 ${600 + i * 30 + (i % 2) * 12}, 700 ${660 + i * 32}, 1100 ${610 + i * 36} S 1500 ${640 + i * 34}, 1500 ${640 + i * 34}`} />
             ))}
