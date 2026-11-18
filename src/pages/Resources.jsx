@@ -10,6 +10,7 @@ import { Container, Section, Eyebrow, Img } from '../components/ui/primitives.js
 const GROUPS = [
   { heading: 'Guides', items: [
     { title: 'Support & documentation', text: 'PheNode quick start guides and user manuals, current and archived.', to: '/support', thumb: 'support-docs' },
+    { title: 'API instructions', text: 'Request your PheNode’s sensor data from phenode.live with an access token.', to: '/resources/api', thumb: 'api' },
   ] },
   { heading: 'Press', items: [
     { title: 'Agrela Ecosystems expands nationally as PheNode moves from agricultural research into transportation infrastructure', text: 'Danforth Plant Science Center, 2026', href: 'https://www.danforthcenter.org/news/agrela-ecosystems-phenode-expands-nationally-into-transportation-infrastructure/', external: true, thumb: 'press-danforth' },

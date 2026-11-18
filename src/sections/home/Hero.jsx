@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Button, ButtonPair } from '../../components/ui/primitives.jsx'
 import PartExplorer from '../../components/hardware/PartExplorer.jsx'
@@ -23,6 +23,8 @@ export default function Hero() {
   const [ready, setReady] = useState(false)
   const [selected, setSelected] = useState(null)
   const section = useRef(null)
+  const station = useRef(null)
+  const flipFrom = useRef(null) // where the station was on screen just before the view changed
   const lastSelected = useRef(null)
   const quiet = useRef(false) // the next close is the reset below: no focus move, no scroll
 
@@ -72,6 +74,28 @@ export default function Hero() {
     }
   }, [])
 
+  // Choosing a component (or going back) notes where the station is on screen first, so it can glide from there.
+  const select = useCallback((id) => {
+    if (station.current) flipFrom.current = station.current.getBoundingClientRect()
+    setSelected(id)
+  }, [])
+
+  // The station glides between its two places (right of the copy ↔ left of the details) as a Web Animation of its
+  // transform, which the browser runs off the page's main thread: it stays smooth while the close-up is being painted.
+  // (It was a Motion layout animation, driven frame by frame from the main thread; on the live site, in Safari, it
+  // froze for about 0.3 s after each click and then jumped, Nov 18.) A click mid-glide starts from where it is.
+  useLayoutEffect(() => {
+    const el = station.current, from = flipFrom.current
+    flipFrom.current = null
+    if (!el || !from) return
+    el.getAnimations().forEach((a) => a.cancel())
+    if (reduced) return
+    const to = el.getBoundingClientRect()
+    const dx = from.left - to.left, dy = from.top - to.top
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return
+    el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0px, 0px)' }], { duration: 950, easing: `cubic-bezier(${GLIDE.join(', ')})` })
+  }, [selected, reduced])
+
   // Detail view keys: Esc goes back to the whole station, ←/→ step through the components.
   useEffect(() => {
     if (!selected) return undefined
@@ -79,13 +103,13 @@ export default function Hero() {
       if (e.target instanceof Element && e.target.closest('input, textarea, select')) return
       const n = BASE_STATION_PARTS.length
       const i = BASE_STATION_PARTS.findIndex((p) => p.id === selected)
-      if (e.key === 'Escape') setSelected(null)
-      else if (e.key === 'ArrowRight') setSelected(BASE_STATION_PARTS[(i + 1) % n].id)
-      else if (e.key === 'ArrowLeft') setSelected(BASE_STATION_PARTS[(i - 1 + n) % n].id)
+      if (e.key === 'Escape') select(null)
+      else if (e.key === 'ArrowRight') select(BASE_STATION_PARTS[(i + 1) % n].id)
+      else if (e.key === 'ArrowLeft') select(BASE_STATION_PARTS[(i - 1 + n) % n].id)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [selected])
+  }, [selected, select])
 
   // Opening or closing: on one-column layouts bring the top of the hero back under the header, and on closing return
   // focus to the component's name in the strip.
@@ -129,7 +153,7 @@ export default function Hero() {
               <motion.div
                 key="copy" className="max-w-[640px]"
                 initial={{ opacity: 0, x: -32 }}
-                animate={{ opacity: 1, x: 0, transition: reduced ? { duration: 0 } : { duration: 0.6, delay: 0.4, ease: OUT } }}
+                animate={{ opacity: 1, x: 0, transition: reduced ? { duration: 0 } : { duration: 0.6, delay: 0.6, ease: OUT } }}
                 exit={{ opacity: 0, x: -56, transition: reduced ? { duration: 0 } : { duration: 0.35, ease: [0.4, 0, 1, 1] } }}
               >
                 <p className="eyebrow mb-6" style={rv(0.05)}>Hyperlocal environmental intelligence</p>
@@ -145,12 +169,13 @@ export default function Hero() {
           </AnimatePresence>
           {selected && <h1 className="sr-only">Understand your environment.</h1>}
 
-          {/* The station: glides between the two columns; PartExplorer handles the close-up */}
-          <motion.div layout="position" transition={{ layout: reduced ? { duration: 0 } : { duration: 0.95, ease: GLIDE } }} className="relative mx-auto w-full max-w-[760px] lg:max-w-none">
+          {/* The station: glides between the two columns (the Web Animation above); PartExplorer handles the close-up.
+              On the way back the headline waits (0.6 s) until the station has mostly cleared its column. */}
+          <div ref={station} className="relative mx-auto w-full max-w-[760px] lg:max-w-none">
             <div style={rv(0.7, 1.2)}>
-              <PartExplorer selected={selected} onSelect={setSelected} />
+              <PartExplorer selected={selected} onSelect={select} />
             </div>
-          </motion.div>
+          </div>
 
           <AnimatePresence mode="popLayout" initial={false}>
             {selected && (
@@ -160,7 +185,7 @@ export default function Hero() {
                 animate={{ opacity: 1, x: 0, transition: reduced ? { duration: 0 } : { duration: 0.6, delay: 0.9, ease: OUT } }}
                 exit={{ opacity: 0, x: 48, transition: reduced ? { duration: 0 } : { duration: 0.3, ease: [0.4, 0, 1, 1] } }}
               >
-                <PartDetail id={selected} onSelect={setSelected} onClose={() => setSelected(null)} />
+                <PartDetail id={selected} onSelect={select} onClose={() => select(null)} />
               </motion.div>
             )}
           </AnimatePresence>

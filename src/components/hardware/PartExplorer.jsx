@@ -67,8 +67,9 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
   const fy = sel ? (sel.fy ?? sel.y) : 50
   const glide = (props) => (reduced ? 'none' : props.map((p) => `${p} 1.05s ${GLIDE}`).join(', '))
   // The card closes around the station quickly on the way in (so the zoom never spills over the details), and opens
-  // only once the camera has pulled back on the way out.
-  const frame = reduced ? 'none' : sel ? `clip-path 0.55s ${GLIDE}` : `clip-path 0.5s ${GLIDE} 0.5s`
+  // only once the camera has pulled back on the way out (from 0.8 s; at 0.5 s the station was still twice its size
+  // and spilled over the returning headline, Nov 18).
+  const frame = reduced ? 'none' : sel ? `clip-path 0.55s ${GLIDE}` : `clip-path 0.4s ${GLIDE} 0.8s`
 
   return (
     <div className={className} style={style}>
@@ -81,8 +82,10 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
         onPointerLeave={() => { if (!sel) leave() }}
         onClick={onClick}
       >
-        {/* Agrela-blue halo (tune strength with the two alpha values), then the neutral lift; both soften in a close-up */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-[-16%] inset-y-[-18%] blur-3xl" style={{ background: 'radial-gradient(50% 50% at 50% 48%, rgba(26,117,224,0.42) 0%, rgba(26,117,224,0.26) 45%, rgba(26,117,224,0.10) 72%, transparent 92%)', opacity: sel ? 0.5 : 1, transition: glide(['opacity']) }} />
+        {/* Agrela-blue halo, then the neutral lift; both soften in a close-up. The halo's softness is all in the gradient:
+            it was a blur filter until Nov 18, which the browser had to repaint as the close-up opened (with the image's
+            drop shadow, the cause of the stutter when choosing a component on the live site). */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-[-16%] inset-y-[-18%]" style={{ background: 'radial-gradient(50% 50% at 50% 48%, rgba(26,117,224,0.40) 0%, rgba(26,117,224,0.30) 25%, rgba(26,117,224,0.19) 48%, rgba(26,117,224,0.09) 68%, rgba(26,117,224,0.03) 84%, transparent 100%)', opacity: sel ? 0.5 : 1, transition: glide(['opacity']) }} />
         <div aria-hidden="true" className="pointer-events-none absolute inset-[-12%] rounded-full bg-[radial-gradient(closest-side,rgba(244,242,236,0.10),transparent_70%)]" style={{ opacity: sel ? 0 : 1, transition: glide(['opacity']) }} />
 
         {/* The frame: open around the whole station, a rounded card around a close-up */}
@@ -92,7 +95,7 @@ export default function PartExplorer({ selected = null, onSelect, className = ''
             <Img
               name="hardware/base-station-v4" widths={BASE_STATION_WIDTHS} sizes={hiRes ? '(min-width:1024px) 140vw, 260vw' : imageSizes}
               alt="PheNode base station: aluminum sensor frame with rain gauge, solar panel, wind sensor, radiation shield, imager, control box and a soil probe."
-              className="relative h-full w-full object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.55)]" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined}
+              className="relative h-full w-full object-contain" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined}
             />
             {/* spotlight (overview): dims everything except the component under the pointer, masked to the product's own
                 silhouette so the dimming never shows as a box over the glow */}

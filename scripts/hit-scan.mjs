@@ -3,7 +3,7 @@
 import { launch, homeReady } from './browser.mjs'
 const base = process.argv[2] && process.argv[2].startsWith('http') ? process.argv[2] : 'http://localhost:4173'
 const args = process.argv.slice(2).filter((a) => a.startsWith('/'))
-const routes = args.length ? args : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/resources', '/support', '/contact', '/company']
+const routes = args.length ? args : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/resources', '/support', '/resources/api', '/contact', '/company']
 const browser = await launch()
 let issues = 0
 for (const [w, h] of [[1440, 900], [1024, 768], [820, 1180], [390, 844]]) {

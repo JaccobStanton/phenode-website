@@ -11,6 +11,7 @@ export const PAGES = {
   caseStudies: () => import('../pages/CaseStudies.jsx'),
   resources: () => import('../pages/Resources.jsx'),
   support: () => import('../pages/Support.jsx'),
+  api: () => import('../pages/Api.jsx'),
   contact: () => import('../pages/Contact.jsx'),
   company: () => import('../pages/Company.jsx'),
   legal: () => import('../pages/Legal.jsx'),
@@ -19,7 +20,7 @@ export const PAGES = {
 
 const BY_PATH = {
   '/': 'home', '/phenode': 'phenode', '/applications': 'applications', '/case-studies': 'caseStudies', '/resources': 'resources',
-  '/support': 'support', '/contact': 'contact', '/company': 'company',
+  '/support': 'support', '/resources/api': 'api', '/contact': 'contact', '/company': 'company',
 }
 
 const started = new Set()

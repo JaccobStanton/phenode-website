@@ -34,6 +34,7 @@ export const NAV = [
     children: [
       { label: 'Resources', to: '/resources', text: 'Guides, press, learning' },
       { label: 'Support & Documentation', to: '/support', text: 'Current and archived docs' },
+      { label: 'API', to: '/resources/api', text: 'Your sensor data from phenode.live' },
       { label: 'Company', to: '/company', text: 'Agrela Ecosystems' },
     ],
   },
@@ -42,6 +43,6 @@ export const NAV = [
 export const FOOTER = [
   { heading: 'PheNode', links: [['Overview', '/phenode'], ...PHENODE_PARTS.map((p) => [p.label, `/phenode#${p.id}`])] },
   { heading: 'Applications', links: [['Transportation & Infrastructure', '/applications/transportation'], ['Agricultural Research', '/applications/agriculture'], ['Ecological Research', '/applications/ecology'], ['Urban Environmental Intelligence', '/applications/urban'], ['Case Studies', '/case-studies']] },
-  { heading: 'Agrela', links: [['Resources', '/resources'], ['Support', '/support'], ['Company', '/company'], ['Contact', '/contact']] },
+  { heading: 'Agrela', links: [['Resources', '/resources'], ['Support', '/support'], ['API', '/resources/api'], ['Company', '/company'], ['Contact', '/contact']] },
   { heading: 'Legal', links: [['Privacy Policy', '/legal/privacy'], ['Terms of Service', '/legal/terms']] },
 ]

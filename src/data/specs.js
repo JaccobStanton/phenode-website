@@ -47,7 +47,7 @@ export const WIRELESS_NODE = {
   // and the radiation shield they sat in). Its light sensor stays; ambient air and soil are measured with sensors in
   // its two ports.
   coreMeasurements: ['Lux (light intensity / daylength)'],
-  addOnMeasurements: ['Ambient air', 'Soil moisture (VWC)', 'Soil temperature', 'Soil electrical conductivity (salinity)'],
+  addOnMeasurements: ['Ambient air', 'Soil moisture (VWC)', 'Soil temperature', 'Soil electrical conductivity (salinity)', 'Soil water potential'],
   transmit: 'Hourly transmission to the nearest PheNode via LoRaWAN',
   range: 'Up to 1 km line of sight',
   sensorSpecs: [
@@ -59,7 +59,8 @@ export const WIRELESS_NODE = {
  * Add-on sensors — the "Sensor add-ons" cards on the PheNode page (wireless node part) and the base station's add-on
  * spec table. `row` groups the cards (soil first, then air and sun); `connects` says what each one plugs into
  * ('base' = PheNode base station, 'node' = wireless sensor node). Nov 17 (Jake): ATMOS 14 and SP-421 added; TEROS 54 and
- * TEROS 22 specs from METER's spec sheets, SP-421 from Apogee's manual (see the project notes for the sources).
+ * TEROS 22 specs from METER's spec sheets, SP-421 from Apogee's manual (see the project notes for the sources). Nov 18
+ * (Jake): the water potential sensor and the profile probe connect to the wireless node too.
  */
 export const ADD_ON_SENSORS = [
   {
@@ -85,7 +86,7 @@ export const ADD_ON_SENSORS = [
     image: 'sensor-water-potential-2026',
     imageWidths: [400, 700],
     note: 'Measures how tightly water is held by the soil — the plant-available side of soil moisture.',
-    connects: ['base'],
+    connects: ['base', 'node'],
     specs: [
       { name: 'Soil water potential', range: '0 to −100,000 kPa', accuracy: '±(10 % of reading + 2 kPa) from −100 to −5 kPa; resolution 0.1 kPa' },
       { name: 'Soil temperature', range: '−40 to +60 °C', accuracy: '±1.0 °C' },
@@ -99,7 +100,7 @@ export const ADD_ON_SENSORS = [
     image: 'sensor-profile-probe-angle',
     imageWidths: [400, 800, 1400],
     note: 'Measures multiple depths at once — 15, 30, 45 and 60 cm — and is easier to install and remove than conventional profile probes.',
-    connects: ['base'],
+    connects: ['base', 'node'],
     specs: [
       { name: 'Soil profile probe measurement depths', range: '15 cm, 30 cm, 45 cm, 60 cm', accuracy: '—' }, // was "Depths" (Jake, Nov 16)
       { name: 'Soil moisture (VWC)', range: '0.00 to 0.70 m³/m³', accuracy: '±0.05 m³/m³ (mineral soils)' },

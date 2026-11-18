@@ -15,6 +15,7 @@ const ApplicationPage = lazy(PAGES.application)
 const CaseStudies = lazy(PAGES.caseStudies)
 const Resources = lazy(PAGES.resources)
 const Support = lazy(PAGES.support)
+const Api = lazy(PAGES.api)
 const Contact = lazy(PAGES.contact)
 const Company = lazy(PAGES.company)
 const Legal = lazy(PAGES.legal)
@@ -163,6 +164,8 @@ export default function App() {
               <Route path="/design-your-system" element={<Navigate to="/contact" replace />} />
               <Route path="/resources" element={<Resources />} />
               <Route path="/support" element={<Support />} />
+              {/* Resources › API (Nov 18) */}
+              <Route path="/resources/api" element={<Api />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/company" element={<Company />} />
               <Route path="/legal/:doc" element={<Legal />} />

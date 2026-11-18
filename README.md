@@ -14,7 +14,7 @@ npm run preview    # serve dist/ on :4173
 npm run lint
 ```
 
-Node 20+. Fonts are self-hosted (`@fontsource-variable/inter`, the PheNode app's font, and `@fontsource-variable/geist-mono`) — no third-party requests at runtime.
+Node 20+. Fonts are self-hosted (`@fontsource-variable/inter`, the PheNode app's font, and `@fontsource-variable/geist-mono`) — no third-party requests at runtime, except Google Analytics on the live site (see Analytics below).
 
 ### Environment
 
@@ -24,6 +24,7 @@ Node 20+. Fonts are self-hosted (`@fontsource-variable/inter`, the PheNode app's
 | `VITE_BASE` | Optional. Base path when hosting under a sub-path (e.g. `/preview/`). |
 | `VITE_ROUTER` | Optional. `hash` switches to a hash router for hosts that cannot rewrite deep links to `index.html`. |
 | `VITE_DOCS_SOURCE` | Optional. `agrelaeco` links the Support PDFs to agrelaeco.com's copies instead of `public/docs/` (used for the Claude preview, which can't hold files over 15 MB). |
+| `VITE_SITE_URL` | Optional. The site's public address, for the link-preview image (`og:image` in `index.html`; crawlers need a full address). Default `https://agrela-website.web.app`. Since Nov 18, `.env.production` on Jake's Mac (not in git) sets `https://phenode.com`, so deploys from there use it; a build anywhere else (Netlify, a fresh clone) uses the default unless it's set there too. |
 | `VITE_MODEL_SUFFIX` | Optional. `.js` makes the 3D viewers load JS module twins of the models (`models/<name>.glb.js`, made with `scripts/models/module-twin.mjs`: the GLB as base64, meshopt removed). For hosts that can't serve `.glb` files, like the Claude preview. A module loads like the site's own code; the earlier glTF-JSON twins needed a `data:` fetch and WebAssembly, which a strict content policy blocks. |
 
 ### Deploy
@@ -33,6 +34,10 @@ The build is static. For history-mode routing, rewrite all paths to `/index.html
 **Netlify (progress preview):** GitHub `JaccobStanton/phenode-website` is connected to Netlify, which builds every push to `main`. `netlify.toml` sets the build (`npm run build` → `dist`, Node 22), sends `X-Robots-Tag: noindex, nofollow` on every page so the preview stays out of search engines (**delete that `[[headers]]` block at launch**), and lets browsers keep the hashed build files in `/static/` for a year. Deep links use `public/_redirects`.
 
 **Firebase Hosting (project `agrela-website`):** `firebase.json` serves `dist` with an SPA rewrite (`**` → `/index.html`, the Firebase equivalent of `_redirects`) and also sends `X-Robots-Tag: noindex, nofollow` on every page, including on phenode.com once the domain is connected. **Delete that `X-Robots-Tag` entry at launch**, together with Netlify's. Its other `headers` entries (keep them): the hashed build files in `/static/` are cached for a year, as on Netlify, and pages (`/`, `/index.html` and any address without a file extension) are re-checked on every visit, so a browser never runs an hour-old page against a new deploy's files (Firebase caches for an hour by default). Firebase doesn't build: run `npm run build` (Node 22) and then `firebase deploy --only hosting`.
+
+**Link previews (Nov 18).** Slack, iMessage, LinkedIn and the like read the tags in `index.html` without running the site, so every address shares one card: "PheNode by Agrela — Hyperlocal Environmental Intelligence", the `og:description`, and `public/og-image.jpg` (1200×630). The image needs a full address, filled in from `VITE_SITE_URL` (above). The favicon is the Agrela mark as `favicon.ico` (16/32/48), `icon-192.png` and `apple-touch-icon.png` (180): Safari and Slack don't show SVG icons. Slack keeps a link's preview for a while, so a link shared before a change can show the old one.
+
+**Analytics (Nov 18).** Google Analytics through Firebase (project `agrela-website`, measurement ID `G-K56W00D5EV`), in `src/lib/analytics.js`, started from `src/main.jsx`. It runs only on the live site: a production build without `VITE_ROUTER`, not served from localhost (`npm run preview`) or `*.netlify.app`, in a browser where `isSupported()` holds. The Firebase code is fetched once the page has loaded. Page changes inside the site (no reload) are counted by Google Analytics' enhanced measurement, "Page changes based on browser history events" (web stream settings); the site doesn't log page views itself, which would count them twice. To check after a deploy: Realtime report, go from `/phenode` to `/contact`, and a second `page_view` should appear. The privacy policy mentions analytic services in general but doesn't name Google Analytics.
 
 ## Structure
 
@@ -69,6 +74,7 @@ public/assets/     WebP assets (see docs/asset-manifest.md), public/docs/ docume
 - The pilot-customer retention figure is not shown at all (Jake's PM, Nov 16: not public).
 - Pricing is intentionally omitted. The Buyer's Guide isn't offered on the site (its Resources entry and "Source: … Buyer's Guide" credits were deleted on Nov 17); its PDF is in `media-src/docs/`, unpublished, and its numbers still back `specs.js`.
 - The privacy policy (`/legal/privacy`) and terms of service (`/legal/terms`, `src/data/legalTerms.jsx`) are Agrela's updated November 2026 versions, copied word for word from the text Jake sent (Nov 16), typos included. The privacy policy's mention of the Terms of Service links to `/legal/terms` instead of printing the agrelaeco.com address.
+- Resources › API (`/resources/api`, `src/pages/Api.jsx`) is "API Instructions for phenode.live" (September 2026), word for word from the PDF Jake sent on Nov 18, with each command in a block with a Copy button (`src/components/ui/CodeBlock.jsx`). Its help address is the PDF's, support@phenode.com.
 - Support (`/support`) is one list of documents by version, as on agrelaeco.com/support (`src/data/docs.js`). The PDFs are copies of agrelaeco.com's, in `public/docs/` (current) and `public/docs/archive/`. The Claude preview build sets `VITE_DOCS_SOURCE=agrelaeco` to link to agrelaeco.com's copies instead (the preview can't hold files over 15 MB).
 - The home page runs: intro, hero (01), What is PheNode, Hyperlocal, How PheNode works, Choose your perspective, Software (06), Scale, Your data, Proof, and the closing section (`src/data/homeSections.js` numbers them). Its "Application experiences", "Hardware", "Build your PheNode" and "Case studies" sections, and the extra parts of home "Software", were hidden from Nov 15 and deleted on Nov 17 (Jake), together with the feature flags that hid them (`src/data/features.js`).
 - The PheNode tab is one long page (`/phenode`, `src/pages/PheNode.jsx`): the overview, then the Base station, Wireless sensor node, Data platform and Software parts, each at `/phenode#<part>`. `PHENODE_PARTS` in `src/data/navigation.js` sets their order for the page, the header menu and the footer. The old addresses (`/phenode/base-station` and the like) lead to their part.

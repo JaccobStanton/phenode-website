@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const base = process.argv[2] || 'http://localhost:4173'
-const routes = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/phenode', '/applications', '/applications/transportation', '/applications/agriculture', '/applications/ecology', '/applications/urban', '/case-studies', '/resources', '/support', '/contact', '/company', '/legal/privacy']
+const routes = process.argv.slice(3).length ? process.argv.slice(3) : ['/', '/phenode', '/applications', '/applications/transportation', '/applications/agriculture', '/applications/ecology', '/applications/urban', '/case-studies', '/resources', '/support', '/resources/api', '/contact', '/company', '/legal/privacy']
 const sizes = { desktop: [1440, 900], tablet: [1024, 1366], mobile: [390, 844] }
 const out = process.env.SHOT_DIR || 'shots'
 fs.mkdirSync(out, { recursive: true })

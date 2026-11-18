@@ -151,4 +151,10 @@ Every entry on the Resources page shows a 3:2 thumbnail beside its title, like a
 | `press-agfundernews` | AgFunderNews article (Dec 2023) | The article's lead image, Nadia Shakoor's headshot, credited to Agrela (`media-src/press/agfundernews-2023-nadia-shakoor-headshot.jpg`, 1920×1281) |
 | `how-it-works` | How PheNode works | Jake's `about-us-hero.jpg` (as on the Company hero) |
 | `applications` | Applications | Jake's "PheNode in Barley" (`media-src/company/phenode-in-barley-original.jpg`) |
+| `api` | API instructions | The Download / API drawing (`public/assets/journey/export.svg`) on night navy (#0A1A3D) with its blue backlight, rendered in Chromium at 960×640 (Nov 18) |
 | `case-studies` | Case studies | AgFunderNews in-article photo of a PheNode in a wildflower meadow at The Ray, credited to Agrela (`media-src/press/agfundernews-2023-exit-6-phenode.jpg`, 1920×1500) |
+
+## Share image and icons (Nov 18)
+
+- `public/og-image.jpg` (1200×630): the link-preview image (`og:image` / `twitter:image` in `index.html`). Made from `media-src/og/og-image.html` (the PheNode logo, "Hyperlocal Environmental Intelligence", the `base-station-v4` render), screenshot in Chromium at 1200×630, JPEG quality 80.
+- `public/favicon.ico` (16, 32, 48 px), `public/icon-192.png`, `public/apple-touch-icon.png` (180 px): the Agrela mark (the gradient square with the wheat), cut from the Agrela Ecosystems logo (`agrela-ecosystems-dark-1600.webp`, deleted from `public/assets/logos/` on Nov 17; in git before 628bf2a), the wheat filled white. They replace the PheNode-mark `favicon.svg`: Safari and Slack don't show SVG icons.

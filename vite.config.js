@@ -1,8 +1,23 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const base = process.env.VITE_BASE || '/'
+
+// The site's public address, for the share image in index.html's link-preview tags. Set VITE_SITE_URL (for example in
+// .env.production) when the site moves to its own domain; until then, Firebase Hosting's address.
+const DEFAULT_SITE_URL = 'https://agrela-website.web.app'
+
+/**
+ * Fills in %SITE_URL% in index.html (Nov 18). Link-preview crawlers (Slack, LinkedIn…) need the share image as a full
+ * address. Runs before Vite reads the page's tags, so the image is left as the external address it now is.
+ */
+function siteUrl(url) {
+  return {
+    name: 'agrela:site-url',
+    transformIndexHtml: { order: 'pre', handler: (html) => html.replaceAll('%SITE_URL%', url) },
+  }
+}
 
 /**
  * Preloads the Latin subset of Inter (the face of every headline and paragraph) from index.html, so the first text
@@ -39,6 +54,7 @@ const LANDING_PAGES = [
   ['^/case-studies/?$', 'src/pages/CaseStudies.jsx'],
   ['^/resources/?$', 'src/pages/Resources.jsx'],
   ['^/support/?$', 'src/pages/Support.jsx'],
+  ['^/resources/api/?$', 'src/pages/Api.jsx'],
   ['^/contact/?$', 'src/pages/Contact.jsx'],
   ['^/company/?$', 'src/pages/Company.jsx'],
   ['^/legal/[^/]+/?$', 'src/pages/Legal.jsx'],
@@ -81,7 +97,10 @@ function preloadLandingPage() {
 // VITE_BASE lets the same build be hosted at a sub-path (e.g. a hosted preview).
 export default defineConfig(({ mode }) => ({
   base,
-  plugins: [react(), tailwindcss(), preloadMainFont(), preloadLandingPage()],
+  plugins: [
+    siteUrl((loadEnv(mode, process.cwd(), 'VITE_').VITE_SITE_URL || DEFAULT_SITE_URL).replace(/\/+$/, '')),
+    react(), tailwindcss(), preloadMainFont(), preloadLandingPage(),
+  ],
   build: {
     target: 'es2020',
     sourcemap: mode !== 'production',

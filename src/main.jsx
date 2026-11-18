@@ -6,9 +6,11 @@ import './styles/index.css'
 import App from './App.jsx'
 import { installSmilPauser } from './lib/smil.js'
 import { primeIntroHeader } from './lib/intro.js'
+import { startAnalytics } from './lib/analytics.js'
 
 installSmilPauser()
 primeIntroHeader() // before the first paint: the home intro starts with a reduced header
+startAnalytics() // Google Analytics, on the live site only, once the page has loaded (lib/analytics.js)
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

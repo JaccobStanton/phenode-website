@@ -2,7 +2,7 @@
 import { launch, homeReady } from './browser.mjs'
 import fs from 'node:fs'
 const axe = fs.readFileSync('node_modules/axe-core/axe.min.js', 'utf8')
-const routes = process.argv.slice(2).length ? process.argv.slice(2) : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/resources', '/support', '/contact', '/company', '/legal/privacy']
+const routes = process.argv.slice(2).length ? process.argv.slice(2) : ['/', '/phenode', '/applications', '/applications/agriculture', '/case-studies', '/resources', '/support', '/resources/api', '/contact', '/company', '/legal/privacy']
 const browser = await launch()
 let total = 0
 for (const [w, h] of [[1440, 900], [390, 844]]) {
