@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy --only hosting",
     "lint": "eslint .",
     "shots": "node scripts/screenshots.mjs"
   },
