@@ -49,7 +49,7 @@ export default function Proof() {
               <p className="reveal mt-3 font-mono text-[10.5px] tracking-[0.1em] text-stone">Sources: Danforth Plant Science Center (2026), The Ray. Customer locations are never shown without permission.</p>
             </div>
           </div>
-          <div className="reveal mt-10 flex flex-wrap gap-3">
+          <div className="btn-row reveal mt-10 flex flex-wrap gap-3">
             <Button to="/case-studies" variant="primary">View case studies</Button>
             <Button to="/company" variant="ghost">About Agrela</Button>
           </div>

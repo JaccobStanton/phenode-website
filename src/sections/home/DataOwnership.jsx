@@ -35,7 +35,7 @@ export default function DataOwnership() {
             <ul className="reveal mt-8 flex flex-col gap-2 border-t hairline pt-6 text-[14.5px] text-ink/80">
               {SOFTWARE.dataPlan.map((d) => <li key={d} className="flex gap-3"><span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-data" aria-hidden="true" />{d}</li>)}
             </ul>
-            <div className="reveal mt-8 flex flex-wrap gap-3">
+            <div className="btn-row reveal mt-8 flex flex-wrap gap-3">
               <Button to="/phenode#data-platform" variant="primary-ink">The data platform</Button>
               <Button to="/support" variant="ghost-ink">Documentation</Button>
             </div>

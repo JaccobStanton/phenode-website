@@ -39,8 +39,10 @@ export function startAnalytics() {
     try {
       const [{ initializeApp }, { getAnalytics, isSupported }] = await Promise.all([import('firebase/app'), import('firebase/analytics')])
       if (await isSupported()) getAnalytics(initializeApp(FIREBASE_CONFIG))
-    } catch {
-      // blocked or offline: no analytics for this visit
+    } catch (e) {
+      // Blocked, offline, or a build made without the firebase package (`npm install`): no analytics for this visit.
+      // Said in the console, because on Nov 19 it failed silently on the live site (built before npm install).
+      console.warn('Google Analytics did not start:', e)
     }
   }
   const whenIdle = () => (window.requestIdleCallback ? window.requestIdleCallback(start, { timeout: 4000 }) : setTimeout(start, 1000))

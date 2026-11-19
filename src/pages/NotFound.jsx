@@ -9,7 +9,7 @@ export default function NotFound() {
           <p className="eyebrow">404</p>
           <h1 className="display-lg mt-4 max-w-[14ch]">No measurement at this location.</h1>
           <p className="lede mt-4 max-w-[40ch]">The page you were looking for isn't here. The system is.</p>
-          <div className="mt-8 flex flex-wrap gap-3"><Button to="/" variant="primary">Home</Button><Button to="/phenode" variant="ghost">Explore PheNode</Button></div>
+          <div className="btn-row mt-8 flex flex-wrap gap-3"><Button to="/" variant="primary">Home</Button><Button to="/phenode" variant="ghost">Explore PheNode</Button></div>
         </Container>
       </section>
     </Page>

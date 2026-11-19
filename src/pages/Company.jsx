@@ -68,7 +68,7 @@ export default function Company() {
                 {TIMELINE.map(([y, k, v]) => <li key={y} className="grid grid-cols-[72px_1fr] gap-4 py-5"><span className="font-mono text-[12px] tracking-[0.1em] text-stone-2">{y}</span><div><p className="text-[16px] font-semibold tracking-tight">{k}</p><p className="mt-1 text-[14.5px] leading-relaxed text-ink/75">{v}</p></div></li>)}
               </ol>
               <p className="mt-3 font-mono text-[10.5px] tracking-[0.1em] text-stone-2">Sources: Danforth Plant Science Center press (2026); The Ray.</p>
-              <div className="mt-10 flex flex-wrap gap-3"><Button to="/contact" variant="primary-ink">Talk to Agrela</Button><Button href={COMPANY.website} variant="ghost-ink" icon="external">agrelaeco.com</Button></div>
+              <div className="btn-row mt-10 flex flex-wrap gap-3"><Button to="/contact" variant="primary-ink">Talk to Agrela</Button><Button href={COMPANY.website} variant="ghost-ink" icon="external">agrelaeco.com</Button></div>
             </div>
           </div>
         </Container>
