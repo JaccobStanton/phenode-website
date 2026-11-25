@@ -51,7 +51,7 @@ const ART = (
 
 export default function Api() {
   return (
-    <Page title="API" description="API instructions for phenode.live: request an access token, then request sensor data for your PheNode and a time range.">
+    <Page>
       <PageHero
         eyebrow="API"
         title="API Instructions for phenode.live"

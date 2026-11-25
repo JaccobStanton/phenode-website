@@ -26,7 +26,7 @@ const GROUPS = [
 
 export default function Resources() {
   return (
-    <Page title="Resources" description="PheNode guides, press and learning resources from Agrela Ecosystems.">
+    <Page>
       <PageHero
         eyebrow="Resources"
         title="Read before you deploy."

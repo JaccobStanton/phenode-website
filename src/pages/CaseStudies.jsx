@@ -6,7 +6,7 @@ import { APPLICATION_BY_ID } from '../data/applications.js'
 
 export default function CaseStudies() {
   return (
-    <Page title="Case studies" description="PheNode deployments: roadside monitoring with The Ray and the Georgia and Washington State departments of transportation, and agricultural research at the Danforth Center.">
+    <Page>
       <section className="theme-paper pt-28 pb-10 md:pt-40">
         <Container>
           <p className="eyebrow">Case studies</p>

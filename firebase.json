@@ -4,24 +4,44 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "_redirects"
     ],
-    "rewrites": [
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "redirects": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/phenode/base-station",
+        "destination": "/phenode#base-station",
+        "type": 301
+      },
+      {
+        "source": "/phenode/wireless-node",
+        "destination": "/phenode#wireless-node",
+        "type": 301
+      },
+      {
+        "source": "/phenode/data-platform",
+        "destination": "/phenode#data-platform",
+        "type": 301
+      },
+      {
+        "source": "/phenode/software",
+        "destination": "/phenode#software",
+        "type": 301
+      },
+      {
+        "source": "/case-studies/*",
+        "destination": "/case-studies",
+        "type": 301
+      },
+      {
+        "source": "/design-your-system",
+        "destination": "/contact",
+        "type": 301
       }
     ],
     "headers": [
-      {
-        "source": "**",
-        "headers": [
-          {
-            "key": "X-Robots-Tag",
-            "value": "noindex, nofollow"
-          }
-        ]
-      },
       {
         "source": "/",
         "headers": [

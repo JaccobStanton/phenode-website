@@ -150,6 +150,7 @@ export default function App() {
         <Nav />
         <main id="main">
           <Suspense fallback={<Loading />}>
+            {/* a new page also needs its entry in data/pageMeta.js (its title, description and own HTML file) */}
             <Routes>
               <Route path="/" element={<Home />} />
               {/* one long page since Nov 16: Overview, Base station, Wireless sensor node, Data platform, Software */}

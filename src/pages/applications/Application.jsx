@@ -29,7 +29,7 @@ export default function ApplicationPage() {
   const cases = CASE_STUDIES.filter((c) => c.application === id)
   const count = app.environment === 'corridor' ? 10 : app.environment === 'city' ? 14 : 8
   return (
-    <Page title={app.kicker} description={app.summary}>
+    <Page>
       <section className="theme-ink pt-28 pb-10 md:pt-40">
         <Container>
           <p className="eyebrow">{app.kicker}</p>

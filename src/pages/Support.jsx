@@ -23,7 +23,7 @@ const NADIA = {
 
 export default function Support() {
   return (
-    <Page title="Support & documentation" description="PheNode support documentation in PDF format: quick start guides and user manuals, current and archived.">
+    <Page>
       <PageHero
         eyebrow="Support"
         title="Quick start guides and manuals."

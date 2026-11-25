@@ -10,7 +10,7 @@ export default function ApplicationsIndex() {
   const { applications, role } = usePersonalization()
   const list = role ? applications : APPLICATIONS
   return (
-    <Page title="Applications" description="PheNode applications: transportation and smart infrastructure, agricultural research, ecological research and restoration, urban environmental intelligence.">
+    <Page>
       <section className="theme-ink pt-28 pb-12 md:pt-40">
         <Container>
           <p className="eyebrow">Applications</p>

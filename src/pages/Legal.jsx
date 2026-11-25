@@ -60,7 +60,7 @@ export default function Legal() {
   const d = DOCS[doc]
   if (!d) return <Navigate to="/" replace />
   return (
-    <Page title={d.title}>
+    <Page>
       <section className="theme-paper pt-28 pb-6 md:pt-40">
         <Container>
           <p className="eyebrow">Legal</p>

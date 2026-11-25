@@ -22,7 +22,7 @@ const TIMELINE = [
 
 export default function Company() {
   return (
-    <Page title="Company" description="Agrela Ecosystems: founded in 2016 at the Donald Danforth Plant Science Center, maker of the PheNode environmental monitoring platform.">
+    <Page>
       <PageHero
         eyebrow="Company"
         title="Built by researchers who needed the data."

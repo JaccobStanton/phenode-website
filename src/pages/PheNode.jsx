@@ -31,7 +31,7 @@ export default function PheNodePage() {
   const [ref, progress] = useScrollProgress({ start: 'top 70%', end: 'bottom 60%' })
   const reveal = useReveal()
   return (
-    <Page title="PheNode" description="PheNode: a solar-powered base station, wireless sensor nodes, a data platform and software — one configurable environmental monitoring system.">
+    <Page>
       <OverviewHero />
 
       <Section theme="paper">

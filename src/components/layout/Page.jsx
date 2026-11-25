@@ -1,16 +1,35 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Img } from '../ui/primitives.jsx'
+import { metaFor, pageTitle } from '../../data/pageMeta.js'
 
-/** Sets the document title/description per page. */
+const setContent = (selector, value) => document.querySelector(selector)?.setAttribute('content', value)
+
+/**
+ * Sets the browser title and the page's description, share and canonical tags as the visitor moves between pages.
+ * They come from data/pageMeta.js, the list the build also writes each page's own HTML from (so a page opened directly
+ * already has them). `title` / `description` override the list: Contact's "Request a demo", the Not found page.
+ */
 export default function Page({ title, description, children }) {
+  const { pathname } = useLocation()
   useEffect(() => {
-    const prev = document.title
-    document.title = title ? `${title} — PheNode by Agrela` : 'PheNode by Agrela — Hyperlocal Environmental Intelligence'
-    const meta = document.querySelector('meta[name="description"]')
-    const prevDesc = meta?.getAttribute('content')
-    if (meta && description) meta.setAttribute('content', description)
-    return () => { document.title = prev; if (meta && prevDesc) meta.setAttribute('content', prevDesc) }
-  }, [title, description])
+    const meta = metaFor(pathname)
+    const fullTitle = pageTitle(title !== undefined ? title : meta?.title)
+    const text = description ?? meta?.description
+    document.title = fullTitle
+    if (text) setContent('meta[name="description"]', text)
+    if (!meta) return
+    setContent('meta[property="og:title"]', fullTitle)
+    setContent('meta[name="twitter:title"]', fullTitle)
+    setContent('meta[property="og:description"]', meta.share ?? text)
+    setContent('meta[name="twitter:description"]', meta.share ?? text)
+    // the canonical address: the page's path on the site's own address (the built HTML has it; not in development)
+    const canonical = document.querySelector('link[rel="canonical"]')
+    if (canonical) {
+      canonical.href = new URL(meta.path, canonical.href).href
+      setContent('meta[property="og:url"]', canonical.href)
+    }
+  }, [pathname, title, description])
   return children
 }
 
